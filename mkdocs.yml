@@ -1,0 +1,101 @@
+site_name: Introdução ao Geoprocessamento e Sensoriamento Remoto
+site_description: >
+  Livro didático da disciplina de Introdução ao Geoprocessamento e Sensoriamento
+  Remoto: sensoriamento remoto com Google Earth Engine e bancos de dados
+  geográficos com PostGIS e QGIS.
+site_author: "Sergio Souza Costa"
+
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: pt
+  font: false
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.share
+    - content.code.annotate
+    - content.code.copy
+    - content.tabs.link
+    - content.tooltips
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Alternar para modo escuro
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Alternar para modo claro
+
+plugins:
+  - search
+
+markdown_extensions:
+  - attr_list
+  - admonition
+  - pymdownx.details
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - tables
+  - toc:
+      permalink: true
+
+extra_css:
+  - stylesheets/lambdageo.css
+
+extra_javascript:
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - "⇦ Coleção LambdaGeo": https://lambdageo.github.io/ebooks/
+  - Apresentação: index.md
+
+  - Parte 1 — Sensoriamento Remoto com Google Earth Engine (16h):
+    - "Plano da Parte 1":                              parte1/00_plano_parte1.md
+    - "Cap 1: Geoinformação e Cartografia":            parte1/01_geoinformacao.md
+    - "Cap 2: Fundamentos de Sensoriamento Remoto":    parte1/02_sensoriamento_remoto.md
+    - "Cap 3: Conhecendo o Google Earth Engine":       parte1/03_conhecendo_gee.md
+    - "Cap 4: Tipos de Dados Geográficos":             parte1/04_tipos_dados.md
+    - "Cap 5: Seleção e Visualização — Vetores":       parte1/05_selecao_vetorial.md
+    - "Cap 6: Seleção e Visualização — Imagens":       parte1/06_selecao_matricial.md
+    - "Cap 7: Processamento de Dados Vetoriais":       parte1/07_processamento_vetorial.md
+    - "Cap 8: Processamento de Dados Matriciais":      parte1/08_processamento_matricial.md
+    - "Cap 9: Atividades e Lista de Exercícios":       parte1/09_exercicios.md
+
+  - Parte 2 — Banco de Dados Geográficos e QGIS (14h):
+    - "Plano da Parte 2":                              parte2/00_plano_parte2.md
+    - "Cap 10: Introdução a Bancos de Dados":          parte2/10_introducao_bd.md
+    - "Cap 11: Projeto de Banco de Dados Geográficos": parte2/11_projeto_bdg.md
+    - "Cap 12: Instalando PostgreSQL, PostGIS e QGIS": parte2/12_instalacao.md
+    - "Cap 13: A Linguagem SQL":                       parte2/13_sql.md
+    - "Cap 14: Tipos de Dados Espaciais":              parte2/14_tipos_espaciais.md
+    - "Cap 15: Operações e Indexação Espacial":        parte2/15_operacoes_espaciais.md
+    - "Cap 16: Integração com o QGIS":                 parte2/16_integracao_qgis.md
+    - "Cap 17: Lista de Exercícios e Trabalho":        parte2/17_exercicios.md
+
+  - Anexos:
+    - "Fontes de Dados Geográficos":                   anexos/fontes_dados.md
+    - "Referências":                                   anexos/referencias.md

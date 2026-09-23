@@ -1,0 +1,54 @@
+# Licença
+
+Copyright (c) Prof. Sergio Costa
+
+## Texto e código do livro
+
+Este trabalho está licenciado sob a **Creative Commons Atribuição-CompartilhaIgual 4.0
+Internacional (CC BY-SA 4.0)**.
+
+Você tem o direito de:
+
+- **Compartilhar** — copiar e redistribuir o material em qualquer suporte ou formato
+- **Adaptar** — remixar, transformar e criar a partir do material, para qualquer fim,
+  inclusive comercial
+
+De acordo com os seguintes termos:
+
+- **Atribuição** — Você deve dar o crédito apropriado, prover um link para a licença e
+  indicar se mudanças foram feitas.
+- **CompartilhaIgual** — Se você remixar, transformar ou criar a partir do material, tem de
+  distribuir as suas contribuições sob a mesma licença que o original.
+
+Texto completo da licença:
+<https://creativecommons.org/licenses/by-sa/4.0/legalcode.pt>
+
+Resumo em português:
+<https://creativecommons.org/licenses/by-sa/4.0/deed.pt-BR>
+Este livro é composto de material inédito e de versões revistas e atualizadas de materiais
+anteriores do mesmo autor:
+
+- o minicurso *Google Earth Engine no Ensino de Introdução ao Sensoriamento Remoto e ao
+  Geoprocessamento* (ERCEMAPI 2023), base da Parte 1;
+- o fascículo *Banco de Dados Geográficos* (COSTA, S. S., IFMA, 2021), disponível em
+  <https://proedu.rnp.br/handle/123456789/1705>, base da Parte 2.
+
+## Dados distribuídos em `docs/dados/`
+
+Os arquivos em `docs/dados/` são derivados de dados públicos, simplificados para fins
+didáticos, e mantêm a atribuição às fontes originais:
+
+- `BR_UF.zip` — Malha de Unidades da Federação, IBGE (geometria simplificada; atributo
+  numérico `CD_REGIAO` acrescentado);
+- `terras_indigenas.zip` — Terras indígenas, FUNAI (2010), via Ministério do Meio Ambiente
+  (geometria simplificada, subconjunto de atributos);
+- `polos_madeireiros_mma.zip` — Polos madeireiros da Amazônia, Ministério do Meio Ambiente.
+
+## Atribuição a terceiros
+
+Capturas de tela do Google Earth Engine, do QGIS, do pgAdmin e do TerraView ilustram o uso
+desses programas. Figuras conceituais de obras de terceiros (Elmasri & Navathe, Câmara,
+Borges et al., OGC, DSG, entre outras) **não** são reproduzidas: foram substituídas por
+diagramas próprios ou por descrições textuais, com a devida referência bibliográfica no
+anexo *Referências*. A tabela de bandas do Landsat 9 é baseada em material do USGS/NASA,
+de domínio público.
