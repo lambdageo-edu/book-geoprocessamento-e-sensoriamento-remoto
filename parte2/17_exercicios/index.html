@@ -1,0 +1,1530 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Livro didático da disciplina de Introdução ao Geoprocessamento e Sensoriamento Remoto: sensoriamento remoto com Google Earth Engine e bancos de dados geográficos com PostGIS e QGIS.
+">
+      
+      
+        <meta name="author" content="Sergio Souza Costa">
+      
+      
+      
+        <link rel="prev" href="../16_integracao_qgis/">
+      
+      
+        <link rel="next" href="../../anexos/fontes_dados/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Cap 17: Lista de Exercícios e Trabalho - Introdução ao Geoprocessamento e Sensoriamento Remoto</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lambdageo.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lista-de-exercicios-e-trabalho" class="md-skip">
+          Ir para o conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="Introdução ao Geoprocessamento e Sensoriamento Remoto" class="md-header__button md-logo" aria-label="Introdução ao Geoprocessamento e Sensoriamento Remoto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Introdução ao Geoprocessamento e Sensoriamento Remoto
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Cap 17: Lista de Exercícios e Trabalho
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Alternar para modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Alternar para modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Alternar para modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Alternar para modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Compartilhar" aria-label="Compartilhar" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando a pesquisa
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Introdução ao Geoprocessamento e Sensoriamento Remoto" class="md-nav__button md-logo" aria-label="Introdução ao Geoprocessamento e Sensoriamento Remoto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Introdução ao Geoprocessamento e Sensoriamento Remoto
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://lambdageo.github.io/ebooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ⇦ Coleção LambdaGeo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apresentação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parte 1 — Sensoriamento Remoto com Google Earth Engine (16h)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Parte 1 — Sensoriamento Remoto com Google Earth Engine (16h)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte1/00_plano_parte1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plano da Parte 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte1/01_geoinformacao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 1: Geoinformação e Cartografia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte1/02_sensoriamento_remoto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 2: Fundamentos de Sensoriamento Remoto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte1/03_conhecendo_gee/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 3: Conhecendo o Google Earth Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte1/04_tipos_dados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 4: Tipos de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte1/05_selecao_vetorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 5: Seleção e Visualização — Vetores
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte1/06_selecao_matricial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 6: Seleção e Visualização — Imagens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte1/07_processamento_vetorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 7: Processamento de Dados Vetoriais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte1/08_processamento_matricial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 8: Processamento de Dados Matriciais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte1/09_exercicios/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 9: Atividades e Lista de Exercícios
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parte 2 — Banco de Dados Geográficos e QGIS (14h)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Parte 2 — Banco de Dados Geográficos e QGIS (14h)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00_plano_parte2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plano da Parte 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10_introducao_bd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 10: Introdução a Bancos de Dados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11_projeto_bdg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 11: Projeto de Banco de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12_instalacao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 12: Instalando PostgreSQL, PostGIS e QGIS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13_sql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 13: A Linguagem SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14_tipos_espaciais/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 14: Tipos de Dados Espaciais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15_operacoes_espaciais/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 15: Operações e Indexação Espacial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16_integracao_qgis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 16: Integração com o QGIS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 17: Lista de Exercícios e Trabalho
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 17: Lista de Exercícios e Trabalho
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lista-de-exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lista de exercícios
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Lista de exercícios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#conceitos-capitulos-10-e-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conceitos (Capítulos 10 e 11)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sql-capitulo-13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SQL (Capítulo 13)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bancos-de-dados-geograficos-capitulos-14-a-16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bancos de dados geográficos (Capítulos 14 a 16)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trabalho-pratico-da-parte-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trabalho prático da Parte 2
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Anexos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Anexos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../anexos/fontes_dados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fontes de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../anexos/referencias/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referências
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lista-de-exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lista de exercícios
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Lista de exercícios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#conceitos-capitulos-10-e-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conceitos (Capítulos 10 e 11)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sql-capitulo-13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SQL (Capítulo 13)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bancos-de-dados-geograficos-capitulos-14-a-16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bancos de dados geográficos (Capítulos 14 a 16)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trabalho-pratico-da-parte-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trabalho prático da Parte 2
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="lista-de-exercicios-e-trabalho">Lista de Exercícios e Trabalho<a class="headerlink" href="#lista-de-exercicios-e-trabalho" title="Permanent link">&para;</a></h1>
+<p>Este capítulo reúne a lista de exercícios e o trabalho prático da Parte 2. Os exercícios ao final de cada capítulo servem como preparação.</p>
+<hr />
+<h2 id="lista-de-exercicios">Lista de exercícios<a class="headerlink" href="#lista-de-exercicios" title="Permanent link">&para;</a></h2>
+<h3 id="conceitos-capitulos-10-e-11">Conceitos (Capítulos 10 e 11)<a class="headerlink" href="#conceitos-capitulos-10-e-11" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Conceitue e exemplifique dados, banco de dados e sistema gerenciador de banco de dados.</li>
+<li>Quais são os conceitos utilizados pelos principais modelos de banco de dados usados atualmente (relacional, objeto-relacional, NoSQL)?</li>
+<li>Descreva a arquitetura cliente/servidor e explique o papel do QGIS e do PostgreSQL nessa arquitetura.</li>
+<li>Quais perguntas um usuário de geoprocessamento precisa responder ao modelar um banco de dados geográfico?</li>
+<li>No OMT-G, qual a diferença entre uma classe convencional e uma classe georreferenciada? Dê um exemplo de cada.</li>
+</ol>
+<h3 id="sql-capitulo-13">SQL (Capítulo 13)<a class="headerlink" href="#sql-capitulo-13" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p>Foram criadas duas tabelas em um banco de dados com os comandos:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">aluno</span><span class="w"> </span><span class="p">(</span><span class="n">matricula</span><span class="w"> </span><span class="nb">int</span><span class="p">,</span><span class="w"> </span><span class="n">nmaluno</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">80</span><span class="p">),</span><span class="w"> </span><span class="n">cdcurso</span><span class="w"> </span><span class="nb">int</span><span class="p">);</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">curso</span><span class="w"> </span><span class="p">(</span><span class="n">cdcurso</span><span class="w"> </span><span class="nb">int</span><span class="p">,</span><span class="w"> </span><span class="n">nmcurso</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">80</span><span class="p">));</span>
+</code></pre></div>
+<p>Qual a consulta SQL que retorna o nome do aluno e o nome do curso?</p>
+</li>
+<li>
+<p>Observe o banco de dados composto pelas relações a seguir, em que atributos sublinhados indicam a chave primária e atributos em itálico indicam as chaves estrangeiras:</p>
+<blockquote>
+<p>Usuario (<u>CdUser</u>, Nome, Sexo, <em>CdGrp</em>)</p>
+<p>Post (<u>CodPost</u>, Mensagem, Data, <em>CdUser</em>)</p>
+<p>Grupo (<u>CdGrp</u>, Nome)</p>
+</blockquote>
+<p>As afirmações a seguir podem ser verdadeiras (V) ou falsas (F):</p>
+<ul>
+<li>I – um usuário pode estar alocado em mais de um grupo;</li>
+<li>II – um usuário pode estar associado a mais de um post;</li>
+<li>III – um grupo pode conter mais de um usuário;</li>
+<li>IV – o nome de um grupo é único.</li>
+</ul>
+<p>Marque a alternativa correta: (a) V, V, V, V; (b) V, F, V, V; (c) F, V, V, F; (d) F, F, V, V.</p>
+</li>
+<li>
+<p>A tabela <code>func</code> e o resultado de uma consulta executada no PostgreSQL são apresentados a seguir. Qual consulta SQL foi executada para obter o resultado?</p>
+<p><strong>Tabela <code>func</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>mat</th>
+<th>nome</th>
+<th>cargo</th>
+<th style="text-align: right;">sal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>20161</td>
+<td>Maria</td>
+<td>Professor</td>
+<td style="text-align: right;">1000</td>
+</tr>
+<tr>
+<td>20164</td>
+<td>Carlos</td>
+<td>Médico</td>
+<td style="text-align: right;">3000</td>
+</tr>
+<tr>
+<td>20171</td>
+<td>Marcos</td>
+<td>Engenheiro</td>
+<td style="text-align: right;">2200</td>
+</tr>
+<tr>
+<td>20174</td>
+<td>José</td>
+<td>Enfermeiro</td>
+<td style="text-align: right;">2000</td>
+</tr>
+<tr>
+<td>20153</td>
+<td>Pedro</td>
+<td>Programador</td>
+<td style="text-align: right;">1000</td>
+</tr>
+<tr>
+<td>20181</td>
+<td>Lucas</td>
+<td>Topógrafo</td>
+<td style="text-align: right;">1500</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Resultado</strong></p>
+<table>
+<thead>
+<tr>
+<th>nome</th>
+<th>cargo</th>
+<th style="text-align: right;">sal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Carlos</td>
+<td>Médico</td>
+<td style="text-align: right;">3000</td>
+</tr>
+<tr>
+<td>Marcos</td>
+<td>Engenheiro</td>
+<td style="text-align: right;">2200</td>
+</tr>
+<tr>
+<td>José</td>
+<td>Enfermeiro</td>
+<td style="text-align: right;">2000</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>Foi criada uma tabela com o comando a seguir. Escreva um comando SQL que insira uma nova linha na tabela <code>met</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">met</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">cidade</span><span class="w">     </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">80</span><span class="p">),</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="n">temp_baixa</span><span class="w"> </span><span class="nb">int</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="n">temp_alta</span><span class="w">  </span><span class="nb">int</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="n">precip</span><span class="w">     </span><span class="nb">real</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="p">);</span>
+</code></pre></div>
+</li>
+</ol>
+<h3 id="bancos-de-dados-geograficos-capitulos-14-a-16">Bancos de dados geográficos (Capítulos 14 a 16)<a class="headerlink" href="#bancos-de-dados-geograficos-capitulos-14-a-16" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Explique as duas formas de integrar bancos de dados geográficos e sistemas de informação geográfica.</li>
+<li>
+<p>Considere um banco de dados espacial de uma cidade, com as entidades bairro e lotes:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">bairro</span><span class="w"> </span><span class="p">(</span><span class="n">codigo</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="n">bairronm</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="n">geometry</span><span class="p">(</span><span class="n">POLYGON</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">lotes</span><span class="w">  </span><span class="p">(</span><span class="n">codigo</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="n">lotenm</span><span class="w">   </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="n">geometry</span><span class="p">(</span><span class="n">POLYGON</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span>
+</code></pre></div>
+<p>Qual a consulta SQL que retorna todos os lotes localizados dentro do bairro Turu?</p>
+</li>
+<li>
+<p>Qual a diferença entre WKT e EWKT? Em que situação o EWKT não pode ser usado?</p>
+</li>
+<li>Por que <code>ST_Distance</code> entre dois pontos em EPSG:4326 não retorna metros? Mostre duas formas de obter a distância em metros.</li>
+<li>O que é um índice espacial? Qual comando cria um índice espacial no PostGIS?</li>
+</ol>
+<details class="success">
+<summary>Gabarito de alguns exercícios</summary>
+<p><strong>6.</strong> <code>SELECT a.nmaluno, c.nmcurso FROM aluno a JOIN curso c ON a.cdcurso = c.cdcurso;</code></p>
+<p><strong>7.</strong> Alternativa (c): cada usuário tem uma única chave estrangeira <code>CdGrp</code> (I é falsa); <code>Post</code> referencia <code>CdUser</code>, então um usuário pode ter vários posts (II verdadeira); vários usuários podem ter o mesmo <code>CdGrp</code> (III verdadeira); nada impede nomes repetidos em <code>Grupo</code>, pois a chave é <code>CdGrp</code> (IV falsa).</p>
+<p><strong>8.</strong> <code>SELECT nome, cargo, sal FROM func WHERE sal &gt;= 2000 ORDER BY sal DESC;</code> (outras condições, como <code>sal &gt; 1500</code>, também produzem o resultado).</p>
+<p><strong>11.</strong> <code>SELECT l.* FROM lotes l JOIN bairro b ON ST_Within(l.geom, b.geom) WHERE b.bairronm = 'Turu';</code></p>
+</details>
+<hr />
+<h2 id="trabalho-pratico-da-parte-2">Trabalho prático da Parte 2<a class="headerlink" href="#trabalho-pratico-da-parte-2" title="Permanent link">&para;</a></h2>
+<p>Baixe os arquivos <em>shapefile</em> disponíveis em <a href="https://bit.ly/3b6qN8s">bit.ly/3b6qN8s</a> e descompacte-os em uma pasta. Em seguida:</p>
+<ol>
+<li>Crie um banco de dados geográfico no PostGIS denominado <code>brdata</code>.</li>
+<li>Importe os arquivos <code>sede_municipio.shp</code>, <code>aeroporto_internacional.shp</code> e <code>ferrovia.shp</code>, em um esquema chamado <code>brasil</code>, criando índices espaciais.</li>
+<li>Escreva e teste uma consulta que retorne os municípios cujas sedes estão em um raio de 100 km do aeroporto de São Luís.</li>
+<li>Escreva e teste uma consulta que retorne o nome dos municípios cujas sedes estão a pelo menos 100 km de distância de <strong>qualquer</strong> aeroporto internacional.</li>
+<li>Qual a extensão, em quilômetros, da rede ferroviária no estado do Maranhão? (Dica: importe também o <a href="../../dados/BR_UF.zip">BR_UF.zip</a> e combine <code>ST_Intersection</code> e <code>ST_Length</code>.)</li>
+<li>No QGIS, conecte-se ao banco <code>brdata</code>, carregue como camadas os resultados das consultas 3 e 4 e produza um mapa com legenda, escala e fonte dos dados.</li>
+</ol>
+<p><strong>Entrega:</strong> um relatório (PDF) com, para cada item, a consulta SQL, uma captura de tela do resultado e uma breve explicação; e o mapa do item 6.</p>
+<p><strong>Critérios de avaliação</strong></p>
+<table>
+<thead>
+<tr>
+<th>Critério</th>
+<th style="text-align: center;">Peso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Criação do banco, importação e índices (itens 1 e 2)</td>
+<td style="text-align: center;">15%</td>
+</tr>
+<tr>
+<td>Correção das consultas espaciais (itens 3 a 5)</td>
+<td style="text-align: center;">50%</td>
+</tr>
+<tr>
+<td>Uso correto de SRCs e unidades (metros, quilômetros)</td>
+<td style="text-align: center;">15%</td>
+</tr>
+<tr>
+<td>Mapa e integração com o QGIS (item 6)</td>
+<td style="text-align: center;">20%</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">Atenção aos sistemas de referência</p>
+<p>Verifique o SRID de cada camada importada (<code>SELECT * FROM geometry_columns;</code>). Se as camadas estiverem em SRCs diferentes, use <code>ST_Transform</code>; para medir distâncias em metros, use <code>geography</code> ou um SRC projetado.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar ao topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "content.code.annotate", "content.code.copy", "content.tabs.link", "content.tooltips", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "Mais 1 nesta p\u00e1gina", "search.result.more.other": "Mais # nesta p\u00e1gina", "search.result.none": "Nenhum resultado encontrado", "search.result.one": "1 resultado encontrado", "search.result.other": "# resultados encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1850 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Livro didático da disciplina de Introdução ao Geoprocessamento e Sensoriamento Remoto: sensoriamento remoto com Google Earth Engine e bancos de dados geográficos com PostGIS e QGIS.
+">
+      
+      
+        <meta name="author" content="Sergio Souza Costa">
+      
+      
+      
+        <link rel="prev" href="../04_tipos_dados/">
+      
+      
+        <link rel="next" href="../06_selecao_matricial/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Cap 5: Seleção e Visualização — Vetores - Introdução ao Geoprocessamento e Sensoriamento Remoto</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lambdageo.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#selecao-e-visualizacao-de-dados-vetoriais" class="md-skip">
+          Ir para o conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="Introdução ao Geoprocessamento e Sensoriamento Remoto" class="md-header__button md-logo" aria-label="Introdução ao Geoprocessamento e Sensoriamento Remoto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Introdução ao Geoprocessamento e Sensoriamento Remoto
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Cap 5: Seleção e Visualização — Vetores
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Alternar para modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Alternar para modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Alternar para modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Alternar para modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Compartilhar" aria-label="Compartilhar" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando a pesquisa
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Introdução ao Geoprocessamento e Sensoriamento Remoto" class="md-nav__button md-logo" aria-label="Introdução ao Geoprocessamento e Sensoriamento Remoto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Introdução ao Geoprocessamento e Sensoriamento Remoto
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://lambdageo.github.io/ebooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ⇦ Coleção LambdaGeo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apresentação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parte 1 — Sensoriamento Remoto com Google Earth Engine (16h)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Parte 1 — Sensoriamento Remoto com Google Earth Engine (16h)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00_plano_parte1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plano da Parte 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_geoinformacao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 1: Geoinformação e Cartografia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_sensoriamento_remoto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 2: Fundamentos de Sensoriamento Remoto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_conhecendo_gee/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 3: Conhecendo o Google Earth Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_tipos_dados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 4: Tipos de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 5: Seleção e Visualização — Vetores
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 5: Seleção e Visualização — Vetores
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#acessando-dados-vetoriais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📥 Acessando dados vetoriais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📥 Acessando dados vetoriais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#do-catalogo-do-gee" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Do catálogo do GEE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enviando-seus-proprios-dados-assets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enviando seus próprios dados (assets)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#visualizacao-dos-dados-vetoriais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎨 Visualização dos dados vetoriais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎨 Visualização dos dados vetoriais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#transparencia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transparência
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapas-categoricos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mapas categóricos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#selecao-de-dados-vetoriais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔎 Seleção de dados vetoriais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔎 Seleção de dados vetoriais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#selecao-por-atributos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seleção por atributos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selecao-espacial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seleção espacial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selecao-combinada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seleção combinada
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sintese" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Síntese
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Exercícios
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06_selecao_matricial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 6: Seleção e Visualização — Imagens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07_processamento_vetorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 7: Processamento de Dados Vetoriais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08_processamento_matricial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 8: Processamento de Dados Matriciais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09_exercicios/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 9: Atividades e Lista de Exercícios
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parte 2 — Banco de Dados Geográficos e QGIS (14h)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Parte 2 — Banco de Dados Geográficos e QGIS (14h)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/00_plano_parte2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plano da Parte 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/10_introducao_bd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 10: Introdução a Bancos de Dados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/11_projeto_bdg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 11: Projeto de Banco de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/12_instalacao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 12: Instalando PostgreSQL, PostGIS e QGIS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/13_sql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 13: A Linguagem SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/14_tipos_espaciais/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 14: Tipos de Dados Espaciais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/15_operacoes_espaciais/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 15: Operações e Indexação Espacial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/16_integracao_qgis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 16: Integração com o QGIS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/17_exercicios/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 17: Lista de Exercícios e Trabalho
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Anexos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Anexos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../anexos/fontes_dados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fontes de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../anexos/referencias/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referências
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#acessando-dados-vetoriais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📥 Acessando dados vetoriais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📥 Acessando dados vetoriais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#do-catalogo-do-gee" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Do catálogo do GEE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enviando-seus-proprios-dados-assets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enviando seus próprios dados (assets)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#visualizacao-dos-dados-vetoriais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎨 Visualização dos dados vetoriais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎨 Visualização dos dados vetoriais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#transparencia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transparência
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapas-categoricos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mapas categóricos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#selecao-de-dados-vetoriais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔎 Seleção de dados vetoriais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔎 Seleção de dados vetoriais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#selecao-por-atributos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seleção por atributos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selecao-espacial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seleção espacial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selecao-combinada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seleção combinada
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sintese" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Síntese
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Exercícios
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="selecao-e-visualizacao-de-dados-vetoriais">Seleção e Visualização de Dados Vetoriais<a class="headerlink" href="#selecao-e-visualizacao-de-dados-vetoriais" title="Permanent link">&para;</a></h1>
+<p>Nos capítulos anteriores vimos os conceitos básicos da plataforma e os tipos de dados geográficos. A partir de agora, vamos trabalhar com dados reais: neste capítulo, veremos como <strong>acessar</strong>, <strong>visualizar</strong> e <strong>selecionar</strong> dados vetoriais — seja do catálogo do GEE, seja de arquivos enviados por você.</p>
+<hr />
+<h2 id="acessando-dados-vetoriais">📥 Acessando dados vetoriais<a class="headerlink" href="#acessando-dados-vetoriais" title="Permanent link">&para;</a></h2>
+<h3 id="do-catalogo-do-gee">Do catálogo do GEE<a class="headerlink" href="#do-catalogo-do-gee" title="Permanent link">&para;</a></h3>
+<p>O catálogo do Google Earth Engine é composto predominantemente por dados matriciais, mas inclui algumas coleções vetoriais, como limites de países e conjuntos de dados fornecidos principalmente por agências dos Estados Unidos. Para encontrá-los, digite um termo na caixa de busca do Code Editor — por exemplo, <em>countries</em>:</p>
+<p><img alt="Buscando dados no catálogo" src="../img/cap05/catalogo-busca.jpg" /></p>
+<p>Clique em um dos resultados, como o <strong>LSIB 2017: Large Scale International Boundary Polygons</strong>:</p>
+<p><img alt="Página de um conjunto de dados no catálogo" src="../img/cap05/catalogo-lsib.png" /></p>
+<p>A partir dessa tela, há duas formas de carregar os dados. A primeira é clicar em <strong>Import</strong>: o conjunto aparece como uma variável (<code>table</code>) na seção de <em>imports</em> do <em>script</em>.</p>
+<p><img alt="O dado importado aparece no topo do *script*" src="../img/cap05/import-table.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">table</span><span class="p">);</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">setCenter</span><span class="p">(</span><span class="o">-</span><span class="mf">37.77028535227355</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">4.567792298842188</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// zoom 1: o mundo todo</span>
+</code></pre></div>
+<p><img alt="Os limites internacionais no mapa" src="../img/cap05/lsib-mapa.jpg" /></p>
+<p>A segunda forma é copiar o trecho de código indicado em <strong>Collection Snippet</strong>, que contém o identificador (ID) do conjunto:</p>
+<p><img alt="O *Collection Snippet* com o identificador" src="../img/cap05/catalogo-snippet.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">paises</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span><span class="s1">'USDOS/LSIB_SIMPLE/2017'</span><span class="p">);</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">paises</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="s1">'Países'</span><span class="p">);</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">setCenter</span><span class="p">(</span><span class="o">-</span><span class="mf">47.92</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">15.80</span><span class="p">,</span><span class="w"> </span><span class="mf">3</span><span class="p">);</span><span class="w"> </span><span class="c1">// centralizando em Brasília</span>
+</code></pre></div>
+<p>Essa segunda forma é mais fácil de copiar e colar em outros <em>scripts</em>, e é a que usaremos no restante do livro.</p>
+<h3 id="enviando-seus-proprios-dados-assets">Enviando seus próprios dados (<em>assets</em>)<a class="headerlink" href="#enviando-seus-proprios-dados-assets" title="Permanent link">&para;</a></h3>
+<p>Como o catálogo tem poucas coleções vetoriais, é comum importar dados de outras fontes, no formato <strong>Shapefile</strong> (também aceitos: CSV com coordenadas e, via Google Cloud, outros formatos). No Brasil, o portal do <strong>IBGE</strong> disponibiliza as malhas territoriais de todo o país — veja outras fontes em <a href="../../anexos/fontes_dados/">Fontes de Dados Geográficos</a>.</p>
+<div class="admonition info">
+<p class="admonition-title">O formato Shapefile</p>
+<p>O Shapefile (ou ESRI Shapefile) é um padrão amplamente usado para armazenar dados vetoriais e se tornou um formato comum para compartilhar dados geoespaciais. Apesar do nome no singular, um <em>shapefile</em> é um <strong>conjunto de arquivos</strong> com o mesmo nome e extensões diferentes: <code>.shp</code> (geometrias), <code>.shx</code> (índice), <code>.dbf</code> (atributos) e <code>.prj</code> (sistema de referência). Os quatro são necessários — envie-os juntos ou compactados em um <code>.zip</code>.</p>
+</div>
+<p><strong>1. Baixe a malha de municípios do Maranhão</strong> no portal <a href="https://www.ibge.gov.br/geociencias/organizacao-do-territorio/malhas-territoriais/15774-malhas.html">Malha Municipal — IBGE</a>.</p>
+<p><strong>2. Envie o arquivo ao GEE.</strong> Na aba <strong>Assets</strong>, clique em <strong>NEW</strong> e escolha <strong>Shape files</strong>. Na janela que se abre, clique em <strong>SELECT</strong> para escolher os arquivos (ou o <code>.zip</code>), dê um nome ao <em>asset</em> e clique em <strong>UPLOAD</strong>. O andamento do envio aparece na aba <strong>Tasks</strong>.</p>
+<p><img alt="Enviando um *shapefile* para os *assets*" src="../img/cap05/upload-shapefile.png" /></p>
+<p><strong>3. Copie o identificador.</strong> Após o envio, o dado aparece na aba <strong>Assets</strong>. Clique nele para ver seus detalhes e copiar o identificador (<em>Table ID</em>):</p>
+<p><img alt="Detalhes do *asset* e seu identificador" src="../img/cap05/asset-detalhes.png" /></p>
+<p>Com o identificador, os dados são carregados como qualquer outro conjunto do catálogo:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">municipios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="s1">'projects/ee-sergiocosta/assets/MA_Municipios_2022'</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="p">);</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">municipios</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="s1">'Municípios do MA'</span><span class="p">);</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">municipios</span><span class="p">,</span><span class="w"> </span><span class="mf">6</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="Municípios do Maranhão" src="../img/cap05/municipios-ma.jpg" /></p>
+<div class="admonition warning">
+<p class="admonition-title">Use o identificador do <strong>seu</strong> <em>asset</em></p>
+<p>Os exemplos deste livro usam os <em>assets</em> do projeto do autor (<code>projects/ee-sergiocosta/assets/...</code>). Ao reproduzi-los, envie os dados para o seu projeto e <strong>substitua o identificador</strong> pelo seu — algo como <code>projects/ee-seunome/assets/MA_Municipios_2022</code>. Os dados usados nos exemplos estão disponíveis para download:</p>
+<ul>
+<li>Municípios do Maranhão: <a href="https://www.ibge.gov.br/geociencias/organizacao-do-territorio/malhas-territoriais/15774-malhas.html">Malha Municipal — IBGE</a> (arquivo <code>MA_Municipios_2022</code>);</li>
+<li>Unidades federativas com o código numérico da região: <a href="../../dados/BR_UF.zip">BR_UF.zip</a> (versão simplificada, preparada para este livro);</li>
+<li>Limites da Amazônia Legal: <a href="https://www.ibge.gov.br/geociencias/organizacao-do-territorio/estrutura-territorial/15819-amazonia-legal.html">Amazônia Legal — IBGE</a>;</li>
+<li>Polos madeireiros e terras indígenas (Capítulo 7): <a href="../../dados/polos_madeireiros_mma.zip">polos_madeireiros_mma.zip</a> e <a href="../../dados/terras_indigenas.zip">terras_indigenas.zip</a>.</li>
+</ul>
+</div>
+<hr />
+<h2 id="visualizacao-dos-dados-vetoriais">🎨 Visualização dos dados vetoriais<a class="headerlink" href="#visualizacao-dos-dados-vetoriais" title="Permanent link">&para;</a></h2>
+<p>Ao adicionar dados vetoriais com <code>Map.addLayer(municipios)</code>, eles aparecem em preto. O segundo parâmetro de <code>Map.addLayer</code> é um dicionário de <strong>parâmetros de visualização</strong>, e o terceiro é o <strong>nome</strong> da camada no gerenciador de camadas (<em>Layers</em>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">municipios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="s1">'projects/ee-sergiocosta/assets/MA_Municipios_2022'</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="p">);</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">municipios</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">'FF0000'</span><span class="p">},</span><span class="w"> </span><span class="s1">'Municípios em vermelho'</span><span class="p">);</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">municipios</span><span class="p">,</span><span class="w"> </span><span class="mf">6</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="Municípios em vermelho" src="../img/cap05/municipios-vermelho.jpg" /></p>
+<p><img alt="O nome da camada no gerenciador de camadas" src="../img/cap05/gerenciador-camadas.png" /></p>
+<details class="tip">
+<summary>Encontrando o código de uma cor</summary>
+<p>As cores são indicadas por códigos hexadecimais RGB (<code>RRGGBB</code>). Há vários <em>sites</em> que retornam o código de uma cor, e a própria busca do Google oferece um seletor — pesquise por <em>seletor de cores</em> ou <em>color picker</em>:</p>
+<p><img alt="Seletor de cores do Google" src="../img/cap05/seletor-cores.png" /></p>
+</details>
+<p>Com o parâmetro <code>color</code>, a borda e o preenchimento ficam na mesma cor. Para um controle mais detalhado, use o método <strong><code>.style()</code></strong> da coleção, que permite definir a cor e a largura da borda, a cor do preenchimento, o tipo de linha, entre outros:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">municipios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="s1">'projects/ee-sergiocosta/assets/MA_Municipios_2022'</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="p">);</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">municipios</span><span class="p">.</span><span class="nx">style</span><span class="p">({</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="nx">fillColor</span><span class="o">:</span><span class="w"> </span><span class="s1">'FF0000'</span><span class="p">,</span><span class="w">  </span><span class="c1">// cor de preenchimento</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">'000000'</span><span class="p">,</span><span class="w">      </span><span class="c1">// cor da borda</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span><span class="nx">width</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="w">              </span><span class="c1">// largura da borda</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="p">}),</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="s1">'Municípios'</span><span class="p">);</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">municipios</span><span class="p">,</span><span class="w"> </span><span class="mf">6</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="Borda preta e preenchimento vermelho" src="../img/cap05/style-borda.jpg" /></p>
+<p>Veja todos os parâmetros em <a href="https://developers.google.com/earth-engine/apidocs/ee-featurecollection-style">ee.FeatureCollection.style</a>.</p>
+<h3 id="transparencia">Transparência<a class="headerlink" href="#transparencia" title="Permanent link">&para;</a></h3>
+<p>É possível acrescentar um canal <strong>alfa</strong> (transparência) à cor, passando do formato <code>RRGGBB</code> para <code>RRGGBBAA</code>. Cada par de dígitos hexadecimais vai de <code>00</code> (0) a <code>FF</code> (255). No canal alfa, <code>00</code> é totalmente transparente e <code>FF</code> totalmente opaco. Para obter o código de uma opacidade <span class="arithmatex">\(p\)</span> (em %), calcule <span class="arithmatex">\(\text{round}(255 \times p / 100)\)</span> e converta para hexadecimal:</p>
+<table>
+<thead>
+<tr>
+<th>Opacidade</th>
+<th>100%</th>
+<th>90%</th>
+<th>80%</th>
+<th>75%</th>
+<th>60%</th>
+<th>50%</th>
+<th>40%</th>
+<th>25%</th>
+<th>20%</th>
+<th>10%</th>
+<th>0%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Código</strong></td>
+<td><code>FF</code></td>
+<td><code>E6</code></td>
+<td><code>CC</code></td>
+<td><code>BF</code></td>
+<td><code>99</code></td>
+<td><code>80</code></td>
+<td><code>66</code></td>
+<td><code>40</code></td>
+<td><code>33</code></td>
+<td><code>1A</code></td>
+<td><code>00</code></td>
+</tr>
+</tbody>
+</table>
+<p>Assim, <code>abffd180</code> é a cor <code>abffd1</code> (um verde-claro) com opacidade de 50% (<code>80</code> em hexadecimal = 128 em decimal).</p>
+<h3 id="mapas-categoricos">Mapas categóricos<a class="headerlink" href="#mapas-categoricos" title="Permanent link">&para;</a></h3>
+<p>Nos exemplos anteriores, todas as feições têm a mesma cor — uma <strong>simbologia simples</strong>. Muitas vezes, porém, precisamos de <strong>mapas categóricos</strong>, em que cada categoria recebe uma cor: tipos de uso da terra, classes de solo, divisões administrativas...</p>
+<p>Considere a coleção de unidades federativas <a href="../../dados/BR_UF.zip">BR_UF.zip</a>, em que cada UF tem um atributo numérico <code>CD_REGIAO</code> com o código de uma das cinco regiões do país (1 = Norte, 2 = Nordeste, 3 = Sudeste, 4 = Sul, 5 = Centro-Oeste). Para colorir por região, o truque é <strong>transformar as feições em uma imagem</strong>. Primeiro, criamos uma imagem vazia:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">vazia</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Image</span><span class="p">().</span><span class="kr">byte</span><span class="p">();</span>
+</code></pre></div>
+<p>Em seguida, usamos o método <code>.paint()</code>, que recebe a coleção de feições e o atributo que definirá o valor dos pixels — neste caso, de 1 a 5:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">regioes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">vazia</span><span class="p">.</span><span class="nx">paint</span><span class="p">(</span><span class="nx">ufs</span><span class="p">,</span><span class="w"> </span><span class="s1">'CD_REGIAO'</span><span class="p">);</span>
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Rasterização</p>
+<p>O método <code>.paint()</code> realiza uma <strong>rasterização</strong>: converte dados vetoriais em uma matriz de pixels. O atributo usado precisa ser <strong>numérico</strong>.</p>
+</div>
+<p>Por fim, associamos uma paleta de cores aos valores: o valor 1 recebe a primeira cor da paleta, o valor 2 a segunda, e assim por diante.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">paleta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">'408F70'</span><span class="p">,</span><span class="w"> </span><span class="s1">'FF0000'</span><span class="p">,</span><span class="w"> </span><span class="s1">'E7EB1B'</span><span class="p">,</span><span class="w"> </span><span class="s1">'FF8C4D'</span><span class="p">,</span><span class="w"> </span><span class="s1">'9091C8'</span><span class="p">];</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">regioes</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">palette</span><span class="o">:</span><span class="w"> </span><span class="nx">paleta</span><span class="p">,</span><span class="w"> </span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">5</span><span class="p">},</span><span class="w"> </span><span class="s1">'Regiões'</span><span class="p">);</span>
+</code></pre></div>
+<p>O código completo:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ufs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span><span class="s1">'projects/ee-sergiocosta/assets/BR_UF'</span><span class="p">);</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">ufs</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="s1">'UFs'</span><span class="p">);</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="c1">// cores diferentes por região: é necessário trabalhar com imagens</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="kd">var</span><span class="w"> </span><span class="nx">vazia</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Image</span><span class="p">().</span><span class="kr">byte</span><span class="p">();</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="c1">// rasterização pelo atributo numérico CD_REGIAO (1 a 5)</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="kd">var</span><span class="w"> </span><span class="nx">regioes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">vazia</span><span class="p">.</span><span class="nx">paint</span><span class="p">(</span><span class="nx">ufs</span><span class="p">,</span><span class="w"> </span><span class="s1">'CD_REGIAO'</span><span class="p">);</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="c1">// os valores de 1 a 5 são associados às cores da paleta</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="kd">var</span><span class="w"> </span><span class="nx">paleta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">'408F70'</span><span class="p">,</span><span class="w"> </span><span class="s1">'FF0000'</span><span class="p">,</span><span class="w"> </span><span class="s1">'E7EB1B'</span><span class="p">,</span><span class="w"> </span><span class="s1">'FF8C4D'</span><span class="p">,</span><span class="w"> </span><span class="s1">'9091C8'</span><span class="p">];</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">regioes</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">palette</span><span class="o">:</span><span class="w"> </span><span class="nx">paleta</span><span class="p">,</span><span class="w"> </span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">5</span><span class="p">},</span><span class="w"> </span><span class="s1">'Regiões'</span><span class="p">);</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">ufs</span><span class="p">,</span><span class="w"> </span><span class="mf">4</span><span class="p">);</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Camada "UFs"</th>
+<th style="text-align: center;">Camada "Regiões"</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><img alt="Unidades federativas" src="../img/cap05/ufs.png" /></td>
+<td style="text-align: center;"><img alt="Regiões coloridas por categoria" src="../img/cap05/regioes.png" /></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="selecao-de-dados-vetoriais">🔎 Seleção de dados vetoriais<a class="headerlink" href="#selecao-de-dados-vetoriais" title="Permanent link">&para;</a></h2>
+<p>As operações de seleção são cruciais para extrair informações relevantes de conjuntos de dados geográficos. Nos SIGs, elas permitem filtrar e consultar elementos por <strong>atributos não espaciais</strong>, por <strong>relações espaciais</strong> ou por interação direta (como clicar em um objeto). O GEE oferece grande parte dessas seleções por meio do método <code>.filter()</code>, que recebe um <strong>filtro</strong> (<code>ee.Filter</code>).</p>
+<h3 id="selecao-por-atributos">Seleção por atributos<a class="headerlink" href="#selecao-por-atributos" title="Permanent link">&para;</a></h3>
+<p>A seleção por atributos filtra os elementos de uma coleção com base nos valores de seus atributos. Suponha que queremos apenas os municípios do Maranhão com mais de 8.000 km². Como a área de cada município está no atributo <code>AREA_KM2</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">filtroArea</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">gt</span><span class="p">(</span><span class="s1">'AREA_KM2'</span><span class="p">,</span><span class="w"> </span><span class="mf">8000</span><span class="p">);</span><span class="w">  </span><span class="c1">// gt = greater than (maior que)</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="kd">var</span><span class="w"> </span><span class="nx">municipiosAcima8000</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">municipios</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">filtroArea</span><span class="p">);</span>
+</code></pre></div>
+<p>Código completo:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">municipios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="s1">'projects/ee-sergiocosta/assets/MA_Municipios_2022'</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="p">);</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="kd">var</span><span class="w"> </span><span class="nx">filtroArea</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">gt</span><span class="p">(</span><span class="s1">'AREA_KM2'</span><span class="p">,</span><span class="w"> </span><span class="mf">8000</span><span class="p">);</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="kd">var</span><span class="w"> </span><span class="nx">municipiosAcima8000</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">municipios</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">filtroArea</span><span class="p">);</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="nx">print</span><span class="p">(</span><span class="s1">'Quantidade:'</span><span class="p">,</span><span class="w"> </span><span class="nx">municipiosAcima8000</span><span class="p">.</span><span class="nx">size</span><span class="p">());</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">municipiosAcima8000</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">'FF0000'</span><span class="p">},</span><span class="w"> </span><span class="s1">'Área maior que 8000 km²'</span><span class="p">);</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">municipiosAcima8000</span><span class="p">,</span><span class="w"> </span><span class="mf">6</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="Municípios com mais de 8.000 km²" src="../img/cap05/selecao-atributo.jpg" /></p>
+<p>Os filtros de comparação mais comuns são:</p>
+<table>
+<thead>
+<tr>
+<th>Filtro</th>
+<th>Significado</th>
+<th>Exemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ee.Filter.eq(nome, valor)</code></td>
+<td>igual a</td>
+<td><code>ee.Filter.eq('SIGLA_UF', 'MA')</code></td>
+</tr>
+<tr>
+<td><code>ee.Filter.neq(nome, valor)</code></td>
+<td>diferente de</td>
+<td><code>ee.Filter.neq('NM_MUN', 'São Luís')</code></td>
+</tr>
+<tr>
+<td><code>ee.Filter.gt</code> / <code>ee.Filter.gte</code></td>
+<td>maior que / maior ou igual</td>
+<td><code>ee.Filter.gte('AREA_KM2', 1000)</code></td>
+</tr>
+<tr>
+<td><code>ee.Filter.lt</code> / <code>ee.Filter.lte</code></td>
+<td>menor que / menor ou igual</td>
+<td><code>ee.Filter.lt('CLOUD_COVER', 20)</code></td>
+</tr>
+<tr>
+<td><code>ee.Filter.inList(nome, lista)</code></td>
+<td>valor pertence à lista</td>
+<td><code>ee.Filter.inList('NM_MUN', ['Caxias', 'Codó'])</code></td>
+</tr>
+<tr>
+<td><code>ee.Filter.and(f1, f2)</code> / <code>ee.Filter.or(f1, f2)</code></td>
+<td>combinação de filtros</td>
+<td>ver Capítulo 7</td>
+</tr>
+<tr>
+<td><code>filtro.not()</code></td>
+<td>negação</td>
+<td><code>ee.Filter.gt('AREA_KM2', 8000).not()</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="selecao-espacial">Seleção espacial<a class="headerlink" href="#selecao-espacial" title="Permanent link">&para;</a></h3>
+<p>A seleção espacial filtra os elementos com base em sua <strong>localização</strong>: os que estão contidos em uma área de interesse, próximos a um ponto ou ao longo de uma linha. Considere uma coleção com os municípios do Maranhão e outra com a delimitação da <strong>Amazônia Legal</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">amazoniaLegal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="s1">'projects/ee-sergiocosta/assets/brazilian_legal_amazon'</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="p">);</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="kd">var</span><span class="w"> </span><span class="nx">municipiosMA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">    </span><span class="s1">'projects/ee-sergiocosta/assets/MA_Municipios_2022'</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="p">);</span>
+</code></pre></div>
+<p>Queremos os municípios que tenham <strong>alguma parte</strong> do seu território dentro da Amazônia Legal (não necessariamente todo o município). O filtro <code>ee.Filter.bounds</code> implementa a operação de <strong>intersecção</strong> entre geometrias:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">interceptaAmazoniaLegal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">bounds</span><span class="p">(</span><span class="nx">amazoniaLegal</span><span class="p">);</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="kd">var</span><span class="w"> </span><span class="nx">dentroAmazonia</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">municipiosMA</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">interceptaAmazoniaLegal</span><span class="p">);</span>
+</code></pre></div>
+<p>Com a negação do filtro, obtemos o resultado inverso — os municípios totalmente fora da Amazônia Legal:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">foraAmazonia</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">municipiosMA</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">interceptaAmazoniaLegal</span><span class="p">.</span><span class="nx">not</span><span class="p">());</span>
+</code></pre></div>
+<p>O código completo, apresentando cada grupo com uma cor:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1">// ENTRADA</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="kd">var</span><span class="w"> </span><span class="nx">amazoniaLegal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">    </span><span class="s1">'projects/ee-sergiocosta/assets/brazilian_legal_amazon'</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="p">);</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="kd">var</span><span class="w"> </span><span class="nx">municipiosMA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">    </span><span class="s1">'projects/ee-sergiocosta/assets/MA_Municipios_2022'</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="p">);</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="c1">// PROCESSAMENTO</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="kd">var</span><span class="w"> </span><span class="nx">interceptaAmazoniaLegal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">bounds</span><span class="p">(</span><span class="nx">amazoniaLegal</span><span class="p">);</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="kd">var</span><span class="w"> </span><span class="nx">dentroAmazonia</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">municipiosMA</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">interceptaAmazoniaLegal</span><span class="p">);</span>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="kd">var</span><span class="w"> </span><span class="nx">foraAmazonia</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">municipiosMA</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">interceptaAmazoniaLegal</span><span class="p">.</span><span class="nx">not</span><span class="p">());</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="c1">// APRESENTAÇÃO/SAÍDA</span>
+<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">dentroAmazonia</span><span class="p">.</span><span class="nx">style</span><span class="p">({</span>
+<a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a><span class="w">  </span><span class="nx">fillColor</span><span class="o">:</span><span class="w"> </span><span class="s1">'50824e'</span><span class="p">,</span><span class="w"> </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">'000000'</span><span class="p">,</span><span class="w"> </span><span class="nx">width</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span>
+<a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a><span class="p">}),</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="s1">'Municípios na Amazônia Legal'</span><span class="p">);</span>
+<a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a>
+<a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">foraAmazonia</span><span class="p">.</span><span class="nx">style</span><span class="p">({</span>
+<a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a><span class="w">  </span><span class="nx">fillColor</span><span class="o">:</span><span class="w"> </span><span class="s1">'ed5d28'</span><span class="p">,</span><span class="w"> </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">'000000'</span><span class="p">,</span><span class="w"> </span><span class="nx">width</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span>
+<a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a><span class="p">}),</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="s1">'Municípios fora da Amazônia Legal'</span><span class="p">);</span>
+<a id="__codelineno-14-22" name="__codelineno-14-22" href="#__codelineno-14-22"></a>
+<a id="__codelineno-14-23" name="__codelineno-14-23" href="#__codelineno-14-23"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">amazoniaLegal</span><span class="p">.</span><span class="nx">style</span><span class="p">({</span>
+<a id="__codelineno-14-24" name="__codelineno-14-24" href="#__codelineno-14-24"></a><span class="w">  </span><span class="nx">fillColor</span><span class="o">:</span><span class="w"> </span><span class="s1">'abffd180'</span><span class="p">,</span><span class="w">  </span><span class="c1">// verde-claro com 50% de opacidade</span>
+<a id="__codelineno-14-25" name="__codelineno-14-25" href="#__codelineno-14-25"></a><span class="w">  </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">'000000'</span><span class="p">,</span><span class="w"> </span><span class="nx">width</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span>
+<a id="__codelineno-14-26" name="__codelineno-14-26" href="#__codelineno-14-26"></a><span class="p">}),</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="s1">'Amazônia Legal'</span><span class="p">);</span>
+<a id="__codelineno-14-27" name="__codelineno-14-27" href="#__codelineno-14-27"></a>
+<a id="__codelineno-14-28" name="__codelineno-14-28" href="#__codelineno-14-28"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">amazoniaLegal</span><span class="p">,</span><span class="w"> </span><span class="mf">6</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="Seleção espacial: municípios dentro e fora da Amazônia Legal" src="../img/cap05/selecao-espacial.jpg" /></p>
+<h3 id="selecao-combinada">Seleção combinada<a class="headerlink" href="#selecao-combinada" title="Permanent link">&para;</a></h3>
+<p>Filtros espaciais e de atributos podem ser <strong>encadeados</strong>. Para selecionar os municípios que estão fora da Amazônia Legal <strong>e</strong> têm mais de 3.000 km²:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1">// ENTRADA</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="kd">var</span><span class="w"> </span><span class="nx">amazoniaLegal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span><span class="s1">'projects/ee-sergiocosta/assets/brazilian_legal_amazon'</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="p">);</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="kd">var</span><span class="w"> </span><span class="nx">municipiosMA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">    </span><span class="s1">'projects/ee-sergiocosta/assets/MA_Municipios_2022'</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="p">);</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="c1">// PROCESSAMENTO</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="kd">var</span><span class="w"> </span><span class="nx">interceptaAmazoniaLegal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">bounds</span><span class="p">(</span><span class="nx">amazoniaLegal</span><span class="p">);</span>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="kd">var</span><span class="w"> </span><span class="nx">filtroArea</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">gt</span><span class="p">(</span><span class="s1">'AREA_KM2'</span><span class="p">,</span><span class="w"> </span><span class="mf">3000</span><span class="p">);</span>
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="kd">var</span><span class="w"> </span><span class="nx">selecionados</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">municipiosMA</span>
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">interceptaAmazoniaLegal</span><span class="p">.</span><span class="nx">not</span><span class="p">())</span>
+<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">filtroArea</span><span class="p">);</span>
+<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a>
+<a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a><span class="c1">// APRESENTAÇÃO/SAÍDA</span>
+<a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">selecionados</span><span class="p">.</span><span class="nx">style</span><span class="p">({</span>
+<a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a><span class="w">  </span><span class="nx">fillColor</span><span class="o">:</span><span class="w"> </span><span class="s1">'ed5d28'</span><span class="p">,</span><span class="w"> </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">'000000'</span><span class="p">,</span><span class="w"> </span><span class="nx">width</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span>
+<a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a><span class="p">}),</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="s1">'Fora da Amazônia Legal e &gt; 3000 km²'</span><span class="p">);</span>
+<a id="__codelineno-15-21" name="__codelineno-15-21" href="#__codelineno-15-21"></a>
+<a id="__codelineno-15-22" name="__codelineno-15-22" href="#__codelineno-15-22"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">amazoniaLegal</span><span class="p">.</span><span class="nx">style</span><span class="p">({</span>
+<a id="__codelineno-15-23" name="__codelineno-15-23" href="#__codelineno-15-23"></a><span class="w">  </span><span class="nx">fillColor</span><span class="o">:</span><span class="w"> </span><span class="s1">'abffd180'</span><span class="p">,</span><span class="w"> </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">'000000'</span><span class="p">,</span><span class="w"> </span><span class="nx">width</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span>
+<a id="__codelineno-15-24" name="__codelineno-15-24" href="#__codelineno-15-24"></a><span class="p">}),</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="s1">'Amazônia Legal'</span><span class="p">);</span>
+<a id="__codelineno-15-25" name="__codelineno-15-25" href="#__codelineno-15-25"></a>
+<a id="__codelineno-15-26" name="__codelineno-15-26" href="#__codelineno-15-26"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">amazoniaLegal</span><span class="p">,</span><span class="w"> </span><span class="mf">6</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="Seleção combinada" src="../img/cap05/selecao-combinada.jpg" /></p>
+<div class="admonition tip">
+<p class="admonition-title">Encadear ou combinar?</p>
+<p>Encadear dois <code>.filter()</code> equivale a combiná-los com <strong>E</strong> lógico. O mesmo resultado poderia ser obtido com um único filtro: <code>ee.Filter.and(interceptaAmazoniaLegal.not(), filtroArea)</code>. Para o <strong>OU</strong> lógico, é obrigatório usar <code>ee.Filter.or(...)</code>.</p>
+</div>
+<hr />
+<h2 id="sintese">📝 Síntese<a class="headerlink" href="#sintese" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Dados vetoriais vêm do <strong>catálogo</strong> (poucos) ou de <strong><em>assets</em></strong> enviados pelo usuário (Shapefile, CSV).</li>
+<li>A visualização é controlada pelos parâmetros de <code>Map.addLayer</code> (<code>color</code>) ou, com mais detalhe, por <code>.style()</code>; mapas categóricos exigem <strong>rasterizar</strong> as feições com <code>.paint()</code>.</li>
+<li>A seleção usa <code>.filter()</code> com filtros de <strong>atributo</strong> (<code>ee.Filter.eq</code>, <code>gt</code>, <code>lt</code>...), <strong>espaciais</strong> (<code>ee.Filter.bounds</code>) e suas combinações (<code>.not()</code>, <code>and</code>, <code>or</code>).</li>
+</ul>
+<h2 id="exercicios">✏️ Exercícios<a class="headerlink" href="#exercicios" title="Permanent link">&para;</a></h2>
+<p>Estes exercícios fazem parte da <a href="../09_exercicios/#atividade-1-selecao-e-visualizacao">Atividade 1</a>.</p>
+<ol>
+<li>Carregue a coleção <code>USDOS/LSIB_SIMPLE/2017</code> e selecione apenas os países da América do Sul (dica: explore os atributos no Console e use <code>ee.Filter.eq</code> com o atributo de região, <code>wld_rgn</code>).</li>
+<li>Envie ao GEE a malha municipal do seu estado e exiba-a com borda azul de largura 2 e preenchimento transparente.</li>
+<li>Selecione os municípios do seu estado com área menor que 500 km² e mostre quantos são com <code>print(...size())</code>.</li>
+<li>Com a coleção BR_UF, faça um mapa categórico com uma cor diferente para cada região, usando uma paleta escolhida por você.</li>
+<li>Selecione os municípios maranhenses <strong>dentro</strong> da Amazônia Legal com área maior que 5.000 km², usando um único <code>ee.Filter.and</code>.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar ao topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "content.code.annotate", "content.code.copy", "content.tabs.link", "content.tooltips", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "Mais 1 nesta p\u00e1gina", "search.result.more.other": "Mais # nesta p\u00e1gina", "search.result.none": "Nenhum resultado encontrado", "search.result.one": "1 resultado encontrado", "search.result.other": "# resultados encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

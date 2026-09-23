@@ -1,0 +1,1690 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Livro didático da disciplina de Introdução ao Geoprocessamento e Sensoriamento Remoto: sensoriamento remoto com Google Earth Engine e bancos de dados geográficos com PostGIS e QGIS.
+">
+      
+      
+        <meta name="author" content="Sergio Souza Costa">
+      
+      
+      
+        <link rel="prev" href="../00_plano_parte1/">
+      
+      
+        <link rel="next" href="../02_sensoriamento_remoto/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Cap 1: Geoinformação e Cartografia - Introdução ao Geoprocessamento e Sensoriamento Remoto</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lambdageo.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#geoinformacao-e-cartografia" class="md-skip">
+          Ir para o conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="Introdução ao Geoprocessamento e Sensoriamento Remoto" class="md-header__button md-logo" aria-label="Introdução ao Geoprocessamento e Sensoriamento Remoto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Introdução ao Geoprocessamento e Sensoriamento Remoto
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Cap 1: Geoinformação e Cartografia
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Alternar para modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Alternar para modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Alternar para modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Alternar para modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Compartilhar" aria-label="Compartilhar" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando a pesquisa
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Introdução ao Geoprocessamento e Sensoriamento Remoto" class="md-nav__button md-logo" aria-label="Introdução ao Geoprocessamento e Sensoriamento Remoto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Introdução ao Geoprocessamento e Sensoriamento Remoto
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://lambdageo.github.io/ebooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ⇦ Coleção LambdaGeo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apresentação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parte 1 — Sensoriamento Remoto com Google Earth Engine (16h)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Parte 1 — Sensoriamento Remoto com Google Earth Engine (16h)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00_plano_parte1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plano da Parte 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 1: Geoinformação e Cartografia
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 1: Geoinformação e Cartografia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#a-geoinformacao-e-sua-relevancia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🌎 A geoinformação e sua relevância
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🌎 A geoinformação e sua relevância">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-primeira-lei-da-geografia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A primeira lei da geografia
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#representando-a-terra-em-um-plano" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🗺️ Representando a Terra em um plano
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🗺️ Representando a Terra em um plano">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#geoide-e-elipsoide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Geoide e elipsoide
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Datum
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#projecoes-cartograficas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Projeções cartográficas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sistemas-de-referencia-de-coordenadas-e-codigos-epsg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sistemas de referência de coordenadas e códigos EPSG
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sistemas-de-informacao-geografica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💻 Sistemas de informação geográfica
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💻 Sistemas de informação geográfica">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-evolucao-da-arquitetura-dos-sigs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A evolução da arquitetura dos SIGs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#e-onde-fica-o-google-earth-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        E onde fica o Google Earth Engine?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sintese" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Síntese
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Exercícios
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_sensoriamento_remoto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 2: Fundamentos de Sensoriamento Remoto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_conhecendo_gee/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 3: Conhecendo o Google Earth Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_tipos_dados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 4: Tipos de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_selecao_vetorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 5: Seleção e Visualização — Vetores
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06_selecao_matricial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 6: Seleção e Visualização — Imagens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07_processamento_vetorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 7: Processamento de Dados Vetoriais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08_processamento_matricial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 8: Processamento de Dados Matriciais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09_exercicios/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 9: Atividades e Lista de Exercícios
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parte 2 — Banco de Dados Geográficos e QGIS (14h)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Parte 2 — Banco de Dados Geográficos e QGIS (14h)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/00_plano_parte2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plano da Parte 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/10_introducao_bd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 10: Introdução a Bancos de Dados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/11_projeto_bdg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 11: Projeto de Banco de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/12_instalacao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 12: Instalando PostgreSQL, PostGIS e QGIS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/13_sql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 13: A Linguagem SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/14_tipos_espaciais/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 14: Tipos de Dados Espaciais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/15_operacoes_espaciais/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 15: Operações e Indexação Espacial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/16_integracao_qgis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 16: Integração com o QGIS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/17_exercicios/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 17: Lista de Exercícios e Trabalho
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Anexos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Anexos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../anexos/fontes_dados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fontes de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../anexos/referencias/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referências
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#a-geoinformacao-e-sua-relevancia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🌎 A geoinformação e sua relevância
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🌎 A geoinformação e sua relevância">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-primeira-lei-da-geografia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A primeira lei da geografia
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#representando-a-terra-em-um-plano" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🗺️ Representando a Terra em um plano
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🗺️ Representando a Terra em um plano">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#geoide-e-elipsoide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Geoide e elipsoide
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Datum
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#projecoes-cartograficas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Projeções cartográficas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sistemas-de-referencia-de-coordenadas-e-codigos-epsg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sistemas de referência de coordenadas e códigos EPSG
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sistemas-de-informacao-geografica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💻 Sistemas de informação geográfica
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💻 Sistemas de informação geográfica">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-evolucao-da-arquitetura-dos-sigs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A evolução da arquitetura dos SIGs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#e-onde-fica-o-google-earth-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        E onde fica o Google Earth Engine?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sintese" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Síntese
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Exercícios
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="geoinformacao-e-cartografia">Geoinformação e Cartografia<a class="headerlink" href="#geoinformacao-e-cartografia" title="Permanent link">&para;</a></h1>
+<p>Antes de abrir o Google Earth Engine, precisamos de alguns conceitos de <strong>geoinformação</strong> que dão sentido aos dados que ele manipula. Este capítulo responde a três perguntas: o que torna uma informação <em>geográfica</em>? Como representamos a superfície curva e irregular da Terra em um plano? E o que são os sistemas que tratam computacionalmente essa informação?</p>
+<hr />
+<h2 id="a-geoinformacao-e-sua-relevancia">🌎 A geoinformação e sua relevância<a class="headerlink" href="#a-geoinformacao-e-sua-relevancia" title="Permanent link">&para;</a></h2>
+<p>Tudo acontece em algum lugar e em algum momento. Algumas ciências, porém, estudam de modo explícito os fenômenos cuja localização importa: fenômenos naturais, como rios, formações rochosas e áreas de floresta, ou sociais, como segregação urbana, violência e epidemias.</p>
+<p>Um dos exemplos mais citados da força do raciocínio espacial é o de <strong>John Snow</strong> durante a epidemia de cólera em Londres, em 1854. Ao marcar num mapa as residências das vítimas, Snow percebeu que os casos se concentravam em torno de uma bomba d'água pública na Broad Street — numa época em que a teoria dominante atribuía a doença ao "ar ruim". O mapa não era apenas uma ilustração: foi o instrumento da descoberta.</p>
+<p>Segundo Longley et al. (2013), <strong>geoinformação</strong> (ou informação geográfica) é aquela que possui <strong>tempo e espaço bem definidos</strong>. Os autores ilustram a ligação entre atributo, espaço e tempo com a afirmação:</p>
+<blockquote>
+<p><em>"A temperatura ao meio-dia local na latitude 34 graus e 35 minutos norte, longitude 120 graus e 0 minutos oeste, era 19 graus Celsius."</em></p>
+</blockquote>
+<p>Há um atributo (temperatura = 19 °C), uma localização (34°35'N, 120°0'W) e um tempo (meio-dia local). Às vezes, parte dessa informação fica implícita. Em <em>"A altitude do Monte Everest é de 8.848 metros"</em>, a localização está subentendida no nome próprio, e o tempo também — a altitude de uma montanha varia muito lentamente. (Curiosidade: uma medição conjunta de China e Nepal, divulgada em 2020, atualizou esse valor para 8.848,86 m.)</p>
+<h3 id="a-primeira-lei-da-geografia">A primeira lei da geografia<a class="headerlink" href="#a-primeira-lei-da-geografia" title="Permanent link">&para;</a></h3>
+<p>Se a localização importa, é porque os fenômenos <strong>não se distribuem aleatoriamente no espaço</strong>. Waldo Tobler sintetizou essa ideia no que ficou conhecido como a <em>primeira lei da geografia</em> (1970):</p>
+<blockquote>
+<p><em>"Todas as coisas estão relacionadas com todas as outras, mas coisas próximas estão mais relacionadas do que coisas distantes."</em></p>
+</blockquote>
+<p>Essa lei está por trás de boa parte das técnicas que veremos: da interpolação de dados de estações meteorológicas às operações de vizinhança em imagens (Capítulo 8).</p>
+<hr />
+<h2 id="representando-a-terra-em-um-plano">🗺️ Representando a Terra em um plano<a class="headerlink" href="#representando-a-terra-em-um-plano" title="Permanent link">&para;</a></h2>
+<p>Para registrar uma posição (latitude e longitude) e, depois, desenhá-la em um mapa, precisamos resolver um problema nada trivial: a Terra <strong>não é uma esfera perfeita</strong>, como o globo que alguns temos sobre a mesa. Sua superfície é irregular, e sua forma é achatada nos polos.</p>
+<h3 id="geoide-e-elipsoide">Geoide e elipsoide<a class="headerlink" href="#geoide-e-elipsoide" title="Permanent link">&para;</a></h3>
+<p>A primeira aproximação usada pela geodésia é o <strong>geoide</strong>: a superfície de igual potencial gravitacional que coincide, aproximadamente, com o nível médio dos mares prolongado sob os continentes. Ele é influenciado pela distribuição de massa da Terra e pela sua rotação — e <strong>não</strong> é a mesma coisa que a superfície topográfica real.</p>
+<p>O geoide se aproxima muito bem da forma da Terra, mas não possui uma descrição matemática simples, o que o torna inadequado para cálculos de posição. Por isso, a Terra é modelada matematicamente por um <strong>elipsoide de revolução</strong>: uma elipse girada em torno do eixo menor, definida por poucos parâmetros (semieixo maior e achatamento).</p>
+<pre class="mermaid"><code>flowchart LR
+    A["Superfície real&lt;br/&gt;(topografia)"] --&gt; B["Geoide&lt;br/&gt;(superfície equipotencial,&lt;br/&gt;≈ nível médio dos mares)"]
+    B --&gt; C["Elipsoide&lt;br/&gt;(modelo matemático&lt;br/&gt;simples)"]
+    C --&gt; D["Plano&lt;br/&gt;(projeção cartográfica)"]</code></pre>
+<h3 id="datum">Datum<a class="headerlink" href="#datum" title="Permanent link">&para;</a></h3>
+<p>Escolher um elipsoide não basta: é preciso dizer <strong>como ele está posicionado e orientado</strong> em relação ao geoide. O conjunto de parâmetros que define um sistema geodésico de referência — o elipsoide, sua posição e sua orientação em relação à Terra — é chamado de <strong>datum planimétrico</strong>.</p>
+<p>Os <em>data</em> podem ser classificados de acordo com a forma como o elipsoide é "amarrado" ao geoide:</p>
+<ul>
+<li><strong>Topocêntricos (locais):</strong> o elipsoide é ajustado para coincidir o melhor possível com o geoide numa região, a partir de um ponto de origem na superfície. Ex.: <strong>SAD 69</strong> e <strong>Córrego Alegre</strong>, usados historicamente no Brasil.</li>
+<li><strong>Geocêntricos (globais):</strong> o centro do elipsoide coincide com o centro de massa da Terra, o que os torna compatíveis com sistemas de posicionamento por satélite. Ex.: <strong>WGS 84</strong> (usado pelo GPS) e <strong>SIRGAS 2000</strong>.</li>
+</ul>
+<div class="admonition info">
+<p class="admonition-title">SIRGAS 2000 no Brasil</p>
+<p>O SIRGAS 2000 é o sistema geodésico oficial do Brasil desde 2005, e o período de transição para abandono do SAD 69 terminou em 2015. Ainda assim, muitos projetos e bases legadas continuam em SAD 69 ou Córrego Alegre: ao combinar dados de fontes diferentes, <strong>verifique sempre o datum</strong>. Na prática, SIRGAS 2000 e WGS 84 são considerados compatíveis: a diferença entre eles é desprezível para a maioria das aplicações de geoprocessamento.</p>
+</div>
+<h3 id="projecoes-cartograficas">Projeções cartográficas<a class="headerlink" href="#projecoes-cartograficas" title="Permanent link">&para;</a></h3>
+<p>O último passo é transferir as feições da superfície curva do elipsoide para uma <strong>superfície desenvolvível</strong> — que pode ser "aberta" sem rasgar nem esticar: o plano, o cilindro ou o cone. Esse método é a <strong>projeção cartográfica</strong>.</p>
+<p>Uma boa forma de sentir o problema é tentar achatar a casca de uma laranja sobre a mesa: ela inevitavelmente rasga ou se deforma. Toda projeção introduz <strong>distorções</strong> em pelo menos uma destas propriedades: <strong>área</strong>, <strong>distância</strong> (escala), <strong>direção</strong> e <strong>forma</strong>. Por isso, as projeções são classificadas pela propriedade que preservam:</p>
+<table>
+<thead>
+<tr>
+<th>Classe</th>
+<th>Propriedade preservada</th>
+<th>Exemplo típico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Conformes</strong></td>
+<td>Ângulos em torno de qualquer ponto; logo, a forma de pequenas regiões</td>
+<td>Mercator, UTM</td>
+</tr>
+<tr>
+<td><strong>Equivalentes</strong></td>
+<td>Áreas (a proporção entre áreas no mapa e no terreno é constante)</td>
+<td>Cônica equivalente de Albers, Mollweide</td>
+</tr>
+<tr>
+<td><strong>Equidistantes</strong></td>
+<td>Distâncias (escala uniforme) ao longo de certas linhas</td>
+<td>Equidistante cilíndrica</td>
+</tr>
+<tr>
+<td><strong>Afiláticas</strong></td>
+<td>Nenhuma das anteriores; buscam um compromisso entre as distorções</td>
+<td>Robinson, Policônica</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Não existe projeção perfeita</p>
+<p>Uma projeção não pode ser, ao mesmo tempo, conforme e equivalente. A escolha depende do uso: para navegação e mapeamento de detalhe, preferem-se projeções conformes (como a UTM); para comparar áreas — por exemplo, o desmatamento de dois estados —, prefira projeções equivalentes. A famosa projeção de Mercator, usada pela maioria dos mapas web, é conforme e por isso <strong>exagera muito as áreas</strong> perto dos polos: a Groenlândia parece do tamanho da África, que é cerca de 14 vezes maior.</p>
+</div>
+<h3 id="sistemas-de-referencia-de-coordenadas-e-codigos-epsg">Sistemas de referência de coordenadas e códigos EPSG<a class="headerlink" href="#sistemas-de-referencia-de-coordenadas-e-codigos-epsg" title="Permanent link">&para;</a></h3>
+<p>Um <strong>Sistema de Referência de Coordenadas (SRC)</strong> reúne tudo o que é necessário para interpretar um par de coordenadas:</p>
+<ul>
+<li><strong>Datum geodésico</strong> — define a forma, o tamanho e o posicionamento do modelo da Terra (ex.: WGS 84, SIRGAS 2000);</li>
+<li><strong>Projeção cartográfica</strong> — quando houver, transforma a superfície curva em um plano (ex.: Mercator, UTM);</li>
+<li><strong>Unidades de medida</strong> — como as coordenadas são expressas (graus, metros).</li>
+</ul>
+<p>Um SRC sem projeção é chamado de <strong>geográfico</strong>: as coordenadas são latitude e longitude, em graus. Um SRC com projeção é chamado de <strong>projetado</strong>: as coordenadas são planas (X, Y), normalmente em metros.</p>
+<p>Como existem milhares de SRCs, a indústria padronizou identificadores numéricos para eles: os <strong>códigos EPSG</strong>, criados pelo <em>European Petroleum Survey Group</em> e hoje mantidos pela IOGP. Cada código identifica um SRC completo, com datum, projeção e parâmetros. Alguns que você encontrará com frequência:</p>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Descrição</th>
+<th>Uso comum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>EPSG:4326</strong></td>
+<td>WGS 84, coordenadas geográficas (graus)</td>
+<td>GPS, GeoJSON, Google Earth Engine</td>
+</tr>
+<tr>
+<td><strong>EPSG:3857</strong></td>
+<td>WGS 84 / Pseudo-Mercator (<em>Web Mercator</em>)</td>
+<td>Mapas web (Google Maps, OpenStreetMap)</td>
+</tr>
+<tr>
+<td><strong>EPSG:4674</strong></td>
+<td>SIRGAS 2000, coordenadas geográficas</td>
+<td>Dados oficiais brasileiros (IBGE)</td>
+</tr>
+<tr>
+<td><strong>EPSG:31983</strong></td>
+<td>SIRGAS 2000 / UTM zona 23S</td>
+<td>Medidas em metros na região de São Luís (MA)</td>
+</tr>
+</tbody>
+</table>
+<p>Veremos esses códigos novamente no GEE (Capítulo 4) e no PostGIS, onde eles aparecem como o <strong>SRID</strong> de cada geometria (Capítulo 14).</p>
+<hr />
+<h2 id="sistemas-de-informacao-geografica">💻 Sistemas de informação geográfica<a class="headerlink" href="#sistemas-de-informacao-geografica" title="Permanent link">&para;</a></h2>
+<p>O termo <strong>sistemas de informação geográfica (SIG)</strong> "é aplicado para sistemas que realizam o tratamento computacional de dados geográficos" (CÂMARA, 2005). Longley et al. (2005) detalham: SIGs são ferramentas computacionais para <strong>coletar, armazenar, processar, analisar e visualizar</strong> informação geográfica. Os autores ainda propõem uma visão de <strong>seis componentes</strong>: a rede (que conecta usuários e dados), o <em>hardware</em>, o <em>software</em>, os dados, os procedimentos e as pessoas.</p>
+<p>Geoprocessamento, por sua vez, "denota a disciplina do conhecimento que utiliza técnicas matemáticas e computacionais para o tratamento da informação geográfica" (CÂMARA et al., 2001). Ele abrange desde a <strong>coleta</strong> (cartografia, sensoriamento remoto, fotogrametria, GPS) até o <strong>armazenamento</strong> (bancos de dados geográficos) e o <strong>tratamento e análise</strong> (modelagem, geoestatística, análise espacial).</p>
+<h3 id="a-evolucao-da-arquitetura-dos-sigs">A evolução da arquitetura dos SIGs<a class="headerlink" href="#a-evolucao-da-arquitetura-dos-sigs" title="Permanent link">&para;</a></h3>
+<p>A arquitetura dos SIGs evoluiu em três gerações, de acordo com o papel dos sistemas gerenciadores de banco de dados (SGBDs):</p>
+<table>
+<thead>
+<tr>
+<th>Geração</th>
+<th>Geometrias e índices</th>
+<th>Atributos</th>
+<th>Acesso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1ª</strong></td>
+<td>Arquivos proprietários</td>
+<td>Arquivos proprietários</td>
+<td>API proprietária do SIG</td>
+</tr>
+<tr>
+<td><strong>2ª — arquitetura dual</strong></td>
+<td>Arquivos proprietários</td>
+<td>SGBD relacional</td>
+<td>API proprietária + SQL</td>
+</tr>
+<tr>
+<td><strong>3ª — arquitetura integrada</strong></td>
+<td>SGBD com extensão espacial</td>
+<td>SGBD</td>
+<td>SQL</td>
+</tr>
+</tbody>
+</table>
+<p>Na terceira geração, o SGBD armazena tudo — atributos <strong>e</strong> geometrias. Os SIGs atuais tendem a usar essa abordagem, e os arquivos ficaram restritos, cada vez mais, ao papel de formato de importação e exportação. Essa arquitetura é o tema central da <a href="../../parte2/00_plano_parte2/">Parte 2</a>.</p>
+<p>Exemplos de SIGs incluem os livres <strong>QGIS</strong>, <strong>SPRING</strong> e <strong>TerraView</strong> (os dois últimos desenvolvidos pelo INPE) e o proprietário <strong>ArcGIS</strong>.</p>
+<h3 id="e-onde-fica-o-google-earth-engine">E onde fica o Google Earth Engine?<a class="headerlink" href="#e-onde-fica-o-google-earth-engine" title="Permanent link">&para;</a></h3>
+<p>Goodchild et al. (2012) observam que a oferta de dados de sensores orbitais e terrestres cresceu tão rapidamente que se fala em um novo paradigma científico, "intensivo em dados", que enfatiza colaboração internacional, grandes recursos computacionais e visualização avançada. Diante de volumes de petabytes, vale a observação atribuída a Jim Gray: <em>"muitas vezes é mais eficiente mover as perguntas do que mover os dados"</em>.</p>
+<p>O Google Earth Engine é exatamente isso: uma plataforma em que os dados e o processamento ficam na nuvem, e o usuário envia apenas as perguntas — na forma de pequenos <em>scripts</em>. Ele não substitui um SIG de <em>desktop</em> em todas as tarefas (edição vetorial detalhada e cartografia final, por exemplo, são melhores no QGIS), mas é imbatível no processamento de grandes coleções de imagens. É o que começaremos a explorar no <a href="../03_conhecendo_gee/">Capítulo 3</a>, depois de entender, no próximo capítulo, o que essas imagens realmente medem.</p>
+<hr />
+<h2 id="sintese">📝 Síntese<a class="headerlink" href="#sintese" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Geoinformação</strong> é a informação com tempo e espaço bem definidos; a primeira lei da geografia explica por que a localização importa.</li>
+<li>A Terra é modelada pelo <strong>geoide</strong> (físico) e pelo <strong>elipsoide</strong> (matemático); o <strong>datum</strong> posiciona o elipsoide; a <strong>projeção</strong> leva-o ao plano, sempre com alguma distorção.</li>
+<li>Um <strong>SRC</strong> combina datum, projeção e unidades, e é identificado por um <strong>código EPSG</strong>.</li>
+<li><strong>SIGs</strong> tratam computacionalmente a geoinformação; sua arquitetura evoluiu dos arquivos proprietários para o SGBD espacial integrado.</li>
+</ul>
+<h2 id="exercicios">✏️ Exercícios<a class="headerlink" href="#exercicios" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Identifique o atributo, a localização e o tempo em: <em>"Em 12 de março de 2024, a precipitação acumulada na estação meteorológica do Tirirical, em São Luís, foi de 85 mm."</em></li>
+<li>Por que o elipsoide, e não o geoide, é usado como superfície de referência para o cálculo de coordenadas?</li>
+<li>Um colega sobrepôs uma camada em SAD 69 a outra em SIRGAS 2000 e notou um deslocamento de dezenas de metros. Explique a causa.</li>
+<li>Você precisa comparar a área desmatada no Maranhão e no Pará. A projeção Web Mercator (EPSG:3857) é adequada? Justifique e sugira uma alternativa.</li>
+<li>Qual a diferença entre um SRC geográfico e um SRC projetado? Dê um código EPSG de cada tipo.</li>
+<li>Descreva a diferença entre as arquiteturas dual e integrada de um SIG.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar ao topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "content.code.annotate", "content.code.copy", "content.tabs.link", "content.tooltips", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "Mais 1 nesta p\u00e1gina", "search.result.more.other": "Mais # nesta p\u00e1gina", "search.result.none": "Nenhum resultado encontrado", "search.result.one": "1 resultado encontrado", "search.result.other": "# resultados encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1901 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Livro didático da disciplina de Introdução ao Geoprocessamento e Sensoriamento Remoto: sensoriamento remoto com Google Earth Engine e bancos de dados geográficos com PostGIS e QGIS.
+">
+      
+      
+        <meta name="author" content="Sergio Souza Costa">
+      
+      
+      
+        <link rel="prev" href="../02_sensoriamento_remoto/">
+      
+      
+        <link rel="next" href="../04_tipos_dados/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Cap 3: Conhecendo o Google Earth Engine - Introdução ao Geoprocessamento e Sensoriamento Remoto</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lambdageo.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#conhecendo-o-google-earth-engine" class="md-skip">
+          Ir para o conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="Introdução ao Geoprocessamento e Sensoriamento Remoto" class="md-header__button md-logo" aria-label="Introdução ao Geoprocessamento e Sensoriamento Remoto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Introdução ao Geoprocessamento e Sensoriamento Remoto
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Cap 3: Conhecendo o Google Earth Engine
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Alternar para modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Alternar para modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Alternar para modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Alternar para modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Compartilhar" aria-label="Compartilhar" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando a pesquisa
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Introdução ao Geoprocessamento e Sensoriamento Remoto" class="md-nav__button md-logo" aria-label="Introdução ao Geoprocessamento e Sensoriamento Remoto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Introdução ao Geoprocessamento e Sensoriamento Remoto
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://lambdageo.github.io/ebooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ⇦ Coleção LambdaGeo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apresentação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parte 1 — Sensoriamento Remoto com Google Earth Engine (16h)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Parte 1 — Sensoriamento Remoto com Google Earth Engine (16h)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00_plano_parte1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plano da Parte 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_geoinformacao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 1: Geoinformação e Cartografia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_sensoriamento_remoto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 2: Fundamentos de Sensoriamento Remoto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 3: Conhecendo o Google Earth Engine
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 3: Conhecendo o Google Earth Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#por-que-processar-na-nuvem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ☁️ Por que processar na nuvem?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#o-que-e-o-google-earth-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🌐 O que é o Google Earth Engine?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#acessando-o-gee-pela-primeira-vez" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔑 Acessando o GEE pela primeira vez
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#o-code-editor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🖥️ O Code Editor
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#javascript-no-google-earth-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧩 JavaScript no Google Earth Engine
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧩 JavaScript no Google Earth Engine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#instrucoes-que-causam-efeitos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instruções que causam efeitos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instrucoes-que-produzem-valores-variaveis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instruções que produzem valores: variáveis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrada-processamento-e-saida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrada, processamento e saída
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agrupando-valores-com-dicionarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agrupando valores com dicionários
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agrupando-operacoes-com-funcoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agrupando operações com funções
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cliente-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚖️ Cliente × servidor
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#o-padrao-filtermapreduce" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔁 O padrão filter–map–reduce
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔁 O padrão filter–map–reduce">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-mesmo-padrao-no-cliente-e-no-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O mesmo padrão, no cliente e no servidor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sintese" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Síntese
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Exercícios
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_tipos_dados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 4: Tipos de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_selecao_vetorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 5: Seleção e Visualização — Vetores
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06_selecao_matricial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 6: Seleção e Visualização — Imagens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07_processamento_vetorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 7: Processamento de Dados Vetoriais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08_processamento_matricial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 8: Processamento de Dados Matriciais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09_exercicios/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 9: Atividades e Lista de Exercícios
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parte 2 — Banco de Dados Geográficos e QGIS (14h)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Parte 2 — Banco de Dados Geográficos e QGIS (14h)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/00_plano_parte2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plano da Parte 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/10_introducao_bd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 10: Introdução a Bancos de Dados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/11_projeto_bdg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 11: Projeto de Banco de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/12_instalacao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 12: Instalando PostgreSQL, PostGIS e QGIS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/13_sql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 13: A Linguagem SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/14_tipos_espaciais/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 14: Tipos de Dados Espaciais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/15_operacoes_espaciais/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 15: Operações e Indexação Espacial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/16_integracao_qgis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 16: Integração com o QGIS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/17_exercicios/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 17: Lista de Exercícios e Trabalho
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Anexos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Anexos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../anexos/fontes_dados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fontes de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../anexos/referencias/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referências
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#por-que-processar-na-nuvem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ☁️ Por que processar na nuvem?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#o-que-e-o-google-earth-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🌐 O que é o Google Earth Engine?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#acessando-o-gee-pela-primeira-vez" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔑 Acessando o GEE pela primeira vez
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#o-code-editor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🖥️ O Code Editor
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#javascript-no-google-earth-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧩 JavaScript no Google Earth Engine
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧩 JavaScript no Google Earth Engine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#instrucoes-que-causam-efeitos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instruções que causam efeitos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instrucoes-que-produzem-valores-variaveis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instruções que produzem valores: variáveis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrada-processamento-e-saida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrada, processamento e saída
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agrupando-valores-com-dicionarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agrupando valores com dicionários
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agrupando-operacoes-com-funcoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agrupando operações com funções
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cliente-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚖️ Cliente × servidor
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#o-padrao-filtermapreduce" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔁 O padrão filter–map–reduce
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔁 O padrão filter–map–reduce">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-mesmo-padrao-no-cliente-e-no-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O mesmo padrão, no cliente e no servidor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sintese" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Síntese
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Exercícios
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="conhecendo-o-google-earth-engine">Conhecendo o Google Earth Engine<a class="headerlink" href="#conhecendo-o-google-earth-engine" title="Permanent link">&para;</a></h1>
+<p>Este capítulo apresenta a plataforma que usaremos em toda a Parte 1: por que ela existe, como obter acesso, como é o ambiente de programação e quais conceitos de JavaScript são necessários para acompanhar os exemplos. Não é preciso saber programar — mas é preciso entender alguns poucos conceitos, que serão apresentados aos poucos e sempre ligados a dados geográficos.</p>
+<hr />
+<h2 id="por-que-processar-na-nuvem">☁️ Por que processar na nuvem?<a class="headerlink" href="#por-que-processar-na-nuvem" title="Permanent link">&para;</a></h2>
+<p>Imagine que você precisa gerar um gráfico com a <strong>precipitação mensal dos últimos 10 anos</strong> em duas regiões — digamos, São Luís (MA) e Congonhas (MG). Existe um dado diário de precipitação para o mundo todo, o <strong>CHIRPS</strong> (<em>Climate Hazards Group InfraRed Precipitation with Station data</em>), com pixels de aproximadamente 5,5 km.</p>
+<p><img alt="O conjunto de dados CHIRPS Daily no catálogo do GEE" src="../img/cap03/chirps-catalogo.png" /></p>
+<p>Quais seriam os passos para gerar esse gráfico em um computador local?</p>
+<ol>
+<li>Baixar as imagens diárias dos últimos 10 anos — aproximadamente <strong>3.650 imagens</strong>;</li>
+<li>Recortar as 3.650 imagens para a região de estudo (para não processar o globo inteiro);</li>
+<li>Para cada ano e cada mês, <strong>somar</strong> as imagens diárias (cerca de 30 por mês), gerando 120 imagens mensais;</li>
+<li>Para cada uma das 120 imagens, calcular a precipitação média na região;</li>
+<li>Repetir os passos 3 e 4 para a outra região;</li>
+<li>Salvar as médias em um arquivo;</li>
+<li>Abrir o arquivo numa planilha e plotar o gráfico.</li>
+</ol>
+<p>Mesmo com software livre, o gargalo é evidente: baixar, armazenar e processar milhares de imagens exige tempo, disco e poder computacional.</p>
+<p><img alt="Processamento convencional: baixar, armazenar, processar localmente e publicar" src="../img/cap03/proc-convencional.png" /></p>
+<p>No <strong>Google Earth Engine (GEE)</strong>, os dados já estão armazenados junto à infraestrutura de processamento. Enviamos apenas as instruções — o <em>script</em> — e recebemos o resultado: um mapa, um gráfico, uma tabela ou um arquivo exportado para o Google Drive.</p>
+<p><img alt="Processamento com o GEE: os dados e o processamento ficam na nuvem" src="../img/cap03/proc-gee.jpg" /></p>
+<p>O <em>script</em> completo para o problema acima tem pouco mais de 50 linhas. Não se preocupe em entendê-lo agora: ao final da Parte 1 você será capaz de lê-lo linha por linha (ele é explicado em detalhe no <a href="../08_processamento_matricial/#serie-temporal-de-precipitacao">Capítulo 8</a>).</p>
+<details class="example">
+<summary>O algoritmo completo no Google Earth Engine (clique para expandir)</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">congonhas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Geometry</span><span class="p">.</span><span class="nx">Polygon</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">        </span><span class="p">[[[</span><span class="o">-</span><span class="mf">43.945697646520735</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">20.44294631828056</span><span class="p">],</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">          </span><span class="p">[</span><span class="o">-</span><span class="mf">43.945697646520735</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">20.579286674789692</span><span class="p">],</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">          </span><span class="p">[</span><span class="o">-</span><span class="mf">43.736957412145735</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">20.579286674789692</span><span class="p">],</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">          </span><span class="p">[</span><span class="o">-</span><span class="mf">43.736957412145735</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">20.44294631828056</span><span class="p">]]],</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">);</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="kd">var</span><span class="w"> </span><span class="nx">saoluis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Geometry</span><span class="p">.</span><span class="nx">Polygon</span><span class="p">(</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">        </span><span class="p">[[[</span><span class="o">-</span><span class="mf">44.30663017068142</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">2.4775511449329626</span><span class="p">],</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">          </span><span class="p">[</span><span class="o">-</span><span class="mf">44.30663017068142</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">2.584563328792773</span><span class="p">],</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">          </span><span class="p">[</span><span class="o">-</span><span class="mf">44.15556815896267</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">2.584563328792773</span><span class="p">],</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">          </span><span class="p">[</span><span class="o">-</span><span class="mf">44.15556815896267</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">2.4775511449329626</span><span class="p">]]],</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">);</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="kd">var</span><span class="w"> </span><span class="nx">areaEstudo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">([</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Feature</span><span class="p">(</span><span class="nx">congonhas</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">nome</span><span class="o">:</span><span class="w"> </span><span class="s1">'Congonhas'</span><span class="p">}),</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">  </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Feature</span><span class="p">(</span><span class="nx">saoluis</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">nome</span><span class="o">:</span><span class="w"> </span><span class="s1">'Sao Luis'</span><span class="p">})</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="p">]);</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="kd">var</span><span class="w"> </span><span class="nx">chirps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">ImageCollection</span><span class="p">(</span><span class="s1">'UCSB-CHG/CHIRPS/DAILY'</span><span class="p">);</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="kd">var</span><span class="w"> </span><span class="nx">anos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">List</span><span class="p">.</span><span class="nx">sequence</span><span class="p">(</span><span class="mf">2014</span><span class="p">,</span><span class="w"> </span><span class="mf">2023</span><span class="p">);</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="kd">var</span><span class="w"> </span><span class="nx">meses</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">List</span><span class="p">.</span><span class="nx">sequence</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">12</span><span class="p">);</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="c1">// Para cada ano e cada mês, soma as imagens diárias</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="kd">var</span><span class="w"> </span><span class="nx">mensais</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">anos</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">y</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">meses</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">m</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">filtradas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">chirps</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">      </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">calendarRange</span><span class="p">(</span><span class="nx">y</span><span class="p">,</span><span class="w"> </span><span class="nx">y</span><span class="p">,</span><span class="w"> </span><span class="s1">'year'</span><span class="p">))</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">      </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">calendarRange</span><span class="p">(</span><span class="nx">m</span><span class="p">,</span><span class="w"> </span><span class="nx">m</span><span class="p">,</span><span class="w"> </span><span class="s1">'month'</span><span class="p">));</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">soma</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">filtradas</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Reducer</span><span class="p">.</span><span class="nx">sum</span><span class="p">())</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">                        </span><span class="p">.</span><span class="nx">rename</span><span class="p">(</span><span class="s1">'precipitacao_mensal'</span><span class="p">);</span>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">soma</span><span class="p">.</span><span class="nx">set</span><span class="p">({</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="w">      </span><span class="s1">'system:time_start'</span><span class="o">:</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nb">Date</span><span class="p">.</span><span class="nx">fromYMD</span><span class="p">(</span><span class="nx">y</span><span class="p">,</span><span class="w"> </span><span class="nx">m</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">).</span><span class="nx">millis</span><span class="p">(),</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="w">      </span><span class="s1">'year'</span><span class="o">:</span><span class="w"> </span><span class="nx">y</span><span class="p">,</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="w">      </span><span class="s1">'month'</span><span class="o">:</span><span class="w"> </span><span class="nx">m</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="w">    </span><span class="p">});</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a><span class="w">  </span><span class="p">});</span>
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a><span class="p">}).</span><span class="nx">flatten</span><span class="p">();</span>
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a><span class="kd">var</span><span class="w"> </span><span class="nx">colecaoMensal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">ImageCollection</span><span class="p">.</span><span class="nx">fromImages</span><span class="p">(</span><span class="nx">mensais</span><span class="p">);</span>
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a><span class="nx">print</span><span class="p">(</span><span class="s1">'Coleção mensal'</span><span class="p">,</span><span class="w"> </span><span class="nx">colecaoMensal</span><span class="p">);</span>
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a><span class="c1">// Série temporal da precipitação média em cada região</span>
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a><span class="kd">var</span><span class="w"> </span><span class="nx">grafico</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ui</span><span class="p">.</span><span class="nx">Chart</span><span class="p">.</span><span class="nx">image</span><span class="p">.</span><span class="nx">seriesByRegion</span><span class="p">({</span>
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a><span class="w">  </span><span class="nx">imageCollection</span><span class="o">:</span><span class="w"> </span><span class="nx">colecaoMensal</span><span class="p">,</span>
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a><span class="w">  </span><span class="nx">regions</span><span class="o">:</span><span class="w"> </span><span class="nx">areaEstudo</span><span class="p">,</span>
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a><span class="w">  </span><span class="nx">reducer</span><span class="o">:</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Reducer</span><span class="p">.</span><span class="nx">mean</span><span class="p">(),</span>
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a><span class="w">  </span><span class="nx">seriesProperty</span><span class="o">:</span><span class="w"> </span><span class="s1">'nome'</span><span class="p">,</span>
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a><span class="w">  </span><span class="nx">xProperty</span><span class="o">:</span><span class="w"> </span><span class="s1">'system:time_start'</span><span class="p">,</span>
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a><span class="w">  </span><span class="nx">scale</span><span class="o">:</span><span class="w"> </span><span class="mf">5566</span>
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a><span class="p">}).</span><span class="nx">setOptions</span><span class="p">({</span>
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a><span class="w">  </span><span class="nx">title</span><span class="o">:</span><span class="w"> </span><span class="s1">'Precipitação mensal (mm)'</span><span class="p">,</span>
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a><span class="w">  </span><span class="nx">vAxis</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="nx">title</span><span class="o">:</span><span class="w"> </span><span class="s1">'Precipitação (mm)'</span><span class="p">},</span>
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a><span class="w">  </span><span class="nx">hAxis</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="nx">title</span><span class="o">:</span><span class="w"> </span><span class="s1">'Meses'</span><span class="p">}</span>
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a><span class="p">});</span>
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a><span class="nx">print</span><span class="p">(</span><span class="nx">grafico</span><span class="p">);</span>
+</code></pre></div>
+</details>
+<p><img alt="Precipitação mensal em Congonhas e São Luís, 2014–2023" src="../img/cap03/chirps-grafico.png" /></p>
+<p>Observe no gráfico o regime de chuvas bem marcado de São Luís, concentrado no primeiro semestre, e o de Congonhas, concentrado no verão austral (de novembro a março). Uma análise que exigiria dias de download ficou pronta em segundos.</p>
+<hr />
+<h2 id="o-que-e-o-google-earth-engine">🌐 O que é o Google Earth Engine?<a class="headerlink" href="#o-que-e-o-google-earth-engine" title="Permanent link">&para;</a></h2>
+<p>A plataforma Google Earth Engine é uma infraestrutura de processamento e análise de dados geoespaciais, concebida e mantida pelo Google, voltada a investigações científicas e análises geoespaciais em escala planetária (GORELICK et al., 2017). Ela combina três elementos:</p>
+<p><img alt="GEE = catálogo de dados + infraestrutura de computação + APIs" src="../img/cap03/gee-componentes.png" /></p>
+<ol>
+<li><strong>Um catálogo público na escala de petabytes</strong>, com dados atuais e históricos das missões Landsat, Sentinel e MODIS, modelos digitais de elevação (SRTM), dados climáticos (CHIRPS, ERA5), mapas de uso e cobertura da terra e algumas coleções vetoriais. Isso permite monitorar alterações na superfície terrestre ao longo de décadas. O usuário também pode enviar seus próprios dados vetoriais e matriciais — por exemplo, imagens do CBERS, que não estão no catálogo.</li>
+<li><strong>Uma infraestrutura computacional</strong> otimizada para processamento paralelo, que executa nos servidores do Google os algoritmos de processamento de dados matriciais e vetoriais — incluindo classificação de imagens —, livrando o usuário da aquisição e gestão de grandes volumes de dados.</li>
+<li><strong>APIs em JavaScript e Python</strong> e um ambiente de desenvolvimento <em>on-line</em>, o <strong>Code Editor</strong>, com recursos de visualização interativa e de criação de painéis e aplicativos.</li>
+</ol>
+<p>Entre as aplicações da plataforma estão o monitoramento ambiental, a gestão de recursos naturais, a agricultura de precisão e a detecção de desastres naturais. No Brasil, o exemplo mais conhecido é o <strong>MapBiomas</strong>, que produz no GEE as séries anuais de mapas de uso e cobertura da terra de todo o país.</p>
+<p>Neste livro usaremos a API <strong>JavaScript</strong>, porque ela está disponível diretamente no navegador, pelo Code Editor, sem instalar nada. Quem preferir Python pode usar a biblioteca <a href="https://geemap.org/">geemap</a> em um <em>notebook</em> Jupyter ou no Google Colab; os conceitos são os mesmos.</p>
+<hr />
+<h2 id="acessando-o-gee-pela-primeira-vez">🔑 Acessando o GEE pela primeira vez<a class="headerlink" href="#acessando-o-gee-pela-primeira-vez" title="Permanent link">&para;</a></h2>
+<p>Para usar o GEE é preciso uma conta Google e um <strong>projeto do Google Cloud</strong> registrado para uso <strong>não comercial</strong> (ensino e pesquisa). O processo é gratuito para esses usos.</p>
+<div class="admonition info">
+<p class="admonition-title">Cotas de uso não comercial</p>
+<p>Desde abril de 2026, todo projeto não comercial recebe uma cota mensal gratuita de processamento, medida em <em>EECU-hours</em> (unidades de computação do Earth Engine). O nível padrão, <strong>Community</strong>, é mais do que suficiente para todos os exercícios deste livro. Detalhes em <a href="https://developers.google.com/earth-engine/guides/noncommercial_tiers">Earth Engine Noncommercial Tiers</a>. A verificação do uso não comercial precisa ser renovada anualmente.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Use o e-mail institucional</p>
+<p>Usar a conta Google vinculada ao e-mail da universidade costuma agilizar a verificação de uso acadêmico.</p>
+</div>
+<p><strong>Passo 1.</strong> Acesse <a href="https://code.earthengine.google.com/">code.earthengine.google.com</a>. Na primeira vez, clique em <strong>"I want to register a new project"</strong>.</p>
+<p><img alt="Passo 1" src="../img/cap03/acesso-01.png" /></p>
+<p><strong>Passo 2.</strong> Escolha <strong>"Register a Noncommercial or Commercial Cloud project"</strong> e depois a opção de uso não comercial.</p>
+<p><img alt="Passo 2" src="../img/cap03/acesso-02.png" /></p>
+<p><strong>Passo 3.</strong> Indique <strong>"Unpaid usage"</strong> e o tipo de organização <strong>"Academia &amp; research"</strong>.</p>
+<p><img alt="Passo 3" src="../img/cap03/acesso-03.png" /></p>
+<p><strong>Passo 4.</strong> Escolha <strong>"Create a new Google Cloud project"</strong> e dê um identificador ao projeto (por exemplo, <code>ee-seunome</code>).</p>
+<p><img alt="Passo 4" src="../img/cap03/acesso-04.png" /></p>
+<p><strong>Passo 5.</strong> É provável que apareça uma mensagem pedindo que você aceite os termos do Google Cloud. Clique no <em>link</em>, aceite os termos e volte à página anterior.</p>
+<p><img alt="Passo 5" src="../img/cap03/acesso-05.png" /></p>
+<p><img alt="Aceitando os termos do Google Cloud" src="../img/cap03/acesso-06.png" /></p>
+<p><strong>Passo 6.</strong> De volta à tela de criação, conclua o cadastro do projeto e confirme as informações.</p>
+<p><img alt="Criando o projeto" src="../img/cap03/acesso-07.png" /></p>
+<p><img alt="Tela de confirmação" src="../img/cap03/acesso-08.png" /></p>
+<p><strong>Passo 7.</strong> Ao final, você será direcionado ao Code Editor.</p>
+<p><img alt="O Code Editor após o cadastro" src="../img/cap03/acesso-09.png" /></p>
+<div class="admonition note">
+<p class="admonition-title">As telas mudam</p>
+<p>O Google altera com frequência o fluxo de cadastro. Se alguma tela estiver diferente, a lógica continua a mesma: criar (ou escolher) um projeto do Google Cloud e registrá-lo para uso não comercial. Em caso de dúvida, consulte <a href="https://developers.google.com/earth-engine/guides/access">Earth Engine access</a>.</p>
+</div>
+<p>Por fim, adicione ao seu Code Editor o repositório com os <em>scripts</em> de exemplo deste livro, clicando no <em>link</em>: <a href="https://code.earthengine.google.com/?accept_repo=users/sergiocosta/ercemapi2023">users/sergiocosta/ercemapi2023</a>.</p>
+<hr />
+<h2 id="o-code-editor">🖥️ O Code Editor<a class="headerlink" href="#o-code-editor" title="Permanent link">&para;</a></h2>
+<p>O Code Editor, acessível em <a href="https://code.earthengine.google.com/">code.earthengine.google.com</a>, é dividido em quatro áreas:</p>
+<p><img alt="O Code Editor do GEE" src="../img/cap03/code-editor.png" /></p>
+<ol>
+<li><strong>Área de código</strong> (centro): onde os <em>scripts</em> são escritos para carregar, processar e visualizar dados. O editor realça a sintaxe e aponta erros. Os botões <strong>Run</strong>, <strong>Save</strong> e <strong>Get Link</strong> ficam no topo.</li>
+<li><strong>Abas à esquerda</strong>: <strong>Scripts</strong> (seus arquivos, organizados em repositórios e pastas), <strong>Docs</strong> (documentação de todos os comandos) e <strong>Assets</strong> (seus dados vetoriais e matriciais enviados à plataforma).</li>
+<li><strong>Abas à direita</strong>: <strong>Inspector</strong> (clique no mapa para ver os valores dos pixels e feições), <strong>Console</strong> (resultados de <code>print</code> e gráficos) e <strong>Tasks</strong> (andamento das exportações e importações).</li>
+<li><strong>Área do mapa</strong> (abaixo): mapa interativo com o gerenciador de camadas (<em>Layers</em>), a alternância entre mapa e satélite e as ferramentas de desenho de geometrias.</li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">Salve explicitamente os seus <em>scripts</em></p>
+<p>Diferente de outros ambientes <em>on-line</em>, o Code Editor <strong>não salva automaticamente</strong>. Clique em <strong>Save</strong> (ou <code>Ctrl+S</code>). Antes do primeiro <em>script</em>, crie um repositório em <em>Scripts → NEW → Repository</em>; dentro dele você pode criar pastas e arquivos. Para compartilhar um <em>script</em> com alguém (ou entregá-lo ao professor), use <strong>Get Link</strong>.</p>
+</div>
+<hr />
+<h2 id="javascript-no-google-earth-engine">🧩 JavaScript no Google Earth Engine<a class="headerlink" href="#javascript-no-google-earth-engine" title="Permanent link">&para;</a></h2>
+<p>A linguagem JavaScript foi criada por Brendan Eich em 1995, na Netscape, para tornar as páginas <em>web</em> mais interativas (WIRFS-BROCK; EICH, 2020). Desde então, deixou de estar restrita aos navegadores. Antes de ser escolhida para o Earth Engine, ela já era a linguagem de <em>script</em> do Google Docs e do Google Planilhas (o Google Apps Script).</p>
+<p>Um <strong><em>script</em></strong> é uma sequência de comandos que o computador segue para realizar um processo — como uma receita culinária. Para escrevê-lo, é preciso conhecer as instruções individuais e saber combiná-las.</p>
+<h3 id="instrucoes-que-causam-efeitos">Instruções que causam efeitos<a class="headerlink" href="#instrucoes-que-causam-efeitos" title="Permanent link">&para;</a></h3>
+<p>Algumas instruções apenas <strong>causam um efeito</strong>: imprimir algo no Console ou mover o mapa. Crie um <em>script</em>, copie o código a seguir e clique em <strong>Run</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// Duas instruções que apenas causam efeitos</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nx">print</span><span class="p">(</span><span class="s1">'Olá, Google Earth Engine!'</span><span class="p">);</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">setCenter</span><span class="p">(</span><span class="o">-</span><span class="mf">37.77028535227355</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">4.567792298842188</span><span class="p">,</span><span class="w"> </span><span class="mf">13</span><span class="p">);</span><span class="w"> </span><span class="c1">// Aracati, CE</span>
+</code></pre></div>
+<p><img alt="Resultado do &quot;Olá, mundo&quot; no Code Editor" src="../img/cap03/hello-world.png" /></p>
+<p><code>print</code> escreve no Console; <code>Map.setCenter(longitude, latitude, zoom)</code> centraliza o mapa. <strong>Atenção à ordem: no GEE, as coordenadas são sempre longitude, latitude</strong> — o inverso do que muitas pessoas estão acostumadas.</p>
+<h3 id="instrucoes-que-produzem-valores-variaveis">Instruções que produzem valores: variáveis<a class="headerlink" href="#instrucoes-que-produzem-valores-variaveis" title="Permanent link">&para;</a></h3>
+<p>Outras instruções <strong>produzem novos valores</strong>, seja buscando um dado no catálogo, seja processando valores criados antes. Por exemplo, <code>ee.Image</code> busca uma imagem a partir de seu identificador. Para usar esse valor depois, damos um nome a ele — ou seja, armazenamos o resultado em uma <strong>variável</strong>, com a palavra <code>var</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">saoluis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Image</span><span class="p">(</span><span class="s1">'LANDSAT/LC08/C02/T1_TOA/LC08_220062_20190504'</span><span class="p">);</span>
+</code></pre></div>
+<h3 id="entrada-processamento-e-saida">Entrada, processamento e saída<a class="headerlink" href="#entrada-processamento-e-saida" title="Permanent link">&para;</a></h3>
+<p>Praticamente todo <em>script</em> no GEE segue três passos: <strong>seleção/entrada</strong> dos dados, <strong>processamento</strong> e <strong>apresentação/saída</strong>. As variáveis são o que liga um passo ao outro.</p>
+<p><img alt="Os três principais passos em um *script*" src="../img/cap03/tres-passos.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">// SELEÇÃO/ENTRADA</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1">// Esta operação produz um novo valor: um objeto do tipo imagem.</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1">// Veremos o que são as imagens no próximo capítulo.</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="kd">var</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Image</span><span class="p">(</span><span class="s1">'LANDSAT/LC08/C02/T1_TOA/LC08_220062_20190504'</span><span class="p">);</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="c1">// PROCESSAMENTO</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1">// Um índice de vegetação (NDVI), calculado a partir de duas bandas.</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="c1">// Veremos índices em detalhe no Capítulo 8.</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ndvi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">expression</span><span class="p">(</span><span class="s1">'(NIR - Red) / (NIR + Red)'</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span><span class="s1">'NIR'</span><span class="o">:</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">'B5'</span><span class="p">),</span><span class="w"> </span><span class="c1">// banda do infravermelho próximo</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span><span class="s1">'Red'</span><span class="o">:</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">'B4'</span><span class="p">)</span><span class="w">  </span><span class="c1">// banda do vermelho</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="p">});</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="c1">// APRESENTAÇÃO/SAÍDA</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">ndvi</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">palette</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">'blue'</span><span class="p">,</span><span class="w"> </span><span class="s1">'white'</span><span class="p">,</span><span class="w"> </span><span class="s1">'green'</span><span class="p">]},</span><span class="w"> </span><span class="s1">'NDVI'</span><span class="p">);</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">image</span><span class="p">,</span><span class="w"> </span><span class="mf">8</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="O NDVI sobre a região de São Luís" src="../img/cap03/ndvi-exemplo.jpg" /></p>
+<h3 id="agrupando-valores-com-dicionarios">Agrupando valores com dicionários<a class="headerlink" href="#agrupando-valores-com-dicionarios" title="Permanent link">&para;</a></h3>
+<p>Às vezes é útil agrupar vários valores sob um mesmo nome. Os metadados de uma imagem, por exemplo, poderiam ser representados assim:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">metadados</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nx">dataAquisicao</span><span class="o">:</span><span class="w"> </span><span class="s1">'2019-09-15'</span><span class="p">,</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nx">resolucaoEspacial</span><span class="o">:</span><span class="w"> </span><span class="mf">30</span><span class="p">,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nx">sistemaCoordenadas</span><span class="o">:</span><span class="w"> </span><span class="s1">'EPSG:4326'</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="p">};</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="nx">print</span><span class="p">(</span><span class="s1">'Data de aquisição:'</span><span class="p">,</span><span class="w"> </span><span class="nx">metadados</span><span class="p">.</span><span class="nx">dataAquisicao</span><span class="p">);</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="nx">print</span><span class="p">(</span><span class="s1">'Resolução espacial:'</span><span class="p">,</span><span class="w"> </span><span class="nx">metadados</span><span class="p">.</span><span class="nx">resolucaoEspacial</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="Resultado do exemplo com dicionário" src="../img/cap03/dicionario.png" /></p>
+<p>A variável <code>metadados</code> é um <strong>dicionário</strong> (ou objeto): um conjunto de pares <strong>chave: valor</strong>. Os dicionários são fundamentais no GEE: eles definem os <strong>atributos das feições</strong> (Capítulo 4) e os <strong>parâmetros</strong> de muitas instruções — como o <code>{min: -1, max: 1, palette: [...]}</code> que passamos a <code>Map.addLayer</code> no exemplo anterior.</p>
+<h3 id="agrupando-operacoes-com-funcoes">Agrupando operações com funções<a class="headerlink" href="#agrupando-operacoes-com-funcoes" title="Permanent link">&para;</a></h3>
+<p>No exemplo do NDVI, o processamento coube em uma única instrução. Frequentemente, porém, ele exige várias instruções, que podem ser organizadas e encapsuladas em <strong>funções</strong>: dada uma entrada, a função a processa e retorna uma saída.</p>
+<p><img alt="Conceito e exemplo de função" src="../img/cap03/funcoes.png" /></p>
+<p><img alt="Estrutura de uma função em JavaScript" src="../img/cap03/estrutura-funcao.png" /></p>
+<p>Uma função para converter graus Fahrenheit em Celsius:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1">// Definição da função</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kd">var</span><span class="w"> </span><span class="nx">paraCelsius</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="c1">// ENTRADA: f</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">5</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">9</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="nx">f</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">32</span><span class="p">);</span><span class="w">     </span><span class="c1">// PROCESSAMENTO</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">c</span><span class="p">;</span><span class="w">                       </span><span class="c1">// SAÍDA</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="p">};</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="c1">// Uso da função, no mesmo script</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="kd">var</span><span class="w"> </span><span class="nx">tempFahr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">212</span><span class="p">;</span><span class="w">                     </span><span class="c1">// ENTRADA</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="kd">var</span><span class="w"> </span><span class="nx">tempCelsius</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">paraCelsius</span><span class="p">(</span><span class="nx">tempFahr</span><span class="p">);</span><span class="w"> </span><span class="c1">// PROCESSAMENTO</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="nx">print</span><span class="p">(</span><span class="nx">tempCelsius</span><span class="p">);</span><span class="w">                     </span><span class="c1">// APRESENTAÇÃO: 100</span>
+</code></pre></div>
+<p><img alt="Resultado da função paraCelsius" src="../img/cap03/funcao-celsius.png" /></p>
+<p>Funções serão essenciais a partir do Capítulo 7, quando aplicaremos uma mesma operação a todos os elementos de uma coleção.</p>
+<hr />
+<h2 id="cliente-servidor">⚖️ Cliente × servidor<a class="headerlink" href="#cliente-servidor" title="Permanent link">&para;</a></h2>
+<p>Este é o conceito mais importante — e mais confuso — do GEE. No Code Editor convivem <strong>dois mundos</strong>:</p>
+<p><img alt="Objetos do lado do cliente e do lado do servidor" src="../img/cap03/cliente-servidor.png" /></p>
+<ul>
+<li><strong>O lado do cliente</strong> é o seu navegador. Ele entende o JavaScript "puro": números, textos (<em>strings</em>), <em>arrays</em> e objetos, com suas operações usuais (<code>+</code>, <code>*</code>, <code>&gt;</code>...).</li>
+<li><strong>O lado do servidor</strong> é a infraestrutura do Google. Tudo que começa com <code>ee.</code> — <code>ee.Number</code>, <code>ee.List</code>, <code>ee.Image</code>, <code>ee.FeatureCollection</code> — é um <strong>objeto do servidor</strong>. Para usar a infraestrutura do Google, precisamos usar esses tipos e as operações (métodos) deles.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1">// Lado do cliente: JavaScript puro, calculado no navegador</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kd">var</span><span class="w"> </span><span class="nx">n1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">10</span><span class="p">;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="kd">var</span><span class="w"> </span><span class="nx">n2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">20</span><span class="p">;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="kd">var</span><span class="w"> </span><span class="nx">n3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">n1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">n2</span><span class="p">;</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="nx">print</span><span class="p">(</span><span class="nx">n3</span><span class="p">);</span><span class="w">  </span><span class="c1">// 200</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1">// Lado do servidor: calculado na infraestrutura do Google</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="kd">var</span><span class="w"> </span><span class="nx">num1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nb">Number</span><span class="p">(</span><span class="mf">10</span><span class="p">);</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="kd">var</span><span class="w"> </span><span class="nx">num2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nb">Number</span><span class="p">(</span><span class="mf">20</span><span class="p">);</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="kd">var</span><span class="w"> </span><span class="nx">num3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">num1</span><span class="p">.</span><span class="nx">multiply</span><span class="p">(</span><span class="nx">num2</span><span class="p">);</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="nx">print</span><span class="p">(</span><span class="nx">num3</span><span class="p">);</span><span class="w">  </span><span class="c1">// 200</span>
+</code></pre></div>
+<p>Observe que, no servidor, não usamos o operador <code>*</code>, e sim o método <code>.multiply()</code>. A forma geral é <code>objeto.metodo(argumentos)</code>. Os tipos do servidor têm equivalentes aos tipos do JavaScript e muitos outros voltados ao processamento de imagens de satélite. A aba <strong>Docs</strong> lista todos os métodos disponíveis para cada tipo — clique em um método para ver sua descrição.</p>
+<p><img alt="Alguns métodos de ee.Number" src="../img/cap03/ee-number-metodos.png" /></p>
+<div class="admonition warning">
+<p class="admonition-title">Não misture os dois mundos</p>
+<p>Um objeto do servidor (<code>ee.Number(10)</code>) não é um número do JavaScript: ele é uma <em>descrição</em> de um cálculo que será feito no servidor. Por isso <code>ee.Number(10) * 2</code> não funciona como esperado — use <code>ee.Number(10).multiply(2)</code>. Da mesma forma, um <code>if</code> ou <code>for</code> do JavaScript não enxerga o valor de um objeto do servidor. Quando precisarmos repetir uma operação, usaremos o <code>.map()</code>, apresentado a seguir.</p>
+</div>
+<hr />
+<h2 id="o-padrao-filtermapreduce">🔁 O padrão <em>filter–map–reduce</em><a class="headerlink" href="#o-padrao-filtermapreduce" title="Permanent link">&para;</a></h2>
+<p>O padrão <em>filter–map–reduce</em> é amplamente usado em aplicações que lidam com grandes volumes de dados — e é a forma natural de pensar no GEE (CARDILLE, 2022):</p>
+<pre class="mermaid"><code>flowchart LR
+    A["Coleção&lt;br/&gt;de entrada"] -- ".filter()&lt;br/&gt;seleciona os elementos&lt;br/&gt;que interessam" --&gt; B["Coleção&lt;br/&gt;filtrada"]
+    B -- ".map(f)&lt;br/&gt;aplica a função f&lt;br/&gt;a cada elemento" --&gt; C["Coleção&lt;br/&gt;transformada"]
+    C -- ".reduce()&lt;br/&gt;combina tudo em&lt;br/&gt;um resultado" --&gt; D["Resultado&lt;br/&gt;agregado"]</code></pre>
+<ol>
+<li><strong>Filtrar</strong> (<code>.filter()</code>): escolher um subconjunto de imagens ou feições com base em critérios espaciais, temporais, de atributos ou de metadados (Capítulos 5 e 6).</li>
+<li><strong>Mapear</strong> (<code>.map()</code>): aplicar uma função a <strong>cada</strong> elemento da coleção filtrada, calculando ou transformando algo (Capítulos 7 e 8).</li>
+<li><strong>Reduzir</strong> (<code>.reduce()</code>): combinar os elementos transformados em um resultado — uma média, uma soma, um desvio-padrão, uma imagem-síntese de uma série temporal.</li>
+</ol>
+<p>Vamos entender o padrão primeiro com JavaScript puro, sem tipos do GEE.</p>
+<p><strong><code>filter</code></strong> cria uma nova coleção apenas com os elementos que passam em um teste:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">temperaturasF</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">80</span><span class="p">,</span><span class="w"> </span><span class="mf">86</span><span class="p">,</span><span class="w"> </span><span class="mf">95</span><span class="p">,</span><span class="w"> </span><span class="mf">56</span><span class="p">,</span><span class="w"> </span><span class="mf">104</span><span class="p">,</span><span class="w"> </span><span class="mf">50</span><span class="p">,</span><span class="w"> </span><span class="mf">60</span><span class="p">];</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="kd">var</span><span class="w"> </span><span class="nx">maior80</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">80</span><span class="p">;</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="p">};</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="kd">var</span><span class="w"> </span><span class="nx">filtrados</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">temperaturasF</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">maior80</span><span class="p">);</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="nx">print</span><span class="p">(</span><span class="nx">filtrados</span><span class="p">);</span><span class="w">  </span><span class="c1">// [86, 95, 104]</span>
+</code></pre></div>
+<p><strong><code>map</code></strong> cria uma nova coleção aplicando uma função a cada elemento:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">paraCelsius</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="mf">5</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">9</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="nx">f</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">32</span><span class="p">);</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="p">};</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="kd">var</span><span class="w"> </span><span class="nx">temperaturasC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">filtrados</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">paraCelsius</span><span class="p">);</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="nx">print</span><span class="p">(</span><span class="nx">temperaturasC</span><span class="p">);</span><span class="w">  </span><span class="c1">// [30, 35, 40]</span>
+</code></pre></div>
+<p><strong><code>reduce</code></strong> reduz a coleção a um único valor, acumulando o resultado de uma função:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">soma</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">acumulador</span><span class="p">,</span><span class="w"> </span><span class="nx">valorAtual</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">acumulador</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">valorAtual</span><span class="p">;</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="p">};</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="kd">var</span><span class="w"> </span><span class="nx">total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">temperaturasC</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="nx">soma</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">);</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="nx">print</span><span class="p">(</span><span class="nx">total</span><span class="p">);</span><span class="w">  </span><span class="c1">// 105</span>
+</code></pre></div>
+<p>Quando os valores intermediários não interessam, encadeamos as operações:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">resultado</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">temperaturasF</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">maior80</span><span class="p">)</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">paraCelsius</span><span class="p">)</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="nx">soma</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">);</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="nx">print</span><span class="p">(</span><span class="nx">resultado</span><span class="p">);</span><span class="w">  </span><span class="c1">// 105</span>
+</code></pre></div>
+<h3 id="o-mesmo-padrao-no-cliente-e-no-servidor">O mesmo padrão, no cliente e no servidor<a class="headerlink" href="#o-mesmo-padrao-no-cliente-e-no-servidor" title="Permanent link">&para;</a></h3>
+<p>A seguir, o mesmo cálculo — filtrar os valores menores que 8, dobrá-los e somá-los — escrito nos dois mundos. Primeiro, apenas com JavaScript, <strong>do lado do cliente</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">valores</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">10</span><span class="p">,</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span><span class="w"> </span><span class="mf">3</span><span class="p">,</span><span class="w"> </span><span class="mf">5</span><span class="p">];</span><span class="w">  </span><span class="c1">// array do JavaScript</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="kd">var</span><span class="w"> </span><span class="nx">resultado</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">valores</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">8</span><span class="p">;</span><span class="w"> </span><span class="p">})</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">2</span><span class="p">;</span><span class="w"> </span><span class="p">})</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">    </span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">acc</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nx">acc</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">x</span><span class="p">;</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="mf">0</span><span class="p">);</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="nx">print</span><span class="p">(</span><span class="nx">resultado</span><span class="p">);</span><span class="w">  </span><span class="c1">// 20</span>
+</code></pre></div>
+<p>Agora com tipos e operações do GEE, <strong>do lado do servidor</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">valores</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">List</span><span class="p">([</span><span class="mf">10</span><span class="p">,</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span><span class="w"> </span><span class="mf">3</span><span class="p">,</span><span class="w"> </span><span class="mf">5</span><span class="p">]);</span><span class="w">  </span><span class="c1">// lista do servidor</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="kd">var</span><span class="w"> </span><span class="nx">resultado</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">valores</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">lt</span><span class="p">(</span><span class="s1">'item'</span><span class="p">,</span><span class="w"> </span><span class="mf">8</span><span class="p">))</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">    </span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nb">Number</span><span class="p">(</span><span class="nx">x</span><span class="p">).</span><span class="nx">multiply</span><span class="p">(</span><span class="mf">2</span><span class="p">);</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">    </span><span class="p">})</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="w">    </span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Reducer</span><span class="p">.</span><span class="nx">sum</span><span class="p">());</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="nx">print</span><span class="p">(</span><span class="nx">resultado</span><span class="p">);</span><span class="w">  </span><span class="c1">// 20</span>
+</code></pre></div>
+<p>Execute cada versão com o <strong>Profiler</strong> ligado (menu do botão <strong>Run → Run with profiler</strong>, ou <code>Ctrl+Alt+Enter</code>). Na versão do servidor, o Profiler lista as operações executadas na infraestrutura do Google:</p>
+<p><img alt="Profiler: chamadas ao servidor" src="../img/cap03/profiler-servidor.png" /></p>
+<p>Na versão do cliente, nenhuma chamada ao servidor é registrada:</p>
+<p><img alt="Profiler: nenhuma chamada ao servidor" src="../img/cap03/profiler-cliente.png" /></p>
+<div class="admonition info">
+<p class="admonition-title">Por que isso importa?</p>
+<p>As operações do servidor consomem a <strong>cota</strong> do seu projeto. Para cálculos pequenos, como estes, a diferença é irrelevante — mas entender onde cada operação roda ajuda a escrever <em>scripts</em> eficientes e a interpretar as mensagens de erro.</p>
+</div>
+<div class="admonition abstract">
+<p class="admonition-title">Resumo</p>
+<p>O padrão <em>filter–map–reduce</em> permite <strong>selecionar</strong> os dados relevantes, <strong>aplicar</strong> operações específicas a cada um deles e, em seguida, <strong>reduzir</strong> os resultados para obter informações agregadas. Ele reaparecerá em quase todos os capítulos seguintes.</p>
+</div>
+<hr />
+<h2 id="sintese">📝 Síntese<a class="headerlink" href="#sintese" title="Permanent link">&para;</a></h2>
+<ul>
+<li>O GEE une um <strong>catálogo de petabytes</strong>, uma <strong>infraestrutura de processamento paralelo</strong> e <strong>APIs</strong> (JavaScript e Python); os dados não precisam ser baixados.</li>
+<li>O acesso exige um <strong>projeto do Google Cloud</strong> registrado para uso não comercial.</li>
+<li><em>Scripts</em> seguem a estrutura <strong>entrada → processamento → saída</strong>; variáveis, dicionários e funções organizam o código.</li>
+<li>Objetos <code>ee.*</code> vivem no <strong>servidor</strong> e são manipulados por <strong>métodos</strong>; o padrão <strong><em>filter–map–reduce</em></strong> organiza o processamento de coleções.</li>
+</ul>
+<h2 id="exercicios">✏️ Exercícios<a class="headerlink" href="#exercicios" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Crie um repositório no seu Code Editor e salve nele um <em>script</em> que centralize o mapa na sua cidade com zoom 12. Gere o <em>link</em> com <strong>Get Link</strong>.</li>
+<li>Escreva uma função <code>paraFahrenheit</code> que faça a conversão inversa da <code>paraCelsius</code>. Teste-a com 0 e 100.</li>
+<li>Crie um dicionário com os metadados de uma imagem fictícia (satélite, data, cobertura de nuvens) e imprima cada valor.</li>
+<li>Reescreva o exemplo das temperaturas <strong>do lado do servidor</strong>, usando <code>ee.List</code>, <code>ee.Filter.gt</code>, <code>.map</code> com <code>ee.Number</code> e <code>ee.Reducer.sum()</code>. Compare os resultados no Profiler.</li>
+<li>Explique, com suas palavras, por que <code>ee.Number(5) + 3</code> não produz 8.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar ao topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "content.code.annotate", "content.code.copy", "content.tabs.link", "content.tooltips", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "Mais 1 nesta p\u00e1gina", "search.result.more.other": "Mais # nesta p\u00e1gina", "search.result.none": "Nenhum resultado encontrado", "search.result.one": "1 resultado encontrado", "search.result.other": "# resultados encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

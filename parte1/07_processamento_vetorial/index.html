@@ -1,0 +1,1791 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Livro didático da disciplina de Introdução ao Geoprocessamento e Sensoriamento Remoto: sensoriamento remoto com Google Earth Engine e bancos de dados geográficos com PostGIS e QGIS.
+">
+      
+      
+        <meta name="author" content="Sergio Souza Costa">
+      
+      
+      
+        <link rel="prev" href="../06_selecao_matricial/">
+      
+      
+        <link rel="next" href="../08_processamento_matricial/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Cap 7: Processamento de Dados Vetoriais - Introdução ao Geoprocessamento e Sensoriamento Remoto</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lambdageo.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#processamento-de-dados-vetoriais" class="md-skip">
+          Ir para o conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="Introdução ao Geoprocessamento e Sensoriamento Remoto" class="md-header__button md-logo" aria-label="Introdução ao Geoprocessamento e Sensoriamento Remoto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Introdução ao Geoprocessamento e Sensoriamento Remoto
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Cap 7: Processamento de Dados Vetoriais
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Alternar para modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Alternar para modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Alternar para modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Alternar para modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Compartilhar" aria-label="Compartilhar" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando a pesquisa
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Introdução ao Geoprocessamento e Sensoriamento Remoto" class="md-nav__button md-logo" aria-label="Introdução ao Geoprocessamento e Sensoriamento Remoto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Introdução ao Geoprocessamento e Sensoriamento Remoto
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://lambdageo.github.io/ebooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ⇦ Coleção LambdaGeo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apresentação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parte 1 — Sensoriamento Remoto com Google Earth Engine (16h)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Parte 1 — Sensoriamento Remoto com Google Earth Engine (16h)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00_plano_parte1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plano da Parte 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_geoinformacao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 1: Geoinformação e Cartografia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_sensoriamento_remoto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 2: Fundamentos de Sensoriamento Remoto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_conhecendo_gee/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 3: Conhecendo o Google Earth Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_tipos_dados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 4: Tipos de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_selecao_vetorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 5: Seleção e Visualização — Vetores
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06_selecao_matricial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 6: Seleção e Visualização — Imagens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 7: Processamento de Dados Vetoriais
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 7: Processamento de Dados Vetoriais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#geracao-de-faixas-de-distancia-buffer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⭕ Geração de faixas de distância (buffer)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sobreposicao-de-poligonos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔀 Sobreposição de polígonos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔀 Sobreposição de polígonos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interseccao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Intersecção
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uniao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        União
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diferenca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diferença
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#area-e-centroides" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📏 Área e centroides
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📏 Área e centroides">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#calculo-de-area" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cálculo de área
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calculo-de-centroides" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cálculo de centroides
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#geracao-de-dados-amostrais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎲 Geração de dados amostrais
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sintese" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Síntese
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Exercícios
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08_processamento_matricial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 8: Processamento de Dados Matriciais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09_exercicios/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 9: Atividades e Lista de Exercícios
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parte 2 — Banco de Dados Geográficos e QGIS (14h)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Parte 2 — Banco de Dados Geográficos e QGIS (14h)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/00_plano_parte2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plano da Parte 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/10_introducao_bd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 10: Introdução a Bancos de Dados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/11_projeto_bdg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 11: Projeto de Banco de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/12_instalacao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 12: Instalando PostgreSQL, PostGIS e QGIS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/13_sql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 13: A Linguagem SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/14_tipos_espaciais/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 14: Tipos de Dados Espaciais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/15_operacoes_espaciais/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 15: Operações e Indexação Espacial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/16_integracao_qgis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 16: Integração com o QGIS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/17_exercicios/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 17: Lista de Exercícios e Trabalho
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Anexos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Anexos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../anexos/fontes_dados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fontes de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../anexos/referencias/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referências
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#geracao-de-faixas-de-distancia-buffer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⭕ Geração de faixas de distância (buffer)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sobreposicao-de-poligonos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔀 Sobreposição de polígonos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔀 Sobreposição de polígonos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interseccao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Intersecção
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uniao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        União
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diferenca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diferença
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#area-e-centroides" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📏 Área e centroides
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📏 Área e centroides">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#calculo-de-area" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cálculo de área
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calculo-de-centroides" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cálculo de centroides
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#geracao-de-dados-amostrais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎲 Geração de dados amostrais
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sintese" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Síntese
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Exercícios
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="processamento-de-dados-vetoriais">Processamento de Dados Vetoriais<a class="headerlink" href="#processamento-de-dados-vetoriais" title="Permanent link">&para;</a></h1>
+<p>As operações sobre dados vetoriais são comumente conhecidas como <strong>operações de geoprocessamento</strong>. Neste capítulo veremos as mais comuns: geração de faixas de distância (<em>buffer</em>), sobreposição de polígonos (intersecção, união e diferença), cálculo de áreas e centroides e geração de amostras aleatórias.</p>
+<p>Antes de começar, é importante perceber que algumas operações são aplicadas a <strong>uma feição</strong> (<code>ee.Feature</code>) e outras a <strong>uma coleção</strong> (<code>ee.FeatureCollection</code>):</p>
+<p><img alt="Operações de ee.Feature e de ee.FeatureCollection" src="../img/cap07/ops-feature-collection.png" /></p>
+<p>Operações como <code>.buffer()</code>, <code>.centroid()</code>, <code>.area()</code> e <code>.intersection()</code> são definidas para uma feição. Para aplicá-las a todas as feições de uma coleção, usamos o <strong><code>.map()</code></strong> — o segundo passo do padrão <em>filter–map–reduce</em> que vimos no <a href="../03_conhecendo_gee/#o-padrao-filtermapreduce">Capítulo 3</a>.</p>
+<div class="admonition info">
+<p class="admonition-title">Dados usados neste capítulo</p>
+<p>Baixe e envie aos seus <em>assets</em> (ver <a href="../05_selecao_vetorial/#enviando-seus-proprios-dados-assets">Capítulo 5</a>):</p>
+<ul>
+<li><a href="../../dados/polos_madeireiros_mma.zip">polos_madeireiros_mma.zip</a> — polos madeireiros da Amazônia (Ministério do Meio Ambiente), 74 pontos, atributo <code>UF4</code> com a sigla da UF;</li>
+<li><a href="../../dados/terras_indigenas.zip">terras_indigenas.zip</a> — terras indígenas (FUNAI, 2010), atributos <code>NOME_TI23</code> (nome) e <code>UF10</code> (UF). Versão com geometria simplificada, preparada para fins didáticos.</li>
+</ul>
+<p>Lembre-se de substituir <code>projects/ee-sergiocosta/assets/...</code> pelo identificador dos seus <em>assets</em>.</p>
+</div>
+<hr />
+<h2 id="geracao-de-faixas-de-distancia-buffer">⭕ Geração de faixas de distância (<em>buffer</em>)<a class="headerlink" href="#geracao-de-faixas-de-distancia-buffer" title="Permanent link">&para;</a></h2>
+<p>A operação de <em>buffer</em> identifica <strong>zonas de proximidade</strong> ao redor de entidades geográficas — pontos, linhas ou polígonos (LONGLEY, 2005). Autoridades municipais podem usá-la para definir zonas de restrição em torno de rios, reservatórios ou áreas de preservação; no planejamento de transportes, para identificar as áreas a uma certa distância de estações de metrô ou paradas de ônibus.</p>
+<p>Para realizá-la, escolhemos a entidade de interesse e a distância desejada, geralmente em metros. Suponha que queremos investigar a relação entre o desmatamento e a proximidade de <strong>polos madeireiros</strong>. O método <code>.buffer()</code> é aplicado a uma feição e retorna uma nova feição. Para aplicá-lo a toda a coleção, encapsulamos a operação em uma função e usamos o <code>.map()</code>:</p>
+<p><img alt="O map aplica a função de buffer a cada feição da coleção" src="../img/cap07/map-buffer.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">fbuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">feat</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">feat</span><span class="p">.</span><span class="nx">buffer</span><span class="p">(</span><span class="mf">50000</span><span class="p">);</span><span class="w">  </span><span class="c1">// 50 km</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">};</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kd">var</span><span class="w"> </span><span class="nx">bufferPolos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">polosMadeireiros</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">fbuffer</span><span class="p">);</span>
+</code></pre></div>
+<p>O código completo, restrito aos polos do Pará:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">fbuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">feat</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">feat</span><span class="p">.</span><span class="nx">buffer</span><span class="p">(</span><span class="mf">50000</span><span class="p">);</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">};</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="kd">var</span><span class="w"> </span><span class="nx">polosMadeireiros</span><span class="w"> </span><span class="o">=</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span><span class="s1">'projects/ee-sergiocosta/assets/polos_madeireiros_mma'</span><span class="p">);</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="kd">var</span><span class="w"> </span><span class="nx">bufferPolos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">polosMadeireiros</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'UF4'</span><span class="p">,</span><span class="w"> </span><span class="s1">'PA'</span><span class="p">))</span><span class="w">   </span><span class="c1">// filter</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">fbuffer</span><span class="p">);</span><span class="w">                       </span><span class="c1">// map</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">bufferPolos</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="s1">'Buffer de 50 km'</span><span class="p">);</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">bufferPolos</span><span class="p">,</span><span class="w"> </span><span class="mf">6</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="Faixas de 50 km em torno dos polos madeireiros do Pará" src="../img/cap07/buffer-polos.jpg" /></p>
+<hr />
+<h2 id="sobreposicao-de-poligonos">🔀 Sobreposição de polígonos<a class="headerlink" href="#sobreposicao-de-poligonos" title="Permanent link">&para;</a></h2>
+<p>A sobreposição de polígonos é uma operação fundamental nos SIGs, essencial para o planejamento urbano, a gestão de recursos naturais, a análise de riscos e muitas outras aplicações. As três operações principais são a <strong>intersecção</strong>, a <strong>união</strong> e a <strong>diferença</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Operação</th>
+<th style="text-align: center;">Notação</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Intersecção</strong></td>
+<td style="text-align: center;">A ∩ B</td>
+<td>apenas a área comum a A e B</td>
+</tr>
+<tr>
+<td><strong>União</strong></td>
+<td style="text-align: center;">A ∪ B</td>
+<td>toda a área de A e de B</td>
+</tr>
+<tr>
+<td><strong>Diferença</strong></td>
+<td style="text-align: center;">A − B</td>
+<td>a área de A que não está em B</td>
+</tr>
+</tbody>
+</table>
+<h3 id="interseccao">Intersecção<a class="headerlink" href="#interseccao" title="Permanent link">&para;</a></h3>
+<p>A intersecção identifica as <strong>regiões de sobreposição</strong> entre duas ou mais geometrias — as áreas em que diferentes conjuntos de dados têm algo em comum. Na pesquisa sobre conflitos territoriais, por exemplo, ela identifica onde as jurisdições de várias entidades se sobrepõem. Continuando o exemplo anterior, vamos identificar as áreas de <strong>terras indígenas</strong> que estão dentro das faixas de 50 km dos polos madeireiros — algo essencial para avaliar o impacto potencial dessas atividades.</p>
+<p><strong>Exemplo 1 — intersecção com uma única terra indígena.</strong> Selecionamos a TI Parakanã (uma feição, obtida com <code>.first()</code>) e aplicamos a cada <em>buffer</em> uma função que retorna a intersecção com ela:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">polosMadeireiros</span><span class="w"> </span><span class="o">=</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span><span class="s1">'projects/ee-sergiocosta/assets/polos_madeireiros_mma'</span><span class="p">);</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kd">var</span><span class="w"> </span><span class="nx">tis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span><span class="s1">'projects/ee-sergiocosta/assets/terras_indigenas'</span><span class="p">);</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="kd">var</span><span class="w"> </span><span class="nx">tiParakana</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">tis</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'NOME_TI23'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Parakana'</span><span class="p">))</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="p">.</span><span class="nx">first</span><span class="p">();</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="kd">var</span><span class="w"> </span><span class="nx">fbuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">feat</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">feat</span><span class="p">.</span><span class="nx">buffer</span><span class="p">(</span><span class="mf">50000</span><span class="p">);</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="p">};</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="kd">var</span><span class="w"> </span><span class="nx">fintersecaoParakana</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">feat</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">feat</span><span class="p">.</span><span class="nx">intersection</span><span class="p">(</span><span class="nx">tiParakana</span><span class="p">);</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="p">};</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="kd">var</span><span class="w"> </span><span class="nx">intersecao</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">polosMadeireiros</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'UF4'</span><span class="p">,</span><span class="w"> </span><span class="s1">'PA'</span><span class="p">))</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">    </span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">fbuffer</span><span class="p">)</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">    </span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">fintersecaoParakana</span><span class="p">);</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">intersecao</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="s1">'Intersecção com a TI Parakanã'</span><span class="p">);</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">intersecao</span><span class="p">,</span><span class="w"> </span><span class="mf">9</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="Intersecção dos *buffers* com a TI Parakanã" src="../img/cap07/intersecao-parakana.png" /></p>
+<p>Observe que não foi preciso guardar o resultado do <em>buffer</em> em uma variável: os dois <code>.map()</code> foram encadeados.</p>
+<p><strong>Exemplo 2 — intersecção com todas as terras indígenas do Pará.</strong> Agora a função aplicada a cada <em>buffer</em> precisa calcular a intersecção com <strong>cada</strong> terra indígena — ou seja, precisamos de um <code>.map()</code> dentro de outro:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">intersecaoTIs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">feat</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">tisPA</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">tiFeat</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">feat</span><span class="p">.</span><span class="nx">intersection</span><span class="p">(</span><span class="nx">tiFeat</span><span class="p">);</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="p">});</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">};</span>
+</code></pre></div>
+<p>Executando esse código e imprimindo o resultado, nada aparece no mapa. No Console, descobrimos o motivo: o resultado é uma <strong>coleção de coleções</strong> — para cada <em>buffer</em>, uma coleção de intersecções.</p>
+<p><img alt="Uma coleção de coleções" src="../img/cap07/colecao-de-colecoes.png" /></p>
+<p>A operação <strong><code>.flatten()</code></strong> transforma uma coleção de coleções em uma única coleção:</p>
+<p><img alt="O flatten &quot;achata&quot; a coleção de coleções" src="../img/cap07/flatten.png" /></p>
+<p>O código completo:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">polosMadeireiros</span><span class="w"> </span><span class="o">=</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span><span class="s1">'projects/ee-sergiocosta/assets/polos_madeireiros_mma'</span><span class="p">);</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="kd">var</span><span class="w"> </span><span class="nx">tisPA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span><span class="s1">'projects/ee-sergiocosta/assets/terras_indigenas'</span><span class="p">)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'UF10'</span><span class="p">,</span><span class="w"> </span><span class="s1">'PA'</span><span class="p">));</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="kd">var</span><span class="w"> </span><span class="nx">fbuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">feat</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">feat</span><span class="p">.</span><span class="nx">buffer</span><span class="p">(</span><span class="mf">50000</span><span class="p">);</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="p">};</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="kd">var</span><span class="w"> </span><span class="nx">intersecaoTIs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">feat</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">tisPA</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">tiFeat</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">feat</span><span class="p">.</span><span class="nx">intersection</span><span class="p">(</span><span class="nx">tiFeat</span><span class="p">);</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">  </span><span class="p">});</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="p">};</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="kd">var</span><span class="w"> </span><span class="nx">intersecao</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">polosMadeireiros</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'UF4'</span><span class="p">,</span><span class="w"> </span><span class="s1">'PA'</span><span class="p">))</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">    </span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">fbuffer</span><span class="p">)</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">    </span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">intersecaoTIs</span><span class="p">)</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">    </span><span class="p">.</span><span class="nx">flatten</span><span class="p">();</span>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="nx">print</span><span class="p">(</span><span class="nx">intersecao</span><span class="p">);</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">intersecao</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">'FF0000'</span><span class="p">},</span><span class="w"> </span><span class="s1">'TIs a menos de 50 km de polos'</span><span class="p">);</span>
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">intersecao</span><span class="p">,</span><span class="w"> </span><span class="mf">6</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="Intersecção dos *buffers* com todas as TIs do Pará" src="../img/cap07/intersecao-tis.jpg" /></p>
+<p>Agora o Console mostra uma coleção de feições, e não mais uma coleção de coleções.</p>
+<div class="admonition tip">
+<p class="admonition-title">Intersecções vazias</p>
+<p>Quando um <em>buffer</em> não toca uma terra indígena, a intersecção resulta em uma geometria vazia — que também entra na coleção. Para descartá-las, filtre pela área: acrescente ao final da cadeia <code>.map(function (f) { return f.set('area', f.area(1)); }).filter(ee.Filter.gt('area', 0))</code>.</p>
+</div>
+<h3 id="uniao">União<a class="headerlink" href="#uniao" title="Permanent link">&para;</a></h3>
+<p>A união <strong>combina polígonos</strong>, gerando um novo polígono que abrange toda a área dos polígonos originais. Ela é usada para consolidar informações de diversas fontes ou para criar um polígono contínuo a partir de várias unidades menores — na gestão de recursos naturais, várias áreas de vegetação podem resultar em um único polígono de <em>habitat</em>. Um uso muito comum é <strong>delimitar uma área de estudo</strong> a partir de vários municípios. O código a seguir une quatro municípios do centro do Maranhão:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">filtro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">or</span><span class="p">(</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'NM_MUN'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Barra do Corda'</span><span class="p">),</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'NM_MUN'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Grajaú'</span><span class="p">),</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'NM_MUN'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Jenipapo dos Vieiras'</span><span class="p">),</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'NM_MUN'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Fernando Falcão'</span><span class="p">)</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="p">);</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="kd">var</span><span class="w"> </span><span class="nx">areaEstudo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="s1">'projects/ee-sergiocosta/assets/MA_Municipios_2022'</span><span class="p">)</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">filtro</span><span class="p">)</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">  </span><span class="p">.</span><span class="nx">union</span><span class="p">();</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="nx">print</span><span class="p">(</span><span class="nx">areaEstudo</span><span class="p">);</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">areaEstudo</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="s1">'Área de estudo'</span><span class="p">);</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">areaEstudo</span><span class="p">,</span><span class="w"> </span><span class="mf">8</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="A área de estudo resultante da união de quatro municípios" src="../img/cap07/uniao.jpg" /></p>
+<p>O filtro <code>ee.Filter.or</code> seleciona os municípios que satisfazem <strong>qualquer</strong> das condições. O mesmo resultado seria obtido com <code>ee.Filter.inList('NM_MUN', ['Barra do Corda', 'Grajaú', 'Jenipapo dos Vieiras', 'Fernando Falcão'])</code>. O método <code>.union()</code> da coleção retorna uma nova coleção com <strong>uma única feição</strong>, cuja geometria é a união de todas.</p>
+<h3 id="diferenca">Diferença<a class="headerlink" href="#diferenca" title="Permanent link">&para;</a></h3>
+<p>A diferença <strong>subtrai</strong> um polígono de outro, eliminando uma área específica de um polígono maior — por exemplo, remover uma área construída de uma zona de conservação ambiental. Suponha que, durante a análise, decidimos excluir o município de Grajaú da área de estudo:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">municipios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span><span class="s1">'projects/ee-sergiocosta/assets/MA_Municipios_2022'</span><span class="p">);</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="kd">var</span><span class="w"> </span><span class="nx">areaEstudo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">municipios</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">inList</span><span class="p">(</span><span class="s1">'NM_MUN'</span><span class="p">,</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">        </span><span class="p">[</span><span class="s1">'Barra do Corda'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Grajaú'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Jenipapo dos Vieiras'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Fernando Falcão'</span><span class="p">]))</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="p">.</span><span class="nx">union</span><span class="p">();</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="kd">var</span><span class="w"> </span><span class="nx">grajau</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">municipios</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'NM_MUN'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Grajaú'</span><span class="p">))</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span><span class="p">.</span><span class="nx">first</span><span class="p">();</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="kd">var</span><span class="w"> </span><span class="nx">calcularDiferenca</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">feature</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">feature</span><span class="p">.</span><span class="nx">difference</span><span class="p">(</span><span class="nx">grajau</span><span class="p">);</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="p">};</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="kd">var</span><span class="w"> </span><span class="nx">resultadoDiferenca</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">areaEstudo</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">calcularDiferenca</span><span class="p">);</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">areaEstudo</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">'999999'</span><span class="p">},</span><span class="w"> </span><span class="s1">'Área de estudo inicial'</span><span class="p">);</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">resultadoDiferenca</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">'FF0000'</span><span class="p">},</span><span class="w"> </span><span class="s1">'Diferença'</span><span class="p">);</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">resultadoDiferenca</span><span class="p">,</span><span class="w"> </span><span class="mf">8</span><span class="p">);</span>
+</code></pre></div>
+<p>Como <code>areaEstudo</code> é uma coleção (com uma feição), usamos novamente o <code>.map()</code> para aplicar a operação.</p>
+<hr />
+<h2 id="area-e-centroides">📏 Área e centroides<a class="headerlink" href="#area-e-centroides" title="Permanent link">&para;</a></h2>
+<h3 id="calculo-de-area">Cálculo de área<a class="headerlink" href="#calculo-de-area" title="Permanent link">&para;</a></h3>
+<p>O método <code>.area()</code> retorna a área de uma geometria em <strong>metros quadrados</strong>, calculada sobre o elipsoide — ou seja, sem as distorções de uma projeção. Para calcular a área de todos os municípios e guardá-la como um novo atributo, usamos <code>.map()</code> e <code>.set()</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">municipios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span><span class="s1">'projects/ee-sergiocosta/assets/MA_Municipios_2022'</span><span class="p">);</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="kd">var</span><span class="w"> </span><span class="nx">comArea</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">municipios</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">feature</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">areaKm2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">feature</span><span class="p">.</span><span class="nx">geometry</span><span class="p">().</span><span class="nx">area</span><span class="p">(</span><span class="mf">1</span><span class="p">).</span><span class="nx">divide</span><span class="p">(</span><span class="mf">1e6</span><span class="p">);</span><span class="w">  </span><span class="c1">// m² → km²</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">feature</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'area_calc_km2'</span><span class="p">,</span><span class="w"> </span><span class="nx">areaKm2</span><span class="p">);</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="p">});</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="nx">print</span><span class="p">(</span><span class="nx">comArea</span><span class="p">.</span><span class="nx">limit</span><span class="p">(</span><span class="mf">5</span><span class="p">));</span><span class="w">  </span><span class="c1">// compare area_calc_km2 com o atributo AREA_KM2 do IBGE</span>
+</code></pre></div>
+<p>O argumento <code>1</code> é o erro máximo tolerado (em metros) no cálculo.</p>
+<h3 id="calculo-de-centroides">Cálculo de centroides<a class="headerlink" href="#calculo-de-centroides" title="Permanent link">&para;</a></h3>
+<p>Outra operação muito comum é o cálculo do ponto central — o <strong>centro de massa</strong> — de uma geometria, o <strong>centroide</strong>. Ele é usado para posicionar rótulos em mapas temáticos, em análises de redes, de densidade e muitas outras. Aplicado a uma feição, o método <code>.centroid()</code> retorna uma nova feição, com o centroide como geometria e <strong>os mesmos atributos</strong> da original:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">municipios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span><span class="s1">'projects/ee-sergiocosta/assets/MA_Municipios_2022'</span><span class="p">);</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="kd">var</span><span class="w"> </span><span class="nx">calcularCentroide</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">feature</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">feature</span><span class="p">.</span><span class="nx">centroid</span><span class="p">(</span><span class="mf">1</span><span class="p">);</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="p">};</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1">// aplica a função a cada feição da coleção</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="kd">var</span><span class="w"> </span><span class="nx">centroides</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">municipios</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">calcularCentroide</span><span class="p">);</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="nx">print</span><span class="p">(</span><span class="nx">centroides</span><span class="p">.</span><span class="nx">limit</span><span class="p">(</span><span class="mf">5</span><span class="p">));</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">municipios</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="s1">'Municípios'</span><span class="p">);</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">centroides</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">'FF0000'</span><span class="p">},</span><span class="w"> </span><span class="s1">'Centroides'</span><span class="p">);</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">municipios</span><span class="p">,</span><span class="w"> </span><span class="mf">6</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="Centroides dos municípios do Maranhão" src="../img/cap07/centroides.jpg" /></p>
+<div class="admonition question">
+<p class="admonition-title">E se eu calcular o centroide da <em>geometria</em>?</p>
+<p><code>feature.geometry().centroid()</code> retorna apenas uma <strong>geometria</strong>, sem atributos. Para manter os atributos nesse caso, crie uma nova feição: <code>ee.Feature(feature.geometry().centroid(1), feature.toDictionary())</code>. Usar diretamente <code>feature.centroid()</code> é mais simples.</p>
+</div>
+<hr />
+<h2 id="geracao-de-dados-amostrais">🎲 Geração de dados amostrais<a class="headerlink" href="#geracao-de-dados-amostrais" title="Permanent link">&para;</a></h2>
+<p>A geração de amostras aleatórias é uma etapa fundamental em muitas aplicações de sensoriamento remoto e análise espacial: avaliar a qualidade de uma classificação de imagem, treinar algoritmos de aprendizado de máquina ou conduzir análises estatísticas. O método <code>ee.FeatureCollection.randomPoints</code> recebe a região de interesse e o número de pontos desejado e retorna uma coleção de pontos. No exemplo a seguir, criamos 100 pontos na área de estudo:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">areaEstudo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="s1">'projects/ee-sergiocosta/assets/MA_Municipios_2022'</span><span class="p">)</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">inList</span><span class="p">(</span><span class="s1">'NM_MUN'</span><span class="p">,</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">      </span><span class="p">[</span><span class="s1">'Barra do Corda'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Grajaú'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Jenipapo dos Vieiras'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Fernando Falcão'</span><span class="p">]))</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="p">.</span><span class="nx">union</span><span class="p">();</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="kd">var</span><span class="w"> </span><span class="nx">numeroDePontos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">100</span><span class="p">;</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="kd">var</span><span class="w"> </span><span class="nx">amostras</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">.</span><span class="nx">randomPoints</span><span class="p">({</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">  </span><span class="nx">region</span><span class="o">:</span><span class="w"> </span><span class="nx">areaEstudo</span><span class="p">.</span><span class="nx">geometry</span><span class="p">(),</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">  </span><span class="nx">points</span><span class="o">:</span><span class="w"> </span><span class="nx">numeroDePontos</span><span class="p">,</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">  </span><span class="nx">seed</span><span class="o">:</span><span class="w"> </span><span class="mf">42</span><span class="w">  </span><span class="c1">// semente: garante que os mesmos pontos sejam gerados a cada execução</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="p">});</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">areaEstudo</span><span class="p">,</span><span class="w"> </span><span class="mf">8</span><span class="p">);</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">areaEstudo</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="s1">'Área de estudo'</span><span class="p">);</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">amostras</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">'red'</span><span class="p">},</span><span class="w"> </span><span class="s1">'Amostras'</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="100 pontos aleatórios na área de estudo" src="../img/cap07/amostras.png" /></p>
+<div class="admonition tip">
+<p class="admonition-title">Reprodutibilidade</p>
+<p>O parâmetro <code>seed</code> torna o sorteio <strong>reprodutível</strong>: com a mesma semente, os mesmos pontos são gerados. Isso é importante em trabalhos científicos, para que outras pessoas possam repetir a análise.</p>
+</div>
+<hr />
+<h2 id="sintese">📝 Síntese<a class="headerlink" href="#sintese" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Operação</th>
+<th>Aplicada a</th>
+<th>Método no GEE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Faixa de distância</td>
+<td>feição</td>
+<td><code>feature.buffer(distância)</code></td>
+</tr>
+<tr>
+<td>Intersecção</td>
+<td>feição</td>
+<td><code>feature.intersection(outra)</code></td>
+</tr>
+<tr>
+<td>União</td>
+<td>coleção</td>
+<td><code>colecao.union()</code></td>
+</tr>
+<tr>
+<td>Diferença</td>
+<td>feição</td>
+<td><code>feature.difference(outra)</code></td>
+</tr>
+<tr>
+<td>Área</td>
+<td>geometria</td>
+<td><code>geometry.area(erroMax)</code></td>
+</tr>
+<tr>
+<td>Centroide</td>
+<td>feição</td>
+<td><code>feature.centroid(erroMax)</code></td>
+</tr>
+<tr>
+<td>Amostras aleatórias</td>
+<td>região</td>
+<td><code>ee.FeatureCollection.randomPoints(...)</code></td>
+</tr>
+<tr>
+<td>Achatar coleções</td>
+<td>coleção de coleções</td>
+<td><code>colecao.flatten()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Para aplicar uma operação de feição a toda uma coleção, use <strong><code>.map()</code></strong>.</p>
+<h2 id="exercicios">✏️ Exercícios<a class="headerlink" href="#exercicios" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Gere <em>buffers</em> de 10 km em torno das sedes dos polos madeireiros do Maranhão (<code>UF4 = 'MA'</code>). Quantos polos existem no estado?</li>
+<li>Calcule a área (em km²) de cada terra indígena do Maranhão e liste as três maiores (dica: <code>.sort('area', false).limit(3)</code>).</li>
+<li>Construa a área de estudo formada pelos municípios da Ilha do Maranhão (São Luís, São José de Ribamar, Paço do Lumiar e Raposa) e gere 50 amostras aleatórias com semente 2024.</li>
+<li>Modifique o Exemplo 2 da intersecção para calcular, em cada feição resultante, a área em km², e remova as intersecções vazias.</li>
+<li>Explique por que o resultado do Exemplo 2 era uma coleção de coleções e o que o <code>.flatten()</code> faz.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar ao topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "content.code.annotate", "content.code.copy", "content.tabs.link", "content.tooltips", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "Mais 1 nesta p\u00e1gina", "search.result.more.other": "Mais # nesta p\u00e1gina", "search.result.none": "Nenhum resultado encontrado", "search.result.one": "1 resultado encontrado", "search.result.other": "# resultados encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

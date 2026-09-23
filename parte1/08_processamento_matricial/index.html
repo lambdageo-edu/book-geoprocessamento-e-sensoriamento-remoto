@@ -1,0 +1,1906 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Livro didático da disciplina de Introdução ao Geoprocessamento e Sensoriamento Remoto: sensoriamento remoto com Google Earth Engine e bancos de dados geográficos com PostGIS e QGIS.
+">
+      
+      
+        <meta name="author" content="Sergio Souza Costa">
+      
+      
+      
+        <link rel="prev" href="../07_processamento_vetorial/">
+      
+      
+        <link rel="next" href="../09_exercicios/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Cap 8: Processamento de Dados Matriciais - Introdução ao Geoprocessamento e Sensoriamento Remoto</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lambdageo.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#processamento-de-dados-matriciais" class="md-skip">
+          Ir para o conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="Introdução ao Geoprocessamento e Sensoriamento Remoto" class="md-header__button md-logo" aria-label="Introdução ao Geoprocessamento e Sensoriamento Remoto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Introdução ao Geoprocessamento e Sensoriamento Remoto
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Cap 8: Processamento de Dados Matriciais
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Alternar para modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Alternar para modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Alternar para modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Alternar para modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Compartilhar" aria-label="Compartilhar" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando a pesquisa
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Introdução ao Geoprocessamento e Sensoriamento Remoto" class="md-nav__button md-logo" aria-label="Introdução ao Geoprocessamento e Sensoriamento Remoto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Introdução ao Geoprocessamento e Sensoriamento Remoto
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://lambdageo.github.io/ebooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ⇦ Coleção LambdaGeo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apresentação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parte 1 — Sensoriamento Remoto com Google Earth Engine (16h)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Parte 1 — Sensoriamento Remoto com Google Earth Engine (16h)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00_plano_parte1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plano da Parte 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_geoinformacao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 1: Geoinformação e Cartografia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_sensoriamento_remoto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 2: Fundamentos de Sensoriamento Remoto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_conhecendo_gee/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 3: Conhecendo o Google Earth Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_tipos_dados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 4: Tipos de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_selecao_vetorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 5: Seleção e Visualização — Vetores
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06_selecao_matricial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 6: Seleção e Visualização — Imagens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07_processamento_vetorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 7: Processamento de Dados Vetoriais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 8: Processamento de Dados Matriciais
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 8: Processamento de Dados Matriciais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#algebra-de-mapas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧮 Álgebra de mapas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operacoes-locais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📍 Operações locais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📍 Operações locais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#indices-espectrais-o-ndvi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Índices espectrais: o NDVI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pre-processamento-reflectancia-de-superficie-e-fator-de-escala" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pré-processamento: reflectância de superfície e fator de escala
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outro-indice-e-mascaras-o-ndwi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outro índice e máscaras: o NDWI
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operacoes-focais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔲 Operações focais
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operacoes-zonais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🗺️ Operações zonais
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operacoes-globais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🌐 Operações globais
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serie-temporal-de-precipitacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📈 Série temporal de precipitação
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#um-primeiro-passo-na-classificacao-de-imagens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏷️ Um primeiro passo na classificação de imagens
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sintese" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Síntese
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Exercícios
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09_exercicios/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 9: Atividades e Lista de Exercícios
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parte 2 — Banco de Dados Geográficos e QGIS (14h)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Parte 2 — Banco de Dados Geográficos e QGIS (14h)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/00_plano_parte2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plano da Parte 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/10_introducao_bd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 10: Introdução a Bancos de Dados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/11_projeto_bdg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 11: Projeto de Banco de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/12_instalacao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 12: Instalando PostgreSQL, PostGIS e QGIS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/13_sql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 13: A Linguagem SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/14_tipos_espaciais/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 14: Tipos de Dados Espaciais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/15_operacoes_espaciais/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 15: Operações e Indexação Espacial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/16_integracao_qgis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 16: Integração com o QGIS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/17_exercicios/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 17: Lista de Exercícios e Trabalho
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Anexos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Anexos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../anexos/fontes_dados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fontes de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../anexos/referencias/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referências
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#algebra-de-mapas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧮 Álgebra de mapas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operacoes-locais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📍 Operações locais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📍 Operações locais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#indices-espectrais-o-ndvi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Índices espectrais: o NDVI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pre-processamento-reflectancia-de-superficie-e-fator-de-escala" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pré-processamento: reflectância de superfície e fator de escala
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outro-indice-e-mascaras-o-ndwi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outro índice e máscaras: o NDWI
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operacoes-focais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔲 Operações focais
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operacoes-zonais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🗺️ Operações zonais
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operacoes-globais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🌐 Operações globais
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serie-temporal-de-precipitacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📈 Série temporal de precipitação
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#um-primeiro-passo-na-classificacao-de-imagens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏷️ Um primeiro passo na classificação de imagens
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sintese" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Síntese
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Exercícios
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="processamento-de-dados-matriciais">Processamento de Dados Matriciais<a class="headerlink" href="#processamento-de-dados-matriciais" title="Permanent link">&para;</a></h1>
+<p>Assim como nos dados vetoriais, algumas operações são aplicadas a <strong>uma imagem</strong> (<code>ee.Image</code>) e outras a <strong>uma coleção de imagens</strong> (<code>ee.ImageCollection</code>):</p>
+<p><img alt="Operações de ee.Image e de ee.ImageCollection" src="../img/cap08/ops-image-collection.png" /></p>
+<p>Muitas das operações sobre dados matriciais são melhor entendidas dentro do conceito de <strong>álgebra de mapas</strong> (TOMLIN, 1990). Neste capítulo, usamos esse conceito para organizar as operações do GEE, calculamos índices espectrais, pré-processamos imagens, construímos séries temporais e damos um primeiro passo na classificação de imagens.</p>
+<hr />
+<h2 id="algebra-de-mapas">🧮 Álgebra de mapas<a class="headerlink" href="#algebra-de-mapas" title="Permanent link">&para;</a></h2>
+<p>Tomlin (1990) classifica as operações sobre mapas matriciais pela <strong>origem dos valores</strong> usados para calcular cada célula do mapa de saída:</p>
+<ul>
+<li><strong>Operações locais:</strong> o valor de uma localização no mapa de saída é calculado a partir dos valores <strong>da mesma localização</strong> em um ou mais mapas de entrada. Incluem expressões aritméticas e lógicas, como <em>"classificar como alto risco todas as áreas sem vegetação com declividade superior a 15%"</em>.</li>
+<li><strong>Operações focais:</strong> o valor de uma localização no mapa de saída é calculado a partir dos valores <strong>da vizinhança</strong> dessa localização no mapa de entrada. Incluem expressões como <em>"calcular a média local dos valores do mapa"</em>.</li>
+<li><strong>Operações zonais:</strong> o valor é calculado a partir de <strong>todas as células de uma zona</strong>, sendo as zonas definidas por um segundo mapa. Incluem expressões como <em>"dado um mapa de municípios e um modelo digital de terreno, calcular a altitude média de cada município"</em>.</li>
+</ul>
+<p><img alt="Operações local (a), focal (b) e zonal (c)" src="../img/cap08/algebra-mapas.svg" /></p>
+<p>A essas três pode-se acrescentar uma quarta, as <strong>operações globais</strong>, que usam o conjunto de dados inteiro.</p>
+<hr />
+<h2 id="operacoes-locais">📍 Operações locais<a class="headerlink" href="#operacoes-locais" title="Permanent link">&para;</a></h2>
+<p>Operadores locais atuam sobre células individuais, sem considerar as vizinhas. Incluem as operações aritméticas básicas (adição, subtração, multiplicação, divisão) e funções como logaritmo, exponenciação, raiz quadrada e operações trigonométricas e lógicas. No GEE, são métodos das imagens:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">soma</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">imagem1</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">imagem2</span><span class="p">);</span><span class="w">          </span><span class="c1">// imagem1 + imagem2, pixel a pixel</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kd">var</span><span class="w"> </span><span class="nx">raiz</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">imagem</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">();</span><span class="w">                 </span><span class="c1">// raiz quadrada de cada pixel</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kd">var</span><span class="w"> </span><span class="nx">mascara</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">imagem</span><span class="p">.</span><span class="nx">gt</span><span class="p">(</span><span class="mf">0.3</span><span class="p">);</span><span class="w">             </span><span class="c1">// 1 onde o pixel &gt; 0,3; 0 caso contrário</span>
+</code></pre></div>
+<h3 id="indices-espectrais-o-ndvi">Índices espectrais: o NDVI<a class="headerlink" href="#indices-espectrais-o-ndvi" title="Permanent link">&para;</a></h3>
+<p>O exemplo mais clássico de operação local é o <strong>NDVI</strong> (<em>Normalized Difference Vegetation Index</em>), amplamente usado para avaliar a presença e o vigor da vegetação:</p>
+<div class="arithmatex">\[
+NDVI = \frac{NIR - Red}{NIR + Red}
+\]</div>
+<p>em que <strong>NIR</strong> é o valor do pixel na banda do infravermelho próximo e <strong>Red</strong> o valor na banda do vermelho. O resultado varia de −1 a 1: valores próximos de 1 indicam vegetação densa e sadia; próximos de 0, áreas com pouca ou nenhuma vegetação (solo exposto, áreas construídas); e valores negativos estão associados a corpos d'água. A explicação está na assinatura espectral (<a href="../02_sensoriamento_remoto/#assinatura-espectral">Capítulo 2</a>): a vegetação reflete muito o infravermelho próximo e absorve o vermelho.</p>
+<p>No Landsat 8, <strong>a banda 5 é o infravermelho próximo (NIR) e a banda 4 é o vermelho (Red)</strong>. O código a seguir mostra explicitamente a aritmética de bandas com <code>.expression()</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// Uma imagem Landsat 8 em reflectância no topo da atmosfera</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kd">var</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Image</span><span class="p">(</span><span class="s1">'LANDSAT/LC08/C02/T1_TOA/LC08_220062_20190504'</span><span class="p">);</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1">// NDVI como operação local</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ndvi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">expression</span><span class="p">(</span><span class="s1">'(NIR - Red) / (NIR + Red)'</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="s1">'NIR'</span><span class="o">:</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">'B5'</span><span class="p">),</span><span class="w">  </span><span class="c1">// infravermelho próximo</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="s1">'Red'</span><span class="o">:</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">'B4'</span><span class="p">)</span><span class="w">   </span><span class="c1">// vermelho</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="p">}).</span><span class="nx">rename</span><span class="p">(</span><span class="s1">'NDVI'</span><span class="p">);</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">ndvi</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="nx">palette</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">'blue'</span><span class="p">,</span><span class="w"> </span><span class="s1">'white'</span><span class="p">,</span><span class="w"> </span><span class="s1">'green'</span><span class="p">]},</span><span class="w"> </span><span class="s1">'NDVI'</span><span class="p">);</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">image</span><span class="p">,</span><span class="w"> </span><span class="mf">10</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="NDVI calculado como operação local" src="../img/cap08/ndvi-local.jpg" /></p>
+<p>Como a diferença normalizada é muito usada, o GEE oferece um atalho: <code>image.normalizedDifference(['B5', 'B4'])</code> produz o mesmo resultado.</p>
+<div class="admonition question">
+<p class="admonition-title">Desafio: NDVI de uma coleção inteira</p>
+<p>E se precisássemos calcular o NDVI de <strong>todas</strong> as imagens de uma coleção? Tente antes de abrir a resposta.</p>
+</div>
+<details class="success">
+<summary>Resposta: usando o padrão <em>map</em></summary>
+<p>Encapsulamos o cálculo em uma função e a aplicamos a cada imagem com <code>.map()</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">roi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Geometry</span><span class="p">.</span><span class="nx">Point</span><span class="p">([</span><span class="o">-</span><span class="mf">43.85686250192464</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">20.499542712390806</span><span class="p">]);</span><span class="w">  </span><span class="c1">// Congonhas, MG</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kd">var</span><span class="w"> </span><span class="nx">l8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">ImageCollection</span><span class="p">(</span><span class="s1">'LANDSAT/LC08/C02/T1_TOA'</span><span class="p">)</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="p">.</span><span class="nx">filterBounds</span><span class="p">(</span><span class="nx">roi</span><span class="p">)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="p">.</span><span class="nx">filterDate</span><span class="p">(</span><span class="s1">'2015-01-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2023-01-01'</span><span class="p">)</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">lt</span><span class="p">(</span><span class="s1">'CLOUD_COVER'</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">));</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="nx">print</span><span class="p">(</span><span class="nx">l8</span><span class="p">);</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1">// a função recebe uma imagem e retorna o seu NDVI</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="kd">var</span><span class="w"> </span><span class="nx">calcNDVI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">image</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">normalizedDifference</span><span class="p">([</span><span class="s1">'B5'</span><span class="p">,</span><span class="w"> </span><span class="s1">'B4'</span><span class="p">]).</span><span class="nx">rename</span><span class="p">(</span><span class="s1">'NDVI'</span><span class="p">);</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="p">};</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ndvis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">l8</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">calcNDVI</span><span class="p">);</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="nx">print</span><span class="p">(</span><span class="nx">ndvis</span><span class="p">);</span><span class="w">  </span><span class="c1">// uma coleção com o mesmo número de imagens</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">ndvis</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="nx">palette</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">'blue'</span><span class="p">,</span><span class="w"> </span><span class="s1">'white'</span><span class="p">,</span><span class="w"> </span><span class="s1">'green'</span><span class="p">]},</span><span class="w"> </span><span class="s1">'NDVI'</span><span class="p">);</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">roi</span><span class="p">,</span><span class="w"> </span><span class="mf">12</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="A coleção de NDVIs" src="../img/cap08/ndvi-colecao.jpg" /></p>
+<p>E, completando o padrão <em>filter–map–reduce</em>, podemos <strong>reduzir</strong> a coleção a uma única imagem com o NDVI médio do período:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ndviMedio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ndvis</span><span class="p">.</span><span class="nx">mean</span><span class="p">();</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">ndviMedio</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="nx">palette</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">'blue'</span><span class="p">,</span><span class="w"> </span><span class="s1">'white'</span><span class="p">,</span><span class="w"> </span><span class="s1">'green'</span><span class="p">]},</span><span class="w"> </span><span class="s1">'NDVI médio'</span><span class="p">);</span>
+</code></pre></div>
+<p>Outros redutores úteis: <code>.median()</code>, <code>.max()</code>, <code>.min()</code> e <code>.reduce(ee.Reducer.stdDev())</code>.</p>
+</details>
+<h3 id="pre-processamento-reflectancia-de-superficie-e-fator-de-escala">Pré-processamento: reflectância de superfície e fator de escala<a class="headerlink" href="#pre-processamento-reflectancia-de-superficie-e-fator-de-escala" title="Permanent link">&para;</a></h3>
+<p>Os dados <code>T1_TOA</code> usados até aqui estão em reflectância <strong>no topo da atmosfera</strong>. Mas a atmosfera — vapor d'água, aerossóis — interfere no sinal e, portanto, no NDVI. Para análises mais rigorosas, usa-se a reflectância <strong>de superfície</strong> (<em>Surface Reflectance</em>, ou BOA — <em>Bottom of Atmosphere</em>), já corrigida dos efeitos atmosféricos. No catálogo, é a coleção <a href="https://developers.google.com/earth-engine/datasets/catalog/LANDSAT_LC08_C02_T1_L2">LANDSAT/LC08/C02/T1_L2</a>:</p>
+<p><img alt="A coleção de reflectância de superfície no catálogo" src="../img/cap08/catalogo-l8-sr.png" /></p>
+<p>Esses dados, porém, <strong>não estão em reflectância</strong>: são inteiros que precisam ser convertidos com um <strong>fator de escala</strong> e um <strong><em>offset</em></strong> (deslocamento), informados na aba <em>Bands</em> do catálogo. Para as bandas ópticas do Landsat Collection 2, nível 2: <span class="arithmatex">\(\rho = DN \times 0{,}0000275 - 0{,}2\)</span>. É outra operação local:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Image</span><span class="p">(</span><span class="s1">'LANDSAT/LC08/C02/T1_L2/LC08_220062_20190504'</span><span class="p">)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="p">.</span><span class="nx">select</span><span class="p">([</span><span class="s1">'SR_B2'</span><span class="p">,</span><span class="w"> </span><span class="s1">'SR_B3'</span><span class="p">,</span><span class="w"> </span><span class="s1">'SR_B4'</span><span class="p">,</span><span class="w"> </span><span class="s1">'SR_B5'</span><span class="p">]);</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1">// aplica o fator de escala e o offset</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="kd">var</span><span class="w"> </span><span class="nx">reflectancia</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">multiply</span><span class="p">(</span><span class="mf">0.0000275</span><span class="p">).</span><span class="nx">add</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">);</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">image</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="s1">'Número digital'</span><span class="p">);</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">reflectancia</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="s1">'Reflectância'</span><span class="p">);</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">image</span><span class="p">,</span><span class="w"> </span><span class="mf">8</span><span class="p">);</span>
+</code></pre></div>
+<p>Clique em um pixel com o <em>Inspector</em> aberto e compare os valores das duas camadas:</p>
+<p><img alt="O mesmo pixel em número digital e em reflectância" src="../img/cap08/fator-escala-inspector.jpg" /></p>
+<details class="success">
+<summary>Juntando tudo: reflectância de superfície + NDVI de uma coleção</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">roi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Geometry</span><span class="p">.</span><span class="nx">Point</span><span class="p">([</span><span class="o">-</span><span class="mf">43.85686250192464</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">20.499542712390806</span><span class="p">]);</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="kd">var</span><span class="w"> </span><span class="nx">l8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">ImageCollection</span><span class="p">(</span><span class="s1">'LANDSAT/LC08/C02/T1_L2'</span><span class="p">)</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="p">.</span><span class="nx">filterBounds</span><span class="p">(</span><span class="nx">roi</span><span class="p">)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="p">.</span><span class="nx">filterDate</span><span class="p">(</span><span class="s1">'2015-01-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2023-01-01'</span><span class="p">)</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">lt</span><span class="p">(</span><span class="s1">'CLOUD_COVER'</span><span class="p">,</span><span class="w"> </span><span class="mf">5</span><span class="p">));</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="c1">// fator de escala das bandas ópticas (SR_B*) e termais (ST_B*, em °C)</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="kd">var</span><span class="w"> </span><span class="nx">aplicarEscala</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">image</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">opticas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">'SR_B.'</span><span class="p">).</span><span class="nx">multiply</span><span class="p">(</span><span class="mf">0.0000275</span><span class="p">).</span><span class="nx">add</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">);</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">termicas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">'ST_B.*'</span><span class="p">).</span><span class="nx">multiply</span><span class="p">(</span><span class="mf">0.00341802</span><span class="p">).</span><span class="nx">add</span><span class="p">(</span><span class="mf">149.0</span><span class="p">).</span><span class="nx">subtract</span><span class="p">(</span><span class="mf">273.15</span><span class="p">);</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">addBands</span><span class="p">(</span><span class="nx">opticas</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">              </span><span class="p">.</span><span class="nx">addBands</span><span class="p">(</span><span class="nx">termicas</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="p">};</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="kd">var</span><span class="w"> </span><span class="nx">adicionarNDVI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">image</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">ndvi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">normalizedDifference</span><span class="p">([</span><span class="s1">'SR_B5'</span><span class="p">,</span><span class="w"> </span><span class="s1">'SR_B4'</span><span class="p">]).</span><span class="nx">rename</span><span class="p">(</span><span class="s1">'NDVI'</span><span class="p">);</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">addBands</span><span class="p">(</span><span class="nx">ndvi</span><span class="p">);</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="p">};</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ndvis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">l8</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="w">    </span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">aplicarEscala</span><span class="p">)</span>
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="w">    </span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">adicionarNDVI</span><span class="p">)</span>
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="w">    </span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">'NDVI'</span><span class="p">);</span>
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>
+<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ndviMedio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ndvis</span><span class="p">.</span><span class="nx">mean</span><span class="p">();</span>
+<a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">ndviMedio</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="nx">palette</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">'blue'</span><span class="p">,</span><span class="w"> </span><span class="s1">'white'</span><span class="p">,</span><span class="w"> </span><span class="s1">'green'</span><span class="p">]},</span><span class="w"> </span><span class="s1">'NDVI médio'</span><span class="p">);</span>
+<a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">roi</span><span class="p">,</span><span class="w"> </span><span class="mf">12</span><span class="p">);</span>
+</code></pre></div>
+<p>Observe o padrão: cada etapa de pré-processamento vira uma <strong>função</strong>, e as funções são encadeadas com <code>.map()</code>.</p>
+</details>
+<h3 id="outro-indice-e-mascaras-o-ndwi">Outro índice e máscaras: o NDWI<a class="headerlink" href="#outro-indice-e-mascaras-o-ndwi" title="Permanent link">&para;</a></h3>
+<p>O <strong>NDWI</strong> (<em>Normalized Difference Water Index</em>, na versão de McFeeters, 1996) realça corpos d'água usando as bandas do verde e do infravermelho próximo:</p>
+<div class="arithmatex">\[
+NDWI = \frac{Green - NIR}{Green + NIR}
+\]</div>
+<p>Valores positivos indicam, em geral, água. Com uma operação lógica (também local!), criamos uma <strong>máscara</strong> e a aplicamos à imagem com <code>.updateMask()</code>, que torna transparentes os pixels em que a máscara vale 0:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Image</span><span class="p">(</span><span class="s1">'LANDSAT/LC08/C02/T1_L2/LC08_220062_20190504'</span><span class="p">)</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="p">.</span><span class="nx">select</span><span class="p">([</span><span class="s1">'SR_B2'</span><span class="p">,</span><span class="w"> </span><span class="s1">'SR_B3'</span><span class="p">,</span><span class="w"> </span><span class="s1">'SR_B4'</span><span class="p">,</span><span class="w"> </span><span class="s1">'SR_B5'</span><span class="p">]);</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="kd">var</span><span class="w"> </span><span class="nx">sr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">multiply</span><span class="p">(</span><span class="mf">0.0000275</span><span class="p">).</span><span class="nx">add</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">);</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ndwi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">sr</span><span class="p">.</span><span class="nx">normalizedDifference</span><span class="p">([</span><span class="s1">'SR_B3'</span><span class="p">,</span><span class="w"> </span><span class="s1">'SR_B5'</span><span class="p">]).</span><span class="nx">rename</span><span class="p">(</span><span class="s1">'NDWI'</span><span class="p">);</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="kd">var</span><span class="w"> </span><span class="nx">agua</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ndwi</span><span class="p">.</span><span class="nx">gte</span><span class="p">(</span><span class="mf">0</span><span class="p">);</span><span class="w">  </span><span class="c1">// 1 = água, 0 = não água</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">ndwi</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="nx">palette</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">'brown'</span><span class="p">,</span><span class="w"> </span><span class="s1">'white'</span><span class="p">,</span><span class="w"> </span><span class="s1">'blue'</span><span class="p">]},</span><span class="w"> </span><span class="s1">'NDWI'</span><span class="p">);</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">sr</span><span class="p">.</span><span class="nx">updateMask</span><span class="p">(</span><span class="nx">agua</span><span class="p">.</span><span class="nx">not</span><span class="p">()),</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="p">{</span><span class="nx">bands</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">'SR_B4'</span><span class="p">,</span><span class="w"> </span><span class="s1">'SR_B3'</span><span class="p">,</span><span class="w"> </span><span class="s1">'SR_B2'</span><span class="p">],</span><span class="w"> </span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">0.2</span><span class="p">},</span><span class="w"> </span><span class="s1">'Terra (água mascarada)'</span><span class="p">);</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">image</span><span class="p">,</span><span class="w"> </span><span class="mf">9</span><span class="p">);</span>
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Centenas de índices prontos</p>
+<p>O projeto <a href="https://github.com/awesome-spectral-indices/awesome-spectral-indices">Awesome Spectral Indices</a> cataloga centenas de índices espectrais, com fórmulas padronizadas. O módulo <a href="https://github.com/awesome-spectral-indices/spectral">spectral</a> permite usá-los no GEE:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">spectral</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">'users/dmlmont/spectral:spectral'</span><span class="p">);</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nx">print</span><span class="p">(</span><span class="nx">spectral</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">NDVI</span><span class="p">.</span><span class="nx">formula</span><span class="p">);</span>
+</code></pre></div>
+</div>
+<hr />
+<h2 id="operacoes-focais">🔲 Operações focais<a class="headerlink" href="#operacoes-focais" title="Permanent link">&para;</a></h2>
+<p>Operadores focais, também conhecidos como <strong>operadores de vizinhança</strong>, consideram uma vizinhança de células ao redor de cada célula. São usados para filtragem, suavização ou realce de características. Um exemplo comum é o <strong>filtro de média</strong>, que substitui o valor de cada célula pela média dos valores da vizinhança. No GEE, a vizinhança é definida por um <strong><em>kernel</em></strong> (núcleo), e o método <code>.reduceNeighborhood()</code> aplica um redutor a ela:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ndviSuavizado</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ndvi</span><span class="p">.</span><span class="nx">reduceNeighborhood</span><span class="p">({</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nx">reducer</span><span class="o">:</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Reducer</span><span class="p">.</span><span class="nx">mean</span><span class="p">(),</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nx">kernel</span><span class="o">:</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Kernel</span><span class="p">.</span><span class="nx">square</span><span class="p">(</span><span class="mf">1</span><span class="p">)</span><span class="w">  </span><span class="c1">// raio de 1 pixel = janela 3×3</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="p">});</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">O parâmetro de <code>ee.Kernel.square</code> é o <strong>raio</strong></p>
+<p><code>ee.Kernel.square(r)</code> cria uma janela de <span class="arithmatex">\((2r + 1) \times (2r + 1)\)</span> pixels: <code>square(1)</code> é uma janela <strong>3×3</strong>; <code>square(3)</code> já é uma janela <strong>7×7</strong>. Por padrão, o raio é medido em pixels.</p>
+</div>
+<p>Código completo:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Image</span><span class="p">(</span><span class="s1">'LANDSAT/LC08/C02/T1_TOA/LC08_220062_20190504'</span><span class="p">);</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ndvi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">normalizedDifference</span><span class="p">([</span><span class="s1">'B5'</span><span class="p">,</span><span class="w"> </span><span class="s1">'B4'</span><span class="p">]).</span><span class="nx">rename</span><span class="p">(</span><span class="s1">'NDVI'</span><span class="p">);</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ndviSuavizado</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ndvi</span><span class="p">.</span><span class="nx">reduceNeighborhood</span><span class="p">({</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span><span class="nx">reducer</span><span class="o">:</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Reducer</span><span class="p">.</span><span class="nx">mean</span><span class="p">(),</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">  </span><span class="nx">kernel</span><span class="o">:</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Kernel</span><span class="p">.</span><span class="nx">square</span><span class="p">(</span><span class="mf">1</span><span class="p">)</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="p">});</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="kd">var</span><span class="w"> </span><span class="nx">vis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="nx">palette</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">'blue'</span><span class="p">,</span><span class="w"> </span><span class="s1">'white'</span><span class="p">,</span><span class="w"> </span><span class="s1">'green'</span><span class="p">]};</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">ndvi</span><span class="p">,</span><span class="w"> </span><span class="nx">vis</span><span class="p">,</span><span class="w"> </span><span class="s1">'NDVI'</span><span class="p">);</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">ndviSuavizado</span><span class="p">,</span><span class="w"> </span><span class="nx">vis</span><span class="p">,</span><span class="w"> </span><span class="s1">'NDVI suavizado (média 3×3)'</span><span class="p">);</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">image</span><span class="p">,</span><span class="w"> </span><span class="mf">10</span><span class="p">);</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">NDVI original</th>
+<th style="text-align: center;">NDVI suavizado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><img alt="NDVI original" src="../img/cap08/ndvi-original-zoom.png" /></td>
+<td style="text-align: center;"><img alt="NDVI suavizado" src="../img/cap08/ndvi-suavizado.png" /></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">Convolução</p>
+<p>A média em uma vizinhança é um caso particular de <strong>convolução</strong>, que também pode ser executada diretamente: <code>ndvi.convolve(ee.Kernel.square(1))</code>. Com outros <em>kernels</em> — como <code>ee.Kernel.laplacian8()</code> ou <code>ee.Kernel.sobel()</code> —, a convolução realça bordas em vez de suavizar.</p>
+</div>
+<hr />
+<h2 id="operacoes-zonais">🗺️ Operações zonais<a class="headerlink" href="#operacoes-zonais" title="Permanent link">&para;</a></h2>
+<p>Operadores zonais atuam sobre <strong>grupos de células dentro de zonas</strong> — municípios, estados, bacias hidrográficas, áreas de estudo. Eles calculam estatísticas como soma, média, máximo e mínimo das células de cada zona. No GEE, a operação zonal para <strong>uma</strong> região é o <code>.reduceRegion()</code>. Por exemplo, o NDVI médio do município de São Luís:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">saoluis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span><span class="s1">'projects/ee-sergiocosta/assets/MA_Municipios_2022'</span><span class="p">)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'CD_MUN'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2111300'</span><span class="p">));</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="kd">var</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Image</span><span class="p">(</span><span class="s1">'LANDSAT/LC08/C02/T1_TOA/LC08_220062_20190504'</span><span class="p">);</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ndvi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">normalizedDifference</span><span class="p">([</span><span class="s1">'B5'</span><span class="p">,</span><span class="w"> </span><span class="s1">'B4'</span><span class="p">]).</span><span class="nx">rename</span><span class="p">(</span><span class="s1">'NDVI'</span><span class="p">);</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ndviMedio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ndvi</span><span class="p">.</span><span class="nx">reduceRegion</span><span class="p">({</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">  </span><span class="nx">reducer</span><span class="o">:</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Reducer</span><span class="p">.</span><span class="nx">mean</span><span class="p">(),</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">  </span><span class="nx">geometry</span><span class="o">:</span><span class="w"> </span><span class="nx">saoluis</span><span class="p">.</span><span class="nx">geometry</span><span class="p">(),</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">  </span><span class="nx">scale</span><span class="o">:</span><span class="w"> </span><span class="mf">30</span><span class="p">,</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">  </span><span class="nx">maxPixels</span><span class="o">:</span><span class="w"> </span><span class="mf">1e9</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="p">});</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="nx">print</span><span class="p">(</span><span class="s1">'NDVI médio de São Luís:'</span><span class="p">,</span><span class="w"> </span><span class="nx">ndviMedio</span><span class="p">);</span>
+</code></pre></div>
+<p>O resultado de um operador zonal é um <strong>dicionário</strong>, com um valor para cada banda da imagem: <code>{NDVI: 0.27...}</code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">O parâmetro <code>scale</code></p>
+<p><code>scale</code> é o tamanho do pixel (em metros) em que o cálculo será feito — em geral, a resolução nativa do dado (30 m no Landsat). Sem ele, o GEE usa a escala da projeção padrão, o que pode gerar resultados inesperados. O <code>maxPixels</code> aumenta o limite de pixels processados; se ele for excedido, o GEE avisa com um erro.</p>
+</div>
+<p>A média é apenas um entre vários redutores. O redutor <code>max</code>, por exemplo, retorna o maior valor de uma região — como a <strong>altitude máxima de Minas Gerais</strong>, segundo o SRTM:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ufs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span><span class="s1">'projects/ee-sergiocosta/assets/BR_UF'</span><span class="p">);</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="kd">var</span><span class="w"> </span><span class="nx">mg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ufs</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'SIGLA_UF'</span><span class="p">,</span><span class="w"> </span><span class="s1">'MG'</span><span class="p">));</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="kd">var</span><span class="w"> </span><span class="nx">srtm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Image</span><span class="p">(</span><span class="s1">'CGIAR/SRTM90_V4'</span><span class="p">);</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="kd">var</span><span class="w"> </span><span class="nx">altitudeMaxima</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">srtm</span><span class="p">.</span><span class="nx">reduceRegion</span><span class="p">({</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">  </span><span class="nx">reducer</span><span class="o">:</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Reducer</span><span class="p">.</span><span class="nx">max</span><span class="p">(),</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">  </span><span class="nx">geometry</span><span class="o">:</span><span class="w"> </span><span class="nx">mg</span><span class="p">.</span><span class="nx">geometry</span><span class="p">(),</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">  </span><span class="nx">scale</span><span class="o">:</span><span class="w"> </span><span class="mf">90</span><span class="p">,</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">  </span><span class="nx">maxPixels</span><span class="o">:</span><span class="w"> </span><span class="mf">1e9</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="p">});</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="nx">print</span><span class="p">(</span><span class="s1">'Altitude máxima de MG (m):'</span><span class="p">,</span><span class="w"> </span><span class="nx">altitudeMaxima</span><span class="p">);</span>
+</code></pre></div>
+<p>Para <strong>várias zonas</strong> de uma vez, usa-se <code>.reduceRegions()</code>, que recebe uma coleção de feições e devolve a mesma coleção com um novo atributo em cada feição — por exemplo, o NDVI médio de cada município:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">municipios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span><span class="s1">'projects/ee-sergiocosta/assets/MA_Municipios_2022'</span><span class="p">);</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ndviPorMunicipio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ndvi</span><span class="p">.</span><span class="nx">reduceRegions</span><span class="p">({</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">  </span><span class="nx">collection</span><span class="o">:</span><span class="w"> </span><span class="nx">municipios</span><span class="p">.</span><span class="nx">filterBounds</span><span class="p">(</span><span class="nx">image</span><span class="p">.</span><span class="nx">geometry</span><span class="p">()),</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">  </span><span class="nx">reducer</span><span class="o">:</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Reducer</span><span class="p">.</span><span class="nx">mean</span><span class="p">(),</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">  </span><span class="nx">scale</span><span class="o">:</span><span class="w"> </span><span class="mf">30</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="p">});</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="nx">print</span><span class="p">(</span><span class="nx">ndviPorMunicipio</span><span class="p">.</span><span class="nx">select</span><span class="p">([</span><span class="s1">'NM_MUN'</span><span class="p">,</span><span class="w"> </span><span class="s1">'mean'</span><span class="p">]));</span>
+</code></pre></div>
+<pre class="mermaid"><code>flowchart LR
+    A["Imagem&lt;br/&gt;(bandas)"] --&gt; R1[".reduceRegion&lt;br/&gt;(1 geometria)"] --&gt; D["Dicionário&lt;br/&gt;{banda: valor}"]
+    A --&gt; R2[".reduceRegions&lt;br/&gt;(coleção de feições)"] --&gt; F["FeatureCollection&lt;br/&gt;com um atributo novo&lt;br/&gt;em cada feição"]</code></pre>
+<h2 id="operacoes-globais">🌐 Operações globais<a class="headerlink" href="#operacoes-globais" title="Permanent link">&para;</a></h2>
+<p>As operações globais consideram <strong>todo o conjunto de dados</strong> — por exemplo, para equalização de histograma, estiramento de contraste ou normalização. No GEE, podemos usar <code>.reduceRegion</code> sobre toda a extensão da imagem:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Image</span><span class="p">(</span><span class="s1">'LANDSAT/LC08/C02/T1_TOA/LC08_220062_20190504'</span><span class="p">);</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ndvi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">normalizedDifference</span><span class="p">([</span><span class="s1">'B5'</span><span class="p">,</span><span class="w"> </span><span class="s1">'B4'</span><span class="p">]).</span><span class="nx">rename</span><span class="p">(</span><span class="s1">'NDVI'</span><span class="p">);</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="kd">var</span><span class="w"> </span><span class="nx">estatisticas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ndvi</span><span class="p">.</span><span class="nx">reduceRegion</span><span class="p">({</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">  </span><span class="nx">reducer</span><span class="o">:</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Reducer</span><span class="p">.</span><span class="nx">mean</span><span class="p">().</span><span class="nx">combine</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Reducer</span><span class="p">.</span><span class="nx">minMax</span><span class="p">(),</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">),</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">  </span><span class="nx">geometry</span><span class="o">:</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">geometry</span><span class="p">(),</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">  </span><span class="nx">scale</span><span class="o">:</span><span class="w"> </span><span class="mf">30</span><span class="p">,</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">  </span><span class="nx">bestEffort</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w">  </span><span class="c1">// ajusta a escala automaticamente se houver pixels demais</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="p">});</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="nx">print</span><span class="p">(</span><span class="s1">'NDVI da cena inteira:'</span><span class="p">,</span><span class="w"> </span><span class="nx">estatisticas</span><span class="p">);</span>
+</code></pre></div>
+<hr />
+<h2 id="serie-temporal-de-precipitacao">📈 Série temporal de precipitação<a class="headerlink" href="#serie-temporal-de-precipitacao" title="Permanent link">&para;</a></h2>
+<p>Agora temos todos os ingredientes para entender o exemplo motivacional do <a href="../03_conhecendo_gee/#por-que-processar-na-nuvem">Capítulo 3</a>: a precipitação mensal em São Luís e Congonhas. Vamos por partes.</p>
+<p><strong>1. Entrada.</strong> As duas regiões formam uma coleção de feições com o atributo <code>nome</code>, e a coleção CHIRPS diária é carregada:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">areaEstudo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">([</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">  </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Feature</span><span class="p">(</span><span class="nx">congonhas</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">nome</span><span class="o">:</span><span class="w"> </span><span class="s1">'Congonhas'</span><span class="p">}),</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Feature</span><span class="p">(</span><span class="nx">saoluis</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">nome</span><span class="o">:</span><span class="w"> </span><span class="s1">'Sao Luis'</span><span class="p">})</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="p">]);</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="kd">var</span><span class="w"> </span><span class="nx">chirps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">ImageCollection</span><span class="p">(</span><span class="s1">'UCSB-CHG/CHIRPS/DAILY'</span><span class="p">);</span>
+</code></pre></div>
+<p><strong>2. Processamento: de diário para mensal.</strong> Para cada ano e cada mês, filtramos as imagens diárias daquele mês (<em>filter</em>) e as somamos (<em>reduce</em>). Como são dois laços — anos e meses —, usamos um <code>.map()</code> dentro de outro, sobre listas do servidor criadas com <code>ee.List.sequence</code>. O resultado é uma lista de listas, achatada com <code>.flatten()</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">anos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">List</span><span class="p">.</span><span class="nx">sequence</span><span class="p">(</span><span class="mf">2014</span><span class="p">,</span><span class="w"> </span><span class="mf">2023</span><span class="p">);</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="kd">var</span><span class="w"> </span><span class="nx">meses</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">List</span><span class="p">.</span><span class="nx">sequence</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">12</span><span class="p">);</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="kd">var</span><span class="w"> </span><span class="nx">mensais</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">anos</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">y</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">meses</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">m</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">soma</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">chirps</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">        </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">calendarRange</span><span class="p">(</span><span class="nx">y</span><span class="p">,</span><span class="w"> </span><span class="nx">y</span><span class="p">,</span><span class="w"> </span><span class="s1">'year'</span><span class="p">))</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="w">        </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">calendarRange</span><span class="p">(</span><span class="nx">m</span><span class="p">,</span><span class="w"> </span><span class="nx">m</span><span class="p">,</span><span class="w"> </span><span class="s1">'month'</span><span class="p">))</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="w">        </span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Reducer</span><span class="p">.</span><span class="nx">sum</span><span class="p">())</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="w">        </span><span class="p">.</span><span class="nx">rename</span><span class="p">(</span><span class="s1">'precipitacao_mensal'</span><span class="p">);</span>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="w">    </span><span class="c1">// a data (em milissegundos) é necessária para o eixo do gráfico</span>
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">soma</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'system:time_start'</span><span class="p">,</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nb">Date</span><span class="p">.</span><span class="nx">fromYMD</span><span class="p">(</span><span class="nx">y</span><span class="p">,</span><span class="w"> </span><span class="nx">m</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">).</span><span class="nx">millis</span><span class="p">());</span>
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="w">  </span><span class="p">});</span>
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="p">}).</span><span class="nx">flatten</span><span class="p">();</span>
+<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a>
+<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="kd">var</span><span class="w"> </span><span class="nx">colecaoMensal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">ImageCollection</span><span class="p">.</span><span class="nx">fromImages</span><span class="p">(</span><span class="nx">mensais</span><span class="p">);</span>
+</code></pre></div>
+<p><strong>3. Operação zonal ao longo do tempo e saída.</strong> <code>ui.Chart.image.seriesByRegion</code> aplica um redutor (a média) em cada região, para cada imagem da coleção, e desenha o gráfico. A escala de 5.566 m é a resolução nativa do CHIRPS:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">grafico</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ui</span><span class="p">.</span><span class="nx">Chart</span><span class="p">.</span><span class="nx">image</span><span class="p">.</span><span class="nx">seriesByRegion</span><span class="p">({</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="nx">imageCollection</span><span class="o">:</span><span class="w"> </span><span class="nx">colecaoMensal</span><span class="p">,</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">  </span><span class="nx">regions</span><span class="o">:</span><span class="w"> </span><span class="nx">areaEstudo</span><span class="p">,</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">  </span><span class="nx">reducer</span><span class="o">:</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Reducer</span><span class="p">.</span><span class="nx">mean</span><span class="p">(),</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">  </span><span class="nx">seriesProperty</span><span class="o">:</span><span class="w"> </span><span class="s1">'nome'</span><span class="p">,</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">  </span><span class="nx">xProperty</span><span class="o">:</span><span class="w"> </span><span class="s1">'system:time_start'</span><span class="p">,</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="w">  </span><span class="nx">scale</span><span class="o">:</span><span class="w"> </span><span class="mf">5566</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="p">}).</span><span class="nx">setOptions</span><span class="p">({</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="w">  </span><span class="nx">title</span><span class="o">:</span><span class="w"> </span><span class="s1">'Precipitação mensal (mm)'</span><span class="p">,</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="w">  </span><span class="nx">vAxis</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="nx">title</span><span class="o">:</span><span class="w"> </span><span class="s1">'Precipitação (mm)'</span><span class="p">},</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="w">  </span><span class="nx">hAxis</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="nx">title</span><span class="o">:</span><span class="w"> </span><span class="s1">'Meses'</span><span class="p">}</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="p">});</span>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="nx">print</span><span class="p">(</span><span class="nx">grafico</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="A coleção mensal e o gráfico no Console" src="../img/cap08/serie-precipitacao-console.png" /></p>
+<p><img alt="Série temporal de precipitação mensal" src="../img/cap08/serie-precipitacao-grafico.png" /></p>
+<p>No Console, clique no ícone no canto do gráfico para abri-lo em uma nova aba, de onde é possível baixar os dados em CSV ou a figura em PNG/SVG.</p>
+<hr />
+<h2 id="um-primeiro-passo-na-classificacao-de-imagens">🏷️ Um primeiro passo na classificação de imagens<a class="headerlink" href="#um-primeiro-passo-na-classificacao-de-imagens" title="Permanent link">&para;</a></h2>
+<p><strong>Classificar</strong> uma imagem é atribuir a cada pixel uma classe temática — água, vegetação, área urbana, solo exposto. É a técnica por trás de iniciativas como o <strong>MapBiomas</strong>. Na <strong>classificação supervisionada</strong>, o analista fornece <strong>amostras de treinamento</strong> (pixels de classe conhecida); um algoritmo aprende, a partir das assinaturas espectrais dessas amostras, a separar as classes, e então classifica todos os pixels.</p>
+<p>O roteiro no GEE tem cinco passos:</p>
+<ol>
+<li><strong>Montar a imagem</strong> a ser classificada — aqui, uma mediana sem nuvens de reflectância de superfície.</li>
+<li><strong>Desenhar as amostras</strong>: com as ferramentas de desenho, crie uma camada de pontos para cada classe (<em>+ new layer</em>). Em cada camada, clique na engrenagem, escolha <strong>Import as: FeatureCollection</strong> e adicione uma propriedade <code>classe</code> com um valor inteiro: <code>agua</code> = 0, <code>vegetacao</code> = 1, <code>urbano</code> = 2, <code>solo</code> = 3. Marque alguns pontos (15 a 30) sobre alvos inequívocos de cada classe.</li>
+<li><strong>Extrair os valores</strong> das bandas nos pontos de treinamento (<code>.sampleRegions</code>).</li>
+<li><strong>Treinar</strong> um classificador (aqui, <em>Random Forest</em>).</li>
+<li><strong>Classificar</strong> a imagem e visualizar.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1">// Supõe que agua, vegetacao, urbano e solo foram desenhadas como</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="c1">// FeatureCollections com a propriedade "classe" (0, 1, 2, 3).</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="c1">// 1. Imagem: mediana da estação seca de 2023, reflectância de superfície</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="kd">var</span><span class="w"> </span><span class="nx">aplicarEscala</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">image</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">'SR_B.'</span><span class="p">).</span><span class="nx">multiply</span><span class="p">(</span><span class="mf">0.0000275</span><span class="p">).</span><span class="nx">add</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">);</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="p">};</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="kd">var</span><span class="w"> </span><span class="nx">imagem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">ImageCollection</span><span class="p">(</span><span class="s1">'LANDSAT/LC08/C02/T1_L2'</span><span class="p">)</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'WRS_PATH'</span><span class="p">,</span><span class="w"> </span><span class="mf">220</span><span class="p">))</span>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'WRS_ROW'</span><span class="p">,</span><span class="w"> </span><span class="mf">62</span><span class="p">))</span>
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="w">    </span><span class="p">.</span><span class="nx">filterDate</span><span class="p">(</span><span class="s1">'2023-07-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2023-12-31'</span><span class="p">)</span>
+<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">lt</span><span class="p">(</span><span class="s1">'CLOUD_COVER'</span><span class="p">,</span><span class="w"> </span><span class="mf">30</span><span class="p">))</span>
+<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a><span class="w">    </span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">aplicarEscala</span><span class="p">)</span>
+<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a><span class="w">    </span><span class="p">.</span><span class="nx">median</span><span class="p">();</span>
+<a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a>
+<a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a><span class="kd">var</span><span class="w"> </span><span class="nx">bandas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">'SR_B2'</span><span class="p">,</span><span class="w"> </span><span class="s1">'SR_B3'</span><span class="p">,</span><span class="w"> </span><span class="s1">'SR_B4'</span><span class="p">,</span><span class="w"> </span><span class="s1">'SR_B5'</span><span class="p">,</span><span class="w"> </span><span class="s1">'SR_B6'</span><span class="p">,</span><span class="w"> </span><span class="s1">'SR_B7'</span><span class="p">];</span>
+<a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a>
+<a id="__codelineno-17-19" name="__codelineno-17-19" href="#__codelineno-17-19"></a><span class="c1">// 2. Amostras de treinamento</span>
+<a id="__codelineno-17-20" name="__codelineno-17-20" href="#__codelineno-17-20"></a><span class="kd">var</span><span class="w"> </span><span class="nx">amostras</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">agua</span><span class="p">.</span><span class="nx">merge</span><span class="p">(</span><span class="nx">vegetacao</span><span class="p">).</span><span class="nx">merge</span><span class="p">(</span><span class="nx">urbano</span><span class="p">).</span><span class="nx">merge</span><span class="p">(</span><span class="nx">solo</span><span class="p">);</span>
+<a id="__codelineno-17-21" name="__codelineno-17-21" href="#__codelineno-17-21"></a>
+<a id="__codelineno-17-22" name="__codelineno-17-22" href="#__codelineno-17-22"></a><span class="c1">// 3. Valores das bandas nos pontos</span>
+<a id="__codelineno-17-23" name="__codelineno-17-23" href="#__codelineno-17-23"></a><span class="kd">var</span><span class="w"> </span><span class="nx">treinamento</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">imagem</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">bandas</span><span class="p">).</span><span class="nx">sampleRegions</span><span class="p">({</span>
+<a id="__codelineno-17-24" name="__codelineno-17-24" href="#__codelineno-17-24"></a><span class="w">  </span><span class="nx">collection</span><span class="o">:</span><span class="w"> </span><span class="nx">amostras</span><span class="p">,</span>
+<a id="__codelineno-17-25" name="__codelineno-17-25" href="#__codelineno-17-25"></a><span class="w">  </span><span class="nx">properties</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">'classe'</span><span class="p">],</span>
+<a id="__codelineno-17-26" name="__codelineno-17-26" href="#__codelineno-17-26"></a><span class="w">  </span><span class="nx">scale</span><span class="o">:</span><span class="w"> </span><span class="mf">30</span>
+<a id="__codelineno-17-27" name="__codelineno-17-27" href="#__codelineno-17-27"></a><span class="p">});</span>
+<a id="__codelineno-17-28" name="__codelineno-17-28" href="#__codelineno-17-28"></a>
+<a id="__codelineno-17-29" name="__codelineno-17-29" href="#__codelineno-17-29"></a><span class="c1">// 4. Treinamento</span>
+<a id="__codelineno-17-30" name="__codelineno-17-30" href="#__codelineno-17-30"></a><span class="kd">var</span><span class="w"> </span><span class="nx">classificador</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Classifier</span><span class="p">.</span><span class="nx">smileRandomForest</span><span class="p">(</span><span class="mf">50</span><span class="p">).</span><span class="nx">train</span><span class="p">({</span>
+<a id="__codelineno-17-31" name="__codelineno-17-31" href="#__codelineno-17-31"></a><span class="w">  </span><span class="nx">features</span><span class="o">:</span><span class="w"> </span><span class="nx">treinamento</span><span class="p">,</span>
+<a id="__codelineno-17-32" name="__codelineno-17-32" href="#__codelineno-17-32"></a><span class="w">  </span><span class="nx">classProperty</span><span class="o">:</span><span class="w"> </span><span class="s1">'classe'</span><span class="p">,</span>
+<a id="__codelineno-17-33" name="__codelineno-17-33" href="#__codelineno-17-33"></a><span class="w">  </span><span class="nx">inputProperties</span><span class="o">:</span><span class="w"> </span><span class="nx">bandas</span>
+<a id="__codelineno-17-34" name="__codelineno-17-34" href="#__codelineno-17-34"></a><span class="p">});</span>
+<a id="__codelineno-17-35" name="__codelineno-17-35" href="#__codelineno-17-35"></a>
+<a id="__codelineno-17-36" name="__codelineno-17-36" href="#__codelineno-17-36"></a><span class="c1">// 5. Classificação</span>
+<a id="__codelineno-17-37" name="__codelineno-17-37" href="#__codelineno-17-37"></a><span class="kd">var</span><span class="w"> </span><span class="nx">classificada</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">imagem</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">bandas</span><span class="p">).</span><span class="nx">classify</span><span class="p">(</span><span class="nx">classificador</span><span class="p">);</span>
+<a id="__codelineno-17-38" name="__codelineno-17-38" href="#__codelineno-17-38"></a>
+<a id="__codelineno-17-39" name="__codelineno-17-39" href="#__codelineno-17-39"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">amostras</span><span class="p">,</span><span class="w"> </span><span class="mf">10</span><span class="p">);</span>
+<a id="__codelineno-17-40" name="__codelineno-17-40" href="#__codelineno-17-40"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">imagem</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">bands</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">'SR_B4'</span><span class="p">,</span><span class="w"> </span><span class="s1">'SR_B3'</span><span class="p">,</span><span class="w"> </span><span class="s1">'SR_B2'</span><span class="p">],</span><span class="w"> </span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">0.2</span><span class="p">},</span><span class="w"> </span><span class="s1">'Cor verdadeira'</span><span class="p">);</span>
+<a id="__codelineno-17-41" name="__codelineno-17-41" href="#__codelineno-17-41"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">classificada</span><span class="p">,</span>
+<a id="__codelineno-17-42" name="__codelineno-17-42" href="#__codelineno-17-42"></a><span class="w">    </span><span class="p">{</span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">3</span><span class="p">,</span><span class="w"> </span><span class="nx">palette</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">'1f78b4'</span><span class="p">,</span><span class="w"> </span><span class="s1">'33a02c'</span><span class="p">,</span><span class="w"> </span><span class="s1">'e31a1c'</span><span class="p">,</span><span class="w"> </span><span class="s1">'fdbf6f'</span><span class="p">]},</span><span class="w"> </span><span class="s1">'Classificação'</span><span class="p">);</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Isto é só o começo</p>
+<p>Uma classificação confiável exige amostras representativas e bem distribuídas, a separação entre amostras de <strong>treinamento</strong> e de <strong>validação</strong> e a avaliação da exatidão (matriz de confusão, índice Kappa, exatidão global) — lembre-se das amostras aleatórias do <a href="../07_processamento_vetorial/#geracao-de-dados-amostrais">Capítulo 7</a>. Para aprofundar, veja o <em>workflow</em> de classificação do <a href="https://openmrv.org/">OpenMRV</a> e o livro <a href="https://www.eefabook.org/">Cloud-Based Remote Sensing with Google Earth Engine</a>.</p>
+</div>
+<hr />
+<h2 id="sintese">📝 Síntese<a class="headerlink" href="#sintese" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tipo de operação</th>
+<th>Valor de saída calculado a partir de...</th>
+<th>Métodos no GEE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Local</td>
+<td>a mesma célula em uma ou mais imagens</td>
+<td><code>.add</code>, <code>.multiply</code>, <code>.expression</code>, <code>.normalizedDifference</code>, <code>.gt</code>, <code>.updateMask</code></td>
+</tr>
+<tr>
+<td>Focal</td>
+<td>a vizinhança da célula</td>
+<td><code>.reduceNeighborhood</code>, <code>.convolve</code>, <code>ee.Kernel.*</code></td>
+</tr>
+<tr>
+<td>Zonal</td>
+<td>as células de uma zona</td>
+<td><code>.reduceRegion</code>, <code>.reduceRegions</code>, <code>ui.Chart.image.seriesByRegion</code></td>
+</tr>
+<tr>
+<td>Global</td>
+<td>todas as células</td>
+<td><code>.reduceRegion</code> sobre toda a imagem</td>
+</tr>
+<tr>
+<td>Sobre coleções</td>
+<td>as imagens da coleção, pixel a pixel</td>
+<td><code>.mean</code>, <code>.median</code>, <code>.max</code>, <code>.reduce(ee.Reducer.*)</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="exercicios">✏️ Exercícios<a class="headerlink" href="#exercicios" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Calcule o NDVI médio de 2023 para a sua cidade, usando a coleção de reflectância de superfície e o fator de escala. Qual o valor médio para o município?</li>
+<li>Calcule o NDWI da cena <code>LC08_220062_20190504</code> e estime a área (em km²) de água na cena (dica: multiplique a máscara por <code>ee.Image.pixelArea()</code> e some com <code>.reduceRegion</code>).</li>
+<li>Aplique ao NDVI filtros de média com janelas 3×3, 5×5 e 7×7. Descreva o efeito do tamanho da janela.</li>
+<li>Use <code>.reduceRegions</code> para calcular a altitude média (SRTM) de cada UF do Nordeste e ordene o resultado.</li>
+<li>Adapte o exemplo da série temporal para comparar a precipitação mensal de 2015 a 2024 em duas capitais do Nordeste.</li>
+<li>Faça uma classificação com quatro classes na região da sua cidade. Onde o classificador mais erra? Por quê?</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar ao topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "content.code.annotate", "content.code.copy", "content.tabs.link", "content.tooltips", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "Mais 1 nesta p\u00e1gina", "search.result.more.other": "Mais # nesta p\u00e1gina", "search.result.none": "Nenhum resultado encontrado", "search.result.one": "1 resultado encontrado", "search.result.other": "# resultados encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

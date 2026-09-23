@@ -1,0 +1,1749 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Livro didático da disciplina de Introdução ao Geoprocessamento e Sensoriamento Remoto: sensoriamento remoto com Google Earth Engine e bancos de dados geográficos com PostGIS e QGIS.
+">
+      
+      
+        <meta name="author" content="Sergio Souza Costa">
+      
+      
+      
+        <link rel="prev" href="../05_selecao_vetorial/">
+      
+      
+        <link rel="next" href="../07_processamento_vetorial/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Cap 6: Seleção e Visualização — Imagens - Introdução ao Geoprocessamento e Sensoriamento Remoto</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lambdageo.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#selecao-e-visualizacao-de-dados-matriciais" class="md-skip">
+          Ir para o conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="Introdução ao Geoprocessamento e Sensoriamento Remoto" class="md-header__button md-logo" aria-label="Introdução ao Geoprocessamento e Sensoriamento Remoto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Introdução ao Geoprocessamento e Sensoriamento Remoto
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Cap 6: Seleção e Visualização — Imagens
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Alternar para modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Alternar para modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Alternar para modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Alternar para modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Compartilhar" aria-label="Compartilhar" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando a pesquisa
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Introdução ao Geoprocessamento e Sensoriamento Remoto" class="md-nav__button md-logo" aria-label="Introdução ao Geoprocessamento e Sensoriamento Remoto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Introdução ao Geoprocessamento e Sensoriamento Remoto
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://lambdageo.github.io/ebooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ⇦ Coleção LambdaGeo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apresentação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parte 1 — Sensoriamento Remoto com Google Earth Engine (16h)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Parte 1 — Sensoriamento Remoto com Google Earth Engine (16h)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00_plano_parte1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plano da Parte 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_geoinformacao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 1: Geoinformação e Cartografia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_sensoriamento_remoto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 2: Fundamentos de Sensoriamento Remoto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_conhecendo_gee/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 3: Conhecendo o Google Earth Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_tipos_dados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 4: Tipos de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_selecao_vetorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 5: Seleção e Visualização — Vetores
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 6: Seleção e Visualização — Imagens
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 6: Seleção e Visualização — Imagens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#visualizacao-de-dados-matriciais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎨 Visualização de dados matriciais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎨 Visualização de dados matriciais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minimo-e-maximo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mínimo e máximo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paletas-de-cores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paletas de cores
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#composicoes-coloridas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Composições coloridas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#selecao-de-dados-matriciais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔎 Seleção de dados matriciais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔎 Seleção de dados matriciais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#selecao-espacial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seleção espacial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selecao-temporal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seleção temporal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selecao-por-metadados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seleção por metadados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#path-e-row" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path e row
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sintese" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Síntese
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Exercícios
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07_processamento_vetorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 7: Processamento de Dados Vetoriais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08_processamento_matricial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 8: Processamento de Dados Matriciais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09_exercicios/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 9: Atividades e Lista de Exercícios
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parte 2 — Banco de Dados Geográficos e QGIS (14h)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Parte 2 — Banco de Dados Geográficos e QGIS (14h)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/00_plano_parte2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plano da Parte 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/10_introducao_bd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 10: Introdução a Bancos de Dados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/11_projeto_bdg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 11: Projeto de Banco de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/12_instalacao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 12: Instalando PostgreSQL, PostGIS e QGIS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/13_sql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 13: A Linguagem SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/14_tipos_espaciais/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 14: Tipos de Dados Espaciais
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/15_operacoes_espaciais/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 15: Operações e Indexação Espacial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/16_integracao_qgis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 16: Integração com o QGIS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parte2/17_exercicios/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cap 17: Lista de Exercícios e Trabalho
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Anexos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Anexos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../anexos/fontes_dados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fontes de Dados Geográficos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../anexos/referencias/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referências
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#visualizacao-de-dados-matriciais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎨 Visualização de dados matriciais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎨 Visualização de dados matriciais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minimo-e-maximo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mínimo e máximo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paletas-de-cores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paletas de cores
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#composicoes-coloridas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Composições coloridas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#selecao-de-dados-matriciais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔎 Seleção de dados matriciais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔎 Seleção de dados matriciais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#selecao-espacial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seleção espacial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selecao-temporal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seleção temporal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selecao-por-metadados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seleção por metadados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#path-e-row" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path e row
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sintese" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Síntese
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Exercícios
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="selecao-e-visualizacao-de-dados-matriciais">Seleção e Visualização de Dados Matriciais<a class="headerlink" href="#selecao-e-visualizacao-de-dados-matriciais" title="Permanent link">&para;</a></h1>
+<p>A principal fonte de dados matriciais é o próprio catálogo do Google Earth Engine, que abriga coleções dos principais programas internacionais de sensoriamento remoto:</p>
+<ul>
+<li><strong>Landsat</strong> — uma das fontes mais antigas e confiáveis de imagens da Terra (desde 1972), ideal para monitorar mudanças no uso da terra, desmatamento e agricultura;</li>
+<li><strong>Sentinel</strong> — do programa Copernicus da União Europeia, com imagens ópticas (Sentinel-2) e de radar (Sentinel-1), usadas no monitoramento ambiental, na detecção de incêndios e no acompanhamento de eventos extremos;</li>
+<li><strong>MODIS</strong> — imagens diárias de resolução moderada;</li>
+<li><strong>SRTM</strong> — o modelo digital de elevação que vimos no Capítulo 2;</li>
+<li>além de dados climáticos, mapas de cobertura da terra e muitos outros.</li>
+</ul>
+<p>Imagens de programas que não estão no catálogo, como as do <strong>CBERS</strong>, podem ser enviadas como <em>assets</em>, de modo semelhante ao que fizemos com os <em>shapefiles</em>.</p>
+<p>No caso das imagens de satélite, é mais comum trabalhar com <strong>coleções</strong> do que com imagens individuais. Ainda assim, como nos dados vetoriais, podemos acessar uma imagem pelo seu identificador:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Image</span><span class="p">(</span><span class="s1">'LANDSAT/LC08/C02/T1_TOA/LC08_220062_20190504'</span><span class="p">);</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">image</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="s1">'Landsat 8'</span><span class="p">);</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">image</span><span class="p">,</span><span class="w"> </span><span class="mf">8</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="A cena sem parâmetros de visualização" src="../img/cap06/landsat-saoluis.png" /></p>
+<p>A imagem aparece quase preta e pouco informativa: faltam os <strong>parâmetros de visualização</strong>.</p>
+<hr />
+<h2 id="visualizacao-de-dados-matriciais">🎨 Visualização de dados matriciais<a class="headerlink" href="#visualizacao-de-dados-matriciais" title="Permanent link">&para;</a></h2>
+<p>A escolha dos parâmetros de visualização é crucial para a interpretação de imagens. Vamos usar como exemplo uma imagem de <strong>NDVI</strong> (<em>Normalized Difference Vegetation Index</em>), cujos valores variam de −1 a 1 (o índice será explicado no <a href="../08_processamento_matricial/">Capítulo 8</a>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Image</span><span class="p">(</span><span class="s1">'LANDSAT/LC08/C02/T1_TOA/LC08_220062_20190504'</span><span class="p">);</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ndvi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">normalizedDifference</span><span class="p">([</span><span class="s1">'B5'</span><span class="p">,</span><span class="w"> </span><span class="s1">'B4'</span><span class="p">]);</span>
+</code></pre></div>
+<h3 id="minimo-e-maximo">Mínimo e máximo<a class="headerlink" href="#minimo-e-maximo" title="Permanent link">&para;</a></h3>
+<p>Por padrão, uma imagem de uma banda é representada em <strong>tons de cinza</strong>: o valor mínimo é mapeado para o preto e o máximo para o branco. No caso do NDVI, os valores de −1 a 1 seriam distribuídos pelos 256 tons de cinza da tela:</p>
+<p><img alt="Mapeamento padrão: de −1 (preto) a 1 (branco)" src="../img/cap06/escala-cinza-padrao.png" /></p>
+<p>Mas os valores de uma cena real raramente ocupam todo o intervalo teórico. Para saber quais são os valores mais frequentes, recorremos ao <strong>histograma</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">roi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Geometry</span><span class="p">.</span><span class="nx">Polygon</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="p">[[[</span><span class="o">-</span><span class="mf">44.40094120999187</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">2.2314841101817464</span><span class="p">],</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">      </span><span class="p">[</span><span class="o">-</span><span class="mf">44.40094120999187</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">2.8900019126297876</span><span class="p">],</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">      </span><span class="p">[</span><span class="o">-</span><span class="mf">43.43963749905437</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">2.8900019126297876</span><span class="p">],</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">      </span><span class="p">[</span><span class="o">-</span><span class="mf">43.43963749905437</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">2.2314841101817464</span><span class="p">]]]);</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="kd">var</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Image</span><span class="p">(</span><span class="s1">'LANDSAT/LC08/C02/T1_TOA/LC08_220062_20190504'</span><span class="p">);</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ndvi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">normalizedDifference</span><span class="p">([</span><span class="s1">'B5'</span><span class="p">,</span><span class="w"> </span><span class="s1">'B4'</span><span class="p">]);</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="kd">var</span><span class="w"> </span><span class="nx">histograma</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ui</span><span class="p">.</span><span class="nx">Chart</span><span class="p">.</span><span class="nx">image</span><span class="p">.</span><span class="nx">histogram</span><span class="p">({</span><span class="nx">image</span><span class="o">:</span><span class="w"> </span><span class="nx">ndvi</span><span class="p">,</span><span class="w"> </span><span class="nx">region</span><span class="o">:</span><span class="w"> </span><span class="nx">roi</span><span class="p">,</span><span class="w"> </span><span class="nx">scale</span><span class="o">:</span><span class="w"> </span><span class="mf">30</span><span class="p">});</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="nx">print</span><span class="p">(</span><span class="nx">histograma</span><span class="p">);</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">roi</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="s1">'Região do histograma'</span><span class="p">);</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">roi</span><span class="p">,</span><span class="w"> </span><span class="mf">9</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="Histograma do NDVI na região de interesse" src="../img/cap06/histograma-ndvi.png" /></p>
+<p><img alt="A região usada para calcular o histograma" src="../img/cap06/histograma-roi.png" /></p>
+<p>Pelo histograma, os valores se concentram entre <strong>−0,5 e 0,8</strong>. Podemos então definir esses limites como mínimo e máximo: todos os valores abaixo de −0,5 serão mapeados para o preto, e todos acima de 0,8 para o branco. Os 256 tons de cinza passam a ser usados apenas onde há dados — e o contraste melhora.</p>
+<p><img alt="Mapeamento ajustado: de −0,5 (preto) a 0,8 (branco)" src="../img/cap06/escala-cinza-ajustada.png" /></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Mínimo −1 e máximo 1</th>
+<th style="text-align: center;">Mínimo −0,5 e máximo 0,8</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><img alt="NDVI com mínimo e máximo padrão" src="../img/cap06/ndvi-min-max-padrao.jpg" /></td>
+<td style="text-align: center;"><img alt="NDVI com mínimo e máximo ajustados" src="../img/cap06/ndvi-min-max-ajustado.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<h3 id="paletas-de-cores">Paletas de cores<a class="headerlink" href="#paletas-de-cores" title="Permanent link">&para;</a></h3>
+<p>Em vez de tons de cinza, podemos definir uma <strong>paleta de cores</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">paleta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">'red'</span><span class="p">,</span><span class="w"> </span><span class="s1">'yellow'</span><span class="p">,</span><span class="w"> </span><span class="s1">'green'</span><span class="p">];</span>
+</code></pre></div>
+<p>Com essa paleta, o valor mínimo é mapeado para o vermelho, o máximo para o verde, e os valores intermediários são interpolados linearmente, passando pelo amarelo. Os parâmetros de mínimo e máximo continuam tendo grande impacto, como mostra a figura: em (a), sem paleta; em (b), com a paleta e os limites padrão; em (c), com a paleta e os limites ajustados.</p>
+<p><img alt="Efeito da paleta e dos limites" src="../img/cap06/ndvi-paletas.jpg" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Image</span><span class="p">(</span><span class="s1">'LANDSAT/LC08/C02/T1_TOA/LC08_220062_20190504'</span><span class="p">);</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ndvi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">image</span><span class="p">.</span><span class="nx">normalizedDifference</span><span class="p">([</span><span class="s1">'B5'</span><span class="p">,</span><span class="w"> </span><span class="s1">'B4'</span><span class="p">]);</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="kd">var</span><span class="w"> </span><span class="nx">paleta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">'red'</span><span class="p">,</span><span class="w"> </span><span class="s1">'yellow'</span><span class="p">,</span><span class="w"> </span><span class="s1">'green'</span><span class="p">];</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">ndvi</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="s1">'Tons de cinza'</span><span class="p">);</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">ndvi</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">0.8</span><span class="p">},</span><span class="w"> </span><span class="s1">'Tons de cinza, -0.5 a 0.8'</span><span class="p">);</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">ndvi</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">palette</span><span class="o">:</span><span class="w"> </span><span class="nx">paleta</span><span class="p">},</span><span class="w"> </span><span class="s1">'Paleta sem min e max'</span><span class="p">);</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">ndvi</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">palette</span><span class="o">:</span><span class="w"> </span><span class="nx">paleta</span><span class="p">,</span><span class="w"> </span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">0.8</span><span class="p">},</span><span class="w"> </span><span class="s1">'Paleta, -0.5 a 0.8'</span><span class="p">);</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">ndvi</span><span class="p">,</span><span class="w"> </span><span class="mf">8</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="As quatro camadas no gerenciador de camadas" src="../img/cap06/ndvi-camadas.jpg" /></p>
+<div class="admonition tip">
+<p class="admonition-title">Ajustando pelo gerenciador de camadas</p>
+<p>No gerenciador de camadas (<em>Layers</em>), clique na engrenagem ao lado de uma camada para ajustar interativamente o mínimo, o máximo, a paleta e a opacidade. A opção <em>Stretch</em> calcula automaticamente limites a partir do histograma da área visível. Depois de encontrar bons valores, clique em <strong>Import</strong> para levá-los ao seu código.</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Paletas prontas</p>
+<p>Criar boas paletas é difícil. O pacote comunitário <a href="https://github.com/gee-community/ee-palettes">ee-palettes</a> oferece dezenas delas:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">palettes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">'users/gena/packages:palettes'</span><span class="p">);</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kd">var</span><span class="w"> </span><span class="nx">paleta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">palettes</span><span class="p">.</span><span class="nx">colorbrewer</span><span class="p">.</span><span class="nx">RdYlGn</span><span class="p">[</span><span class="mf">9</span><span class="p">];</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">ndvi</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="nx">palette</span><span class="o">:</span><span class="w"> </span><span class="nx">paleta</span><span class="p">},</span><span class="w"> </span><span class="s1">'NDVI'</span><span class="p">);</span>
+</code></pre></div>
+</div>
+<h3 id="composicoes-coloridas">Composições coloridas<a class="headerlink" href="#composicoes-coloridas" title="Permanent link">&para;</a></h3>
+<p>Na interpretação de imagens multiespectrais, é prática comum criar <strong>composições coloridas</strong>: associar três bandas aos três canais de cor da tela — vermelho (R), verde (G) e azul (B). Nas composições em <strong>cor verdadeira</strong>, cada banda vai para o canal correspondente: a banda do vermelho no canal vermelho, a do verde no verde e a do azul no azul. Nas composições em <strong>falsa cor</strong>, usam-se outras combinações. A composição B5 (infravermelho próximo), B4 (vermelho) e B3 (verde) do Landsat 8, por exemplo, realça a vegetação, que aparece em tons de vermelho — lembre-se da assinatura espectral da vegetação, com alta reflectância no infravermelho próximo.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Image</span><span class="p">(</span><span class="s1">'LANDSAT/LC08/C02/T1_TOA/LC08_220062_20190504'</span><span class="p">);</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="kd">var</span><span class="w"> </span><span class="nx">corVerdadeira</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">'B4'</span><span class="p">,</span><span class="w"> </span><span class="s1">'B3'</span><span class="p">,</span><span class="w"> </span><span class="s1">'B2'</span><span class="p">];</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="kd">var</span><span class="w"> </span><span class="nx">falsaCor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">'B5'</span><span class="p">,</span><span class="w"> </span><span class="s1">'B4'</span><span class="p">,</span><span class="w"> </span><span class="s1">'B3'</span><span class="p">];</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">image</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">bands</span><span class="o">:</span><span class="w"> </span><span class="nx">falsaCor</span><span class="p">,</span><span class="w"> </span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="mf">0.03</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">0.4</span><span class="p">},</span><span class="w"> </span><span class="s1">'Falsa cor 5-4-3'</span><span class="p">);</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">image</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">bands</span><span class="o">:</span><span class="w"> </span><span class="nx">corVerdadeira</span><span class="p">,</span><span class="w"> </span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="mf">0.03</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">0.4</span><span class="p">},</span><span class="w"> </span><span class="s1">'Cor verdadeira 4-3-2'</span><span class="p">);</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">image</span><span class="p">,</span><span class="w"> </span><span class="mf">8</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="Composição colorida no Code Editor" src="../img/cap06/composicao-codigo.jpg" /></p>
+<p><img alt="Falsa cor (a) e cor verdadeira (b) sobre os Lençóis Maranhenses" src="../img/cap06/falsa-verdadeira.jpg" /></p>
+<div class="admonition note">
+<p class="admonition-title">Reflectância no topo da atmosfera</p>
+<p>Os limites de 0,03 a 0,4 fazem sentido porque a coleção <code>T1_TOA</code> já está em unidades de <strong>reflectância no topo da atmosfera</strong> (<em>Top of Atmosphere</em>), entre 0 e 1. Coleções em números digitais ou em reflectância de superfície exigem outros limites (Capítulo 8).</p>
+</div>
+<div class="admonition abstract">
+<p class="admonition-title">Antes de montar uma composição</p>
+<p>É importante saber em que faixa do espectro está cada banda (tabela do <a href="../02_sensoriamento_remoto/#resolucao-espectral">Capítulo 2</a>) e qual a <strong>assinatura espectral</strong> do alvo que se deseja realçar. Algumas composições clássicas para Landsat 8/9:</p>
+<table>
+<thead>
+<tr>
+<th>Composição (R-G-B)</th>
+<th>Uso típico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4-3-2</td>
+<td>Cor verdadeira, próxima do que o olho humano vê</td>
+</tr>
+<tr>
+<td>5-4-3</td>
+<td>Falsa cor: vegetação em vermelho</td>
+</tr>
+<tr>
+<td>6-5-4</td>
+<td>Distinção entre vegetação, solo exposto e áreas urbanas</td>
+</tr>
+<tr>
+<td>7-6-4</td>
+<td>Áreas urbanas, solos e geologia; atravessa melhor a fumaça</td>
+</tr>
+<tr>
+<td>5-6-2</td>
+<td>Agricultura: culturas saudáveis em verde vivo</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr />
+<h2 id="selecao-de-dados-matriciais">🔎 Seleção de dados matriciais<a class="headerlink" href="#selecao-de-dados-matriciais" title="Permanent link">&para;</a></h2>
+<p>Com coleções que somam centenas de milhares de imagens, a <strong>seleção</strong> é o primeiro passo de qualquer análise. As imagens de satélite são selecionadas por critérios <strong>espaciais</strong>, <strong>temporais</strong> e de <strong>metadados</strong> — os mesmos disponíveis nos formulários dos catálogos tradicionais, como o do INPE:</p>
+<p><img alt="Formulário de busca do catálogo de imagens do INPE" src="../img/cap06/catalogo-inpe.png" /></p>
+<p>A diferença é que, no GEE, esses critérios são escritos em um <em>script</em>: um processo que, de outra forma, exigiria preencher cada campo e clicar em "pesquisar", torna-se <strong>automatizado e reprodutível</strong>, e permite combinações que nenhum formulário oferece.</p>
+<h3 id="selecao-espacial">Seleção espacial<a class="headerlink" href="#selecao-espacial" title="Permanent link">&para;</a></h3>
+<p>Queremos apenas as imagens que cobrem o município de São Luís. Primeiro, selecionamos o município pela seleção por atributo que vimos no capítulo anterior (o código IBGE de São Luís é 2111300); depois, filtramos a coleção de imagens com <code>.filterBounds()</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">municipios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="s1">'projects/ee-sergiocosta/assets/MA_Municipios_2022'</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="p">);</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1">// código IBGE de São Luís</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="kd">var</span><span class="w"> </span><span class="nx">saoluis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">municipios</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'CD_MUN'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2111300'</span><span class="p">));</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="kd">var</span><span class="w"> </span><span class="nx">imagens</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">ImageCollection</span><span class="p">(</span><span class="s1">'LANDSAT/LC09/C02/T1'</span><span class="p">)</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span><span class="p">.</span><span class="nx">filterBounds</span><span class="p">(</span><span class="nx">saoluis</span><span class="p">);</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="nx">print</span><span class="p">(</span><span class="s1">'Quantidade de imagens:'</span><span class="p">,</span><span class="w"> </span><span class="nx">imagens</span><span class="p">.</span><span class="nx">size</span><span class="p">());</span>
+</code></pre></div>
+<h3 id="selecao-temporal">Seleção temporal<a class="headerlink" href="#selecao-temporal" title="Permanent link">&para;</a></h3>
+<p>Em aplicações de sensoriamento remoto, quase sempre precisamos de uma <strong>seleção temporal</strong>. O código a seguir seleciona apenas as imagens de 1º de janeiro a 30 de outubro de 2022:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">imagens</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">ImageCollection</span><span class="p">(</span><span class="s1">'LANDSAT/LC09/C02/T1'</span><span class="p">)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="p">.</span><span class="nx">filterBounds</span><span class="p">(</span><span class="nx">saoluis</span><span class="p">)</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="p">.</span><span class="nx">filterDate</span><span class="p">(</span><span class="s1">'2022-01-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2022-10-30'</span><span class="p">);</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="nx">print</span><span class="p">(</span><span class="s1">'Quantidade de imagens:'</span><span class="p">,</span><span class="w"> </span><span class="nx">imagens</span><span class="p">.</span><span class="nx">size</span><span class="p">());</span><span class="w">  </span><span class="c1">// 49, quando este texto foi escrito</span>
+</code></pre></div>
+<p>Adicione a primeira imagem da coleção ao mapa e observe:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">primeiraImagem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">imagens</span><span class="p">.</span><span class="nx">first</span><span class="p">();</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">primeiraImagem</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">bands</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">'B4'</span><span class="p">,</span><span class="w"> </span><span class="s1">'B3'</span><span class="p">,</span><span class="w"> </span><span class="s1">'B2'</span><span class="p">],</span><span class="w"> </span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="mf">5000</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">15000</span><span class="p">},</span><span class="w"> </span><span class="s1">'Primeira imagem'</span><span class="p">);</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">saoluis</span><span class="p">,</span><span class="w"> </span><span class="mf">9</span><span class="p">);</span>
+</code></pre></div>
+<p>É bem provável que ela esteja coberta de nuvens — algo muito comum no litoral maranhense durante a estação chuvosa.</p>
+<h3 id="selecao-por-metadados">Seleção por metadados<a class="headerlink" href="#selecao-por-metadados" title="Permanent link">&para;</a></h3>
+<p>Em vez de atributos, as imagens têm <strong>metadados</strong>: informações registradas para cada cena, como data, sensor, ângulo solar e o <strong>percentual de cobertura de nuvens</strong>. Clique em uma imagem com a aba <strong>Inspector</strong> aberta para vê-los, ou imprima a lista completa:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nx">print</span><span class="p">(</span><span class="nx">primeiraImagem</span><span class="p">.</span><span class="nx">propertyNames</span><span class="p">());</span>
+</code></pre></div>
+<p>Os mesmos filtros que usamos para atributos servem para metadados. O código a seguir seleciona apenas as imagens com <strong>menos de 20% de nuvens</strong> e as ordena, de forma crescente, pela cobertura de nuvens:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">municipios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="s1">'projects/ee-sergiocosta/assets/MA_Municipios_2022'</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="p">);</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="kd">var</span><span class="w"> </span><span class="nx">saoluis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">municipios</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'CD_MUN'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2111300'</span><span class="p">));</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="kd">var</span><span class="w"> </span><span class="nx">imagens</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">ImageCollection</span><span class="p">(</span><span class="s1">'LANDSAT/LC09/C02/T1'</span><span class="p">)</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">    </span><span class="p">.</span><span class="nx">filterBounds</span><span class="p">(</span><span class="nx">saoluis</span><span class="p">)</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">    </span><span class="p">.</span><span class="nx">filterDate</span><span class="p">(</span><span class="s1">'2022-01-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2022-10-30'</span><span class="p">)</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">lt</span><span class="p">(</span><span class="s1">'CLOUD_COVER'</span><span class="p">,</span><span class="w"> </span><span class="mf">20</span><span class="p">))</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">    </span><span class="p">.</span><span class="nx">sort</span><span class="p">(</span><span class="s1">'CLOUD_COVER'</span><span class="p">);</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="nx">print</span><span class="p">(</span><span class="s1">'Quantidade de imagens:'</span><span class="p">,</span><span class="w"> </span><span class="nx">imagens</span><span class="p">.</span><span class="nx">size</span><span class="p">());</span><span class="w">  </span><span class="c1">// 8, quando este texto foi escrito</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="kd">var</span><span class="w"> </span><span class="nx">melhor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">imagens</span><span class="p">.</span><span class="nx">first</span><span class="p">();</span><span class="w">  </span><span class="c1">// a de menor cobertura de nuvens</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">melhor</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">bands</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">'B4'</span><span class="p">,</span><span class="w"> </span><span class="s1">'B3'</span><span class="p">,</span><span class="w"> </span><span class="s1">'B2'</span><span class="p">],</span><span class="w"> </span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="mf">5000</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">15000</span><span class="p">},</span><span class="w"> </span><span class="s1">'Menos nuvens'</span><span class="p">);</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">saoluis</span><span class="p">,</span><span class="w"> </span><span class="mf">9</span><span class="p">);</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title"><code>filterMetadata</code> está obsoleto</p>
+<p>Materiais mais antigos (inclusive versões anteriores deste curso) usam <code>.filterMetadata('CLOUD_COVER', 'less_than', 20)</code>. Esse método foi <strong>descontinuado</strong> pelo GEE; use <code>.filter(ee.Filter.lt('CLOUD_COVER', 20))</code>.</p>
+</div>
+<h3 id="path-e-row"><em>Path</em> e <em>row</em><a class="headerlink" href="#path-e-row" title="Permanent link">&para;</a></h3>
+<p>Talvez a imagem com menos nuvens nem seja da área que você esperava: o município de São Luís é coberto por mais de uma cena Landsat. As cenas são indexadas pelo par <strong>path/row</strong> do sistema de referência mundial (WRS-2): o <em>path</em> corresponde às órbitas, que se sucedem de leste para oeste, e o <em>row</em> à posição ao longo da órbita, de norte para sul. A cena que cobre a Ilha do Maranhão é a <strong>220/062</strong>. Filtrando por esses metadados, não é mais necessário usar <code>.filterBounds()</code>, pois o par já define a localização:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">imagens</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">ImageCollection</span><span class="p">(</span><span class="s1">'LANDSAT/LC09/C02/T1'</span><span class="p">)</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="p">.</span><span class="nx">filterDate</span><span class="p">(</span><span class="s1">'2022-01-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2022-10-30'</span><span class="p">)</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">lt</span><span class="p">(</span><span class="s1">'CLOUD_COVER'</span><span class="p">,</span><span class="w"> </span><span class="mf">20</span><span class="p">))</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'WRS_PATH'</span><span class="p">,</span><span class="w"> </span><span class="mf">220</span><span class="p">))</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">    </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'WRS_ROW'</span><span class="p">,</span><span class="w"> </span><span class="mf">62</span><span class="p">))</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">    </span><span class="p">.</span><span class="nx">sort</span><span class="p">(</span><span class="s1">'CLOUD_COVER'</span><span class="p">);</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="nx">print</span><span class="p">(</span><span class="s1">'Quantidade de imagens:'</span><span class="p">,</span><span class="w"> </span><span class="nx">imagens</span><span class="p">.</span><span class="nx">size</span><span class="p">());</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Principais parâmetros para seleção de imagens</p>
+<table>
+<thead>
+<tr>
+<th>Critério</th>
+<th>Método</th>
+<th>Exemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Espacial</td>
+<td><code>.filterBounds(geometria)</code></td>
+<td><code>.filterBounds(saoluis)</code></td>
+</tr>
+<tr>
+<td>Temporal</td>
+<td><code>.filterDate(início, fim)</code></td>
+<td><code>.filterDate('2022-01-01', '2023-01-01')</code></td>
+</tr>
+<tr>
+<td>Sazonal</td>
+<td><code>ee.Filter.calendarRange</code></td>
+<td><code>.filter(ee.Filter.calendarRange(6, 9, 'month'))</code></td>
+</tr>
+<tr>
+<td>Metadados</td>
+<td><code>ee.Filter.lt/eq/...</code></td>
+<td><code>.filter(ee.Filter.lt('CLOUD_COVER', 20))</code></td>
+</tr>
+<tr>
+<td>Ordenação</td>
+<td><code>.sort(propriedade)</code></td>
+<td><code>.sort('CLOUD_COVER')</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr />
+<h2 id="sintese">📝 Síntese<a class="headerlink" href="#sintese" title="Permanent link">&para;</a></h2>
+<ul>
+<li>A visualização de imagens depende do <strong>mínimo</strong>, do <strong>máximo</strong> (escolhidos com apoio do histograma) e da <strong>paleta</strong>; imagens multiespectrais são exibidas por <strong>composições coloridas</strong>.</li>
+<li>A seleção de imagens combina filtros <strong>espaciais</strong> (<code>filterBounds</code>), <strong>temporais</strong> (<code>filterDate</code>, <code>calendarRange</code>) e de <strong>metadados</strong> (<code>CLOUD_COVER</code>, <code>WRS_PATH</code>, <code>WRS_ROW</code>).</li>
+</ul>
+<h2 id="exercicios">✏️ Exercícios<a class="headerlink" href="#exercicios" title="Permanent link">&para;</a></h2>
+<p>Estes exercícios fazem parte da <a href="../09_exercicios/#atividade-1-selecao-e-visualizacao">Atividade 1</a>.</p>
+<ol>
+<li>Gere o histograma do NDVI de uma região da sua escolha e escolha, a partir dele, os limites de visualização. Justifique a escolha.</li>
+<li>Exiba a cena <code>LC08_220062_20190504</code> nas composições 4-3-2, 5-4-3 e 6-5-4. Descreva o que cada uma realça nos Lençóis Maranhenses.</li>
+<li>Selecione as imagens Landsat 8 (<code>LANDSAT/LC08/C02/T1_TOA</code>) que cobrem a sua cidade em 2023 com menos de 10% de nuvens. Quantas são? Exiba a de menor cobertura.</li>
+<li>Repita o exercício anterior apenas para os meses de julho a novembro, com <code>ee.Filter.calendarRange</code>. O número de imagens aumentou ou diminuiu em relação a uma seleção de janeiro a maio? Por quê?</li>
+<li>Descubra o <em>path/row</em> da cena Landsat que cobre a sua cidade (dica: use o <em>Inspector</em> sobre uma imagem) e refaça a seleção usando esses metadados.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar ao topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "content.code.annotate", "content.code.copy", "content.tabs.link", "content.tooltips", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "Mais 1 nesta p\u00e1gina", "search.result.more.other": "Mais # nesta p\u00e1gina", "search.result.none": "Nenhum resultado encontrado", "search.result.one": "1 resultado encontrado", "search.result.other": "# resultados encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
