@@ -411,3 +411,4 @@ A linha `Index Cond` é o filtro primário (o operador `~` testa se um retângul
 4. Qual a diferença entre `ST_Intersects` e `ST_Intersection`? Dê um exemplo de uso de cada uma na mesma consulta.
 5. Crie um *buffer* de 100 km em torno da ferrovia e descubra quais capitais estão dentro dele.
 6. Explique, com suas palavras, o filtro primário e o filtro secundário de uma consulta espacial indexada.
+7. O arquivo `banco02.sql`, no [dadosbdgeo.zip](../dados/dadosbdgeo.zip), cria e preenche as tabelas do exemplo "Lago Azul" da especificação *Simple Features* do OGC (lagos, estradas, rios, pontes, florestas, edificações...). Execute-o em um banco novo (ele já contém o `CREATE EXTENSION postgis`) e responda: quais pontes estão sobre algum rio? Qual a área do Lago Azul, descontada a ilha? Qual a distância de cada edificação até a estrada mais próxima? (Observe que a tabela `edificacoes` tem duas colunas de geometria, `geom_pt` e `geom_pol`.)

@@ -43,6 +43,12 @@ didáticos, e mantêm a atribuição às fontes originais:
 - `terras_indigenas.zip` — Terras indígenas, FUNAI (2010), via Ministério do Meio Ambiente
   (geometria simplificada, subconjunto de atributos);
 - `polos_madeireiros_mma.zip` — Polos madeireiros da Amazônia, Ministério do Meio Ambiente.
+- `dadosbdgeo.zip` — dados da Parte 2 (estados, municípios e sedes municipais, aeroportos
+  internacionais, ferrovias e terras indígenas), da base GISMAPS (2005) derivada da Base
+  Cartográfica Integrada Digital do Brasil ao Milionésimo (IBGE/DGC/DECAR), com os metadados
+  originais nos arquivos `.txt`; atributos convertidos para UTF-8 e `.prj` (WGS 84) e `.cpg`
+  acrescentados. Inclui o projeto `projetoexemplo.qgz` e o *script* `banco02.sql` (exemplo
+  "Lago Azul" da especificação OGC *Simple Features for SQL*).
 
 ## Atribuição a terceiros
 

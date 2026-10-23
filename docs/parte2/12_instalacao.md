@@ -130,7 +130,7 @@ O **QGIS** é um SIG livre e de código aberto, mantido pela fundação OSGeo, d
 
 ### Testando o QGIS
 
-Baixe os dados de exemplo em [bit.ly/3b6qN8s](https://bit.ly/3b6qN8s) e descompacte-os em uma pasta. Abra o QGIS e, no menu **Projeto → Abrir...**, selecione o arquivo `projetoexemplo`.
+Baixe os dados de exemplo, [dadosbdgeo.zip](../dados/dadosbdgeo.zip), e descompacte-os em uma pasta. Abra o QGIS e, no menu **Projeto → Abrir...**, selecione o arquivo `dadosbdgeo/projetoexemplo.qgz`. Os mesmos dados serão usados no [Capítulo 16](16_integracao_qgis.md) e no trabalho prático do [Capítulo 17](17_exercicios.md#trabalho-pratico-da-parte-2).
 
 ![A tela principal do QGIS](img/cap16/qgis-tela-principal.png)
 
