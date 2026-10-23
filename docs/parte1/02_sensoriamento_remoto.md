@@ -33,7 +33,7 @@ A origem do sensoriamento remoto está ligada ao desenvolvimento da fotografia e
 
 | Ano | Marco |
 |---|---|
-| 1839 | Daguerre e Niépce divulgam o processo fotográfico |
+| 1839 | Daguerre divulga o daguerreótipo, desenvolvido a partir do trabalho com Niépce (morto em 1833) |
 | 1858 | Gaspard-Félix Tournachon (Nadar) tira as primeiras fotografias aéreas, a partir de um balão |
 | 1861 | James Clerk Maxwell demonstra a primeira fotografia colorida |
 | 1909 | Primeiras fotografias tiradas a partir de um avião |
@@ -59,7 +59,7 @@ $$
 E_I(\lambda) = E_R(\lambda) + E_A(\lambda) + E_T(\lambda)
 $$
 
-em que \(E_R\) é a energia **refletida**, \(E_A\) a **absorvida** e \(E_T\) a **transmitida**, todas dependentes do comprimento de onda \(\lambda\). O sensor passivo a bordo de um satélite registra a energia refletida (**radiância**) que chega até ele.
+em que \(E_R\) é a energia **refletida**, \(E_A\) a **absorvida** e \(E_T\) a **transmitida**, todas dependentes do comprimento de onda \(\lambda\). O sensor passivo a bordo de um satélite registra a **radiância** que chega até ele: a energia refletida pelo alvo (nas faixas do visível e do infravermelho próximo e médio) ou emitida por ele (no infravermelho termal).
 
 A grandeza de maior interesse é a **reflectância**: a proporção entre o fluxo refletido e o fluxo incidente numa superfície, frequentemente expressa em porcentagem:
 

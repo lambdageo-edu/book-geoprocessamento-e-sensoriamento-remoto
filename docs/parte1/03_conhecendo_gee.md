@@ -240,7 +240,7 @@ Map.centerObject(image, 8);
 var metadados = {
   dataAquisicao: '2019-09-15',
   resolucaoEspacial: 30,
-  sistemaCoordenadas: 'EPSG:4326'
+  sistemaCoordenadas: 'EPSG:32623'  // UTM zona 23N, a projeção das cenas Landsat de São Luís
 };
 
 print('Data de aquisição:', metadados.dataAquisicao);
@@ -314,7 +314,7 @@ Observe que, no servidor, não usamos o operador `*`, e sim o método `.multiply
 
 ## 🔁 O padrão *filter–map–reduce*
 
-O padrão *filter–map–reduce* é amplamente usado em aplicações que lidam com grandes volumes de dados — e é a forma natural de pensar no GEE (CARDILLE, 2022):
+O padrão *filter–map–reduce* é amplamente usado em aplicações que lidam com grandes volumes de dados — e é a forma natural de pensar no GEE (CARDILLE, 2024):
 
 ```mermaid
 flowchart LR

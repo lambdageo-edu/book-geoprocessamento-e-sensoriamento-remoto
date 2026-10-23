@@ -131,7 +131,7 @@ As classes georreferenciadas se especializam em **geo-campos** e **geo-objetos**
 O OMT-G descreve ainda três categorias de **relacionamentos**:
 
 - **Associações simples** — relações entre objetos de classes diferentes, convencionais ou georreferenciadas (ex.: uma edificação *pertence a* um proprietário);
-- **Relacionamentos espaciais** — relações topológicas, métricas ou direcionais entre classes georreferenciadas (ex.: uma edificação *contém* um lote; uma escola está *a menos de 1 km* de um ponto de ônibus);
+- **Relacionamentos espaciais** — relações topológicas, métricas ou direcionais entre classes georreferenciadas (ex.: um lote *contém* uma edificação; uma escola está *a menos de 1 km* de um ponto de ônibus);
 - **Relacionamentos de rede** — ligações arco-nó ou arco-arco (ex.: segmentos de logradouro ligados a cruzamentos; rodovias formando uma malha rodoviária).
 
 Para ver os diagramas completos e sua notação gráfica, consulte o artigo original (BORGES; DAVIS; LAENDER, 2001) e o capítulo "Modelagem de dados geográficos" de Casanova et al. (2005), disponível em [dpi.inpe.br/livros/bdados](http://www.dpi.inpe.br/livros/bdados/index.html).

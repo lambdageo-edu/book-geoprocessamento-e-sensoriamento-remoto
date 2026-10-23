@@ -97,7 +97,7 @@ O GEE representa as primitivas com os tipos `ee.Geometry.Point`, `ee.Geometry.Li
 | `LINESTRING (-44.30 -2.54, -44.31 -2.56)` | `ee.Geometry.LineString([[-44.30, -2.54], [-44.31, -2.56]])` |
 | `POLYGON ((x1 y1, x2 y2, x3 y3, x1 y1))` | `ee.Geometry.Polygon([[[x1, y1], [x2, y2], [x3, y3]]])` |
 
-Para visualizar uma geometria, adicionamos-a ao mapa e aproximamos o zoom:
+Para visualizar uma geometria, adicionamo-la ao mapa e aproximamos o zoom:
 
 ```javascript
 // PASSO 1: ENTRADA/SELEÇÃO
@@ -119,7 +119,7 @@ Map.centerObject(geo, 20);
 
 ### Feições: `ee.Feature`
 
-As entidades geográficas codificadas no modelo vetorial são chamadas de **feições** (*features*): objetos do tipo ponto, linha ou polígono (LONGLEY, 2005). Além da geometria, elas têm **atributos**. Uma feição poligonal que representa um município, por exemplo, pode ter como atributos o nome, a população e o índice de desenvolvimento humano.
+As entidades geográficas codificadas no modelo vetorial são chamadas de **feições** (*features*): objetos do tipo ponto, linha ou polígono (LONGLEY et al., 2013). Além da geometria, elas têm **atributos**. Uma feição poligonal que representa um município, por exemplo, pode ter como atributos o nome, a população e o índice de desenvolvimento humano.
 
 No GEE, uma `ee.Feature` é uma **geometria + um dicionário de atributos**. Cada chave do dicionário nomeia um atributo, e o valor pode ser de qualquer tipo. O código a seguir cria um polígono com os limites aproximados da Universidade Federal do Maranhão e dois atributos, `nome` e `sigla`:
 
@@ -177,7 +177,7 @@ No Console, expanda o objeto impresso: a coleção tem uma lista `features`, e c
 
 ## 🟩 Dados matriciais
 
-Em uma representação matricial, o espaço é dividido em uma **malha retangular de células**, geralmente quadradas. O espaço é concebido como uma matriz \(P(m, n)\), com \(m\) colunas e \(n\) linhas, em que cada célula tem um número de linha, um número de coluna e um valor correspondente ao atributo estudado (CÂMARA, 2005). O exemplo mais comum são as imagens produzidas por sensores a bordo de satélites ou aeronaves. A **resolução espacial** depende da relação entre o tamanho da célula e a área que ela representa no terreno.
+Em uma representação matricial, o espaço é dividido em uma **malha retangular de células**, geralmente quadradas. O espaço é concebido como uma matriz \(P(m, n)\), com \(m\) linhas e \(n\) colunas, em que cada célula tem um número de linha, um número de coluna e um valor correspondente ao atributo estudado (CÂMARA, 2005). O exemplo mais comum são as imagens produzidas por sensores a bordo de satélites ou aeronaves. A **resolução espacial** depende da relação entre o tamanho da célula e a área que ela representa no terreno.
 
 ![Dados matriciais: células e resolução](img/cap04/matriz.png)
 

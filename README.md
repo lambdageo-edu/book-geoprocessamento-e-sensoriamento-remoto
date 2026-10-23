@@ -5,7 +5,7 @@ duas partes: sensoriamento remoto e processamento de dados geográficos na nuvem
 **Google Earth Engine**, e **bancos de dados geográficos** com PostgreSQL/PostGIS integrados
 ao **QGIS**.
 
-📖 **Leia online:** <https://lambdageo.github.io/book-geoprocessamento-e-sensoriamento-remoto/>
+📖 **Leia online:** <https://lambdageo-edu.github.io/book-geoprocessamento-e-sensoriamento-remoto/>
 
 ## Organização
 
@@ -58,4 +58,5 @@ Não é necessário rodar `mkdocs gh-deploy` manualmente.
 
 O texto e o código deste livro são de autoria do Prof. Sergio Costa e estão licenciados sob
 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.pt-BR). Os dados em
-`docs/dados/` são derivados de dados públicos do IBGE, da FUNAI e do MMA. Veja `LICENSE`.
+`docs/dados/` são derivados de dados públicos do IBGE, da FUNAI e do MMA (o `dadosbdgeo.zip`, da base
+GISMAPS sobre dados do IBGE). Veja `LICENSE`.

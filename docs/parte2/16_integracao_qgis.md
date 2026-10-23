@@ -48,7 +48,7 @@ CREATE SCHEMA brasil;
 
 ![O Gerenciador de Banco de Dados](img/cap16/qgis-gerenciador-bd.png)
 
-**3. Importe a camada.** Clique no botão **Importar camada/arquivo**. Na janela, escolha a camada de entrada (um arquivo *shapefile* ou uma camada já aberta no projeto — aqui, os municípios do Brasil) e preencha as opções:
+**3. Importe a camada.** Clique no botão **Importar camada/arquivo**. Na janela, escolha a camada de entrada (um arquivo *shapefile* ou uma camada já aberta no projeto — aqui, os municípios do Brasil, `municipios_br/municipios_br.shp`, do [dadosbdgeo.zip](../dados/dadosbdgeo.zip) baixado no Capítulo 12) e preencha as opções:
 
 ![Importando uma camada vetorial](img/cap16/qgis-importar-camada.png)
 

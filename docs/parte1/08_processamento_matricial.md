@@ -323,7 +323,7 @@ print('NDVI da cena inteira:', estatisticas);
 
 Agora temos todos os ingredientes para entender o exemplo motivacional do [Capítulo 3](03_conhecendo_gee.md#por-que-processar-na-nuvem): a precipitação mensal em São Luís e Congonhas. Vamos por partes.
 
-**1. Entrada.** As duas regiões formam uma coleção de feições com o atributo `nome`, e a coleção CHIRPS diária é carregada:
+**1. Entrada.** As duas regiões — os polígonos `congonhas` e `saoluis`, definidos no início do *script* do Capítulo 3 — formam uma coleção de feições com o atributo `nome`, e a coleção CHIRPS diária é carregada:
 
 ```javascript
 var areaEstudo = ee.FeatureCollection([

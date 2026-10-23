@@ -36,7 +36,7 @@ jobs:
       - name: Build do Livro (Apenas Validação)
         # Executa mkdocs build em PRs para validar se não há erros na compilação
         if: github.event_name == 'pull_request'
-        run: mkdocs build
+        run: mkdocs build --strict
 
       - name: Build e Deploy para a branch gh-pages
         # Faz o deploy apenas em pushes diretos ou merges na branch main

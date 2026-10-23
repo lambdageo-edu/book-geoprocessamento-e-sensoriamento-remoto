@@ -103,10 +103,10 @@ Este capítulo reúne a lista de exercícios e o trabalho prático da Parte 2. O
 
 ## Trabalho prático da Parte 2
 
-Baixe os arquivos *shapefile* disponíveis em [bit.ly/3b6qN8s](https://bit.ly/3b6qN8s) e descompacte-os em uma pasta. Em seguida:
+Use os dados do [dadosbdgeo.zip](../dados/dadosbdgeo.zip), o mesmo arquivo do Capítulo 12, descompactado em uma pasta. Os *shapefiles* estão em coordenadas geográficas WGS 84 (EPSG:4326). Em seguida:
 
 1. Crie um banco de dados geográfico no PostGIS denominado `brdata`.
-2. Importe os arquivos `sede_municipio.shp`, `aeroporto_internacional.shp` e `ferrovia.shp`, em um esquema chamado `brasil`, criando índices espaciais.
+2. Importe os arquivos `municipios_br/sede_municipios.shp`, `aeroportos/AEROPORTO_INTERNACIONAL.shp` e `ferrovias/FERROVIA.shp`, em um esquema chamado `brasil`, criando índices espaciais. (O aeroporto de São Luís é o Marechal Cunha Machado, `cd_uf = 'MA'`.)
 3. Escreva e teste uma consulta que retorne os municípios cujas sedes estão em um raio de 100 km do aeroporto de São Luís.
 4. Escreva e teste uma consulta que retorne o nome dos municípios cujas sedes estão a pelo menos 100 km de distância de **qualquer** aeroporto internacional.
 5. Qual a extensão, em quilômetros, da rede ferroviária no estado do Maranhão? (Dica: importe também o [BR_UF.zip](../dados/BR_UF.zip) e combine `ST_Intersection` e `ST_Length`.)

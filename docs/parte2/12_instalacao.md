@@ -18,7 +18,7 @@ O PostgreSQL é um sistema gerenciador de banco de dados **objeto-relacional**, 
 O **PostGIS** é a extensão que acrescenta ao PostgreSQL os tipos de dados, as funções e os índices espaciais que estudaremos nos Capítulos 14 e 15.
 
 !!! info "Versões"
-    Use uma versão do PostgreSQL com suporte ativo (a partir da 14) e o PostGIS 3.x. Os exemplos deste livro foram testados com PostgreSQL 16 e PostGIS 3.4, mas funcionam em versões mais novas. Versões antigas de materiais anteriores (PostgreSQL 9.5, pgAdmin 3) estão **descontinuadas** e não devem mais ser usadas.
+    Use uma versão do PostgreSQL com suporte ativo (a partir da 15) e o PostGIS 3.x. Os exemplos deste livro foram testados com PostgreSQL 16 e PostGIS 3.4, mas funcionam em versões mais novas. Versões antigas de materiais anteriores (PostgreSQL 9.5, pgAdmin 3) estão **descontinuadas** e não devem mais ser usadas.
 
 Escolha, a seguir, o roteiro do seu sistema operacional.
 
@@ -63,10 +63,10 @@ Escolha, a seguir, o roteiro do seu sistema operacional.
       -e POSTGRES_PASSWORD=postgres \
       -p 5432:5432 \
       -v pgdata:/var/lib/postgresql/data \
-      -d postgis/postgis:17-3.5
+      -d postgis/postgis:16-3.4
     ```
 
-    O volume `pgdata` preserva os dados quando o contêiner é removido. Acesse com qualquer cliente em `localhost:5432`, usuário `postgres`, senha `postgres`. Veja o [tutorial de Docker da Coleção LambdaGeo](https://lambdageo.github.io/tutoriais/) para mais detalhes.
+    A imagem usa as mesmas versões em que os exemplos foram testados (PostgreSQL 16 e PostGIS 3.4); versões mais novas, como `postgis/postgis:17-3.5`, também funcionam. O volume `pgdata` preserva os dados quando o contêiner é removido. Acesse com qualquer cliente em `localhost:5432`, usuário `postgres`, senha `postgres`. Veja o [tutorial de Docker da Coleção LambdaGeo](https://lambdageo.github.io/tutoriais/) para mais detalhes.
 
 ---
 
@@ -94,7 +94,7 @@ CREATE EXTENSION postgis;
 SELECT postgis_full_version();
 ```
 
-O resultado deve mostrar a versão do PostGIS e das bibliotecas que ele usa — GEOS (operações geométricas), PROJ (transformações entre sistemas de referência) e GDAL (formatos de arquivo). Se aparecer a mensagem `function postgis_full_version() does not exist`, a extensão não foi criada no banco correto.
+O resultado deve mostrar a versão do PostGIS e das bibliotecas que ele usa — entre elas o GEOS (operações geométricas) e o PROJ (transformações entre sistemas de referência). O GDAL (formatos matriciais) só aparece se a extensão `postgis_raster` também for criada. Se aparecer a mensagem `function postgis_full_version() does not exist`, a extensão não foi criada no banco correto.
 
 !!! tip "O `psql`, cliente de linha de comando"
     Todos os comandos SQL deste livro também podem ser executados no `psql`. Para conectar ao banco `curso`:
@@ -112,7 +112,7 @@ O resultado deve mostrar a versão do PostGIS e das bibliotecas que ele usa — 
 O **QGIS** é um SIG livre e de código aberto, mantido pela fundação OSGeo, disponível para Windows, Linux e macOS. Ele será o nosso **cliente** geográfico: com ele, visualizaremos e editaremos os dados guardados no PostgreSQL/PostGIS.
 
 !!! info "Qual versão instalar?"
-    O QGIS tem duas linhas de versões: a **LTR** (*Long Term Release*), mais estável, atualizada por um ano, e a **versão mais recente**, com novidades a cada quatro meses. Para uso em aula, prefira a **LTR**. As telas deste livro foram capturadas em versões 3.x; em versões mais novas, a disposição de alguns menus pode mudar, mas as funções são as mesmas.
+    O QGIS tem duas linhas de versões: a **LTR** (*Long Term Release*), mais estável, atualizada por um ano, e a **versão mais recente**, com novidades a cada quatro meses. Para uso em aula, prefira a **LTR**. As telas deste livro foram capturadas em versões 3.x. A partir de 2026 a linha LTR passa para a série 4 (QGIS 4.2), com nova interface baseada em Qt6: a disposição de alguns menus pode mudar, mas as funções usadas aqui são as mesmas.
 
 === "Windows e macOS"
 
@@ -130,7 +130,7 @@ O **QGIS** é um SIG livre e de código aberto, mantido pela fundação OSGeo, d
 
 ### Testando o QGIS
 
-Baixe os dados de exemplo em [bit.ly/3b6qN8s](https://bit.ly/3b6qN8s) e descompacte-os em uma pasta. Abra o QGIS e, no menu **Projeto → Abrir...**, selecione o arquivo `projetoexemplo`.
+Baixe os dados de exemplo, [dadosbdgeo.zip](../dados/dadosbdgeo.zip), e descompacte-os em uma pasta. Abra o QGIS e, no menu **Projeto → Abrir...**, selecione o arquivo `dadosbdgeo/projetoexemplo.qgz`. Os mesmos dados serão usados no [Capítulo 16](16_integracao_qgis.md) e no trabalho prático do [Capítulo 17](17_exercicios.md#trabalho-pratico-da-parte-2).
 
 ![A tela principal do QGIS](img/cap16/qgis-tela-principal.png)
 

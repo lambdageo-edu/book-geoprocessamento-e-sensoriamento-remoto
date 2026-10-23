@@ -12,7 +12,7 @@ O catálogo do Google Earth Engine é composto predominantemente por dados matri
 
 ![Buscando dados no catálogo](img/cap05/catalogo-busca.jpg)
 
-Clique em um dos resultados, como o **LSIB 2017: Large Scale International Boundary Polygons**:
+Clique em um dos resultados, como o **LSIB 2017: Large Scale International Boundary Polygons, Simplified** (há também uma versão *Detailed*, com limites mais precisos e mais pesada):
 
 ![Página de um conjunto de dados no catálogo](img/cap05/catalogo-lsib.png)
 
@@ -45,7 +45,7 @@ Essa segunda forma é mais fácil de copiar e colar em outros *scripts*, e é a 
 Como o catálogo tem poucas coleções vetoriais, é comum importar dados de outras fontes, no formato **Shapefile** (também aceitos: CSV com coordenadas e, via Google Cloud, outros formatos). No Brasil, o portal do **IBGE** disponibiliza as malhas territoriais de todo o país — veja outras fontes em [Fontes de Dados Geográficos](../anexos/fontes_dados.md).
 
 !!! info "O formato Shapefile"
-    O Shapefile (ou ESRI Shapefile) é um padrão amplamente usado para armazenar dados vetoriais e se tornou um formato comum para compartilhar dados geoespaciais. Apesar do nome no singular, um *shapefile* é um **conjunto de arquivos** com o mesmo nome e extensões diferentes: `.shp` (geometrias), `.shx` (índice), `.dbf` (atributos) e `.prj` (sistema de referência). Os quatro são necessários — envie-os juntos ou compactados em um `.zip`.
+    O Shapefile (ou ESRI Shapefile) é um padrão amplamente usado para armazenar dados vetoriais e se tornou um formato comum para compartilhar dados geoespaciais. Apesar do nome no singular, um *shapefile* é um **conjunto de arquivos** com o mesmo nome e extensões diferentes: `.shp` (geometrias), `.shx` (índice), `.dbf` (atributos) e `.prj` (sistema de referência). Envie os quatro juntos, ou compactados em um `.zip`: sem o `.prj`, o GEE supõe WGS 84, o que desloca dados em outros sistemas.
 
 **1. Baixe a malha de municípios do Maranhão** no portal [Malha Municipal — IBGE](https://www.ibge.gov.br/geociencias/organizacao-do-territorio/malhas-territoriais/15774-malhas.html).
 

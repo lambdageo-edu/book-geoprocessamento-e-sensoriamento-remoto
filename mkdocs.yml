@@ -4,6 +4,8 @@ site_description: >
   Remoto: sensoriamento remoto com Google Earth Engine e bancos de dados
   geográficos com PostGIS e QGIS.
 site_author: "Sergio Souza Costa"
+site_url: https://lambdageo-edu.github.io/book-geoprocessamento-e-sensoriamento-remoto/
+repo_url: https://github.com/lambdageo-edu/book-geoprocessamento-e-sensoriamento-remoto
 
 docs_dir: docs
 site_dir: site

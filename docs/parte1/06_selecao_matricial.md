@@ -142,8 +142,9 @@ Map.centerObject(image, 8);
     | 4-3-2 | Cor verdadeira, próxima do que o olho humano vê |
     | 5-4-3 | Falsa cor: vegetação em vermelho |
     | 6-5-4 | Distinção entre vegetação, solo exposto e áreas urbanas |
-    | 7-6-4 | Áreas urbanas, solos e geologia; atravessa melhor a fumaça |
-    | 5-6-2 | Agricultura: culturas saudáveis em verde vivo |
+    | 7-6-4 | Falsa cor urbana: áreas urbanas, solos e geologia |
+    | 7-6-5 | Penetração atmosférica: atravessa melhor a fumaça e a névoa |
+    | 6-5-2 | Agricultura: culturas saudáveis em verde vivo |
 
 ---
 
@@ -175,7 +176,7 @@ print('Quantidade de imagens:', imagens.size());
 
 ### Seleção temporal
 
-Em aplicações de sensoriamento remoto, quase sempre precisamos de uma **seleção temporal**. O código a seguir seleciona apenas as imagens de 1º de janeiro a 30 de outubro de 2022:
+Em aplicações de sensoriamento remoto, quase sempre precisamos de uma **seleção temporal**. O código a seguir seleciona apenas as imagens de 1º de janeiro a 29 de outubro de 2022 (a data final do `.filterDate` não é incluída):
 
 ```javascript
 var imagens = ee.ImageCollection('LANDSAT/LC09/C02/T1')
