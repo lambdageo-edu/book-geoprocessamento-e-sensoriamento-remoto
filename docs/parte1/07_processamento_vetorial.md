@@ -20,7 +20,7 @@ Operações como `.buffer()`, `.centroid()`, `.area()` e `.intersection()` são 
 
 ## ⭕ Geração de faixas de distância (*buffer*)
 
-A operação de *buffer* identifica **zonas de proximidade** ao redor de entidades geográficas — pontos, linhas ou polígonos (LONGLEY, 2005). Autoridades municipais podem usá-la para definir zonas de restrição em torno de rios, reservatórios ou áreas de preservação; no planejamento de transportes, para identificar as áreas a uma certa distância de estações de metrô ou paradas de ônibus.
+A operação de *buffer* identifica **zonas de proximidade** ao redor de entidades geográficas — pontos, linhas ou polígonos (LONGLEY et al., 2013). Autoridades municipais podem usá-la para definir zonas de restrição em torno de rios, reservatórios ou áreas de preservação; no planejamento de transportes, para identificar as áreas a uma certa distância de estações de metrô ou paradas de ônibus.
 
 Para realizá-la, escolhemos a entidade de interesse e a distância desejada, geralmente em metros. Suponha que queremos investigar a relação entre o desmatamento e a proximidade de **polos madeireiros**. O método `.buffer()` é aplicado a uma feição e retorna uma nova feição. Para aplicá-lo a toda a coleção, encapsulamos a operação em uma função e usamos o `.map()`:
 
@@ -128,7 +128,7 @@ var polosMadeireiros =
     ee.FeatureCollection('projects/ee-sergiocosta/assets/polos_madeireiros_mma');
 
 var tisPA = ee.FeatureCollection('projects/ee-sergiocosta/assets/terras_indigenas')
-    .filter(ee.Filter.eq('UF10', 'PA'));
+    .filter(ee.Filter.stringContains('UF10', 'PA'));
 
 var fbuffer = function (feat) {
   return feat.buffer(50000);
@@ -154,6 +154,9 @@ Map.centerObject(intersecao, 6);
 ![Intersecção dos *buffers* com todas as TIs do Pará](img/cap07/intersecao-tis.jpg)
 
 Agora o Console mostra uma coleção de feições, e não mais uma coleção de coleções.
+
+!!! warning "Terras indígenas em mais de uma UF"
+    No atributo `UF10`, as terras que se estendem por mais de um estado aparecem com as siglas separadas por vírgula (`'MT, PA'`, `'AM, PA'`, `'PA, TO'`...). Um filtro `ee.Filter.eq('UF10', 'PA')` deixaria de fora essas terras; por isso usamos `ee.Filter.stringContains`, que testa se o texto contém `PA`. Antes de filtrar por um atributo de texto, confira os valores que ele assume.
 
 !!! tip "Intersecções vazias"
     Quando um *buffer* não toca uma terra indígena, a intersecção resulta em uma geometria vazia — que também entra na coleção. Para descartá-las, filtre pela área: acrescente ao final da cadeia `.map(function (f) { return f.set('area', f.area(1)); }).filter(ee.Filter.gt('area', 0))`.

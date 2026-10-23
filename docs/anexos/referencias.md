@@ -26,8 +26,8 @@
 - DSG — DIRETORIA DE SERVIÇO GEOGRÁFICO. *ET-EDGV 3.0 — Especificação Técnica para a Estruturação de Dados Geoespaciais Vetoriais*. Brasília: Exército Brasileiro, 2017.
 - ELMASRI, R.; NAVATHE, S. B. *Sistemas de Banco de Dados*. 4. ed. São Paulo: Pearson Addison Wesley, 2005.
 - FERREIRA, K. R.; CASANOVA, M. A.; QUEIROZ, G. R.; OLIVEIRA, O. F. Arquiteturas e linguagens. In: CASANOVA, M. A. et al. (Eds.). *Bancos de Dados Geográficos*. Curitiba: MundoGEO, 2005.
-- FERREIRA, J. *Google Apps Script: Web Application Development Essentials*. Sebastopol: O'Reilly Media, 2014.
 - FLORENZANO, T. G. *Iniciação em sensoriamento remoto*. 3. ed. São Paulo: Oficina de Textos, 2011.
+- FUNAI — FUNDAÇÃO NACIONAL DOS POVOS INDÍGENAS. *Terras indígenas* (base vetorial). Brasília: FUNAI, 2010. Disponível em: <https://www.gov.br/funai/pt-br/atuacao/terras-indigenas/geoprocessamento-e-mapas>.
 - FRANÇA, C. T. P. L.; CELESTINO JÚNIOR, J. *Banco de dados*. 2. ed. Fortaleza: EdUECE, 2015.
 - FUSSELL, J.; RUNDQUIST, D.; HARRINGTON, J. A. On defining remote sensing. *Photogrammetric Engineering and Remote Sensing*, v. 52, n. 9, p. 1507–1511, 1986.
 - GOODCHILD, M. F.; GUO, H.; ANNONI, A. et al. Next-generation Digital Earth. *Proceedings of the National Academy of Sciences*, v. 109, n. 28, p. 11088–11094, 2012.

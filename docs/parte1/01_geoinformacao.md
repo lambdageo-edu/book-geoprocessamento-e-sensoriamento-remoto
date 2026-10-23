@@ -96,7 +96,7 @@ Veremos esses códigos novamente no GEE (Capítulo 4) e no PostGIS, onde eles ap
 
 ## 💻 Sistemas de informação geográfica
 
-O termo **sistemas de informação geográfica (SIG)** "é aplicado para sistemas que realizam o tratamento computacional de dados geográficos" (CÂMARA, 2005). Longley et al. (2005) detalham: SIGs são ferramentas computacionais para **coletar, armazenar, processar, analisar e visualizar** informação geográfica. Os autores ainda propõem uma visão de **seis componentes**: a rede (que conecta usuários e dados), o *hardware*, o *software*, os dados, os procedimentos e as pessoas.
+O termo **sistemas de informação geográfica (SIG)** "é aplicado para sistemas que realizam o tratamento computacional de dados geográficos" (CÂMARA, 2005). Longley et al. (2013) detalham: SIGs são ferramentas computacionais para **coletar, armazenar, processar, analisar e visualizar** informação geográfica. Os autores ainda propõem uma visão de **seis componentes**: a rede (que conecta usuários e dados), o *hardware*, o *software*, os dados, os procedimentos e as pessoas.
 
 Geoprocessamento, por sua vez, "denota a disciplina do conhecimento que utiliza técnicas matemáticas e computacionais para o tratamento da informação geográfica" (CÂMARA et al., 2001). Ele abrange desde a **coleta** (cartografia, sensoriamento remoto, fotogrametria, GPS) até o **armazenamento** (bancos de dados geográficos) e o **tratamento e análise** (modelagem, geoestatística, análise espacial).
 

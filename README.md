@@ -5,7 +5,7 @@ duas partes: sensoriamento remoto e processamento de dados geográficos na nuvem
 **Google Earth Engine**, e **bancos de dados geográficos** com PostgreSQL/PostGIS integrados
 ao **QGIS**.
 
-📖 **Leia online:** <https://lambdageo.github.io/book-geoprocessamento-e-sensoriamento-remoto/>
+📖 **Leia online:** <https://lambdageo-edu.github.io/book-geoprocessamento-e-sensoriamento-remoto/>
 
 ## Organização
 

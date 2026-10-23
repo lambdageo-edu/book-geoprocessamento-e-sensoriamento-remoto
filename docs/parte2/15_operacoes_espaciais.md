@@ -203,7 +203,7 @@ WHERE ma.sigla_uf = 'MA'
 ```
 
 !!! info "O modelo de 9 interseções"
-    Todos esses predicados são casos particulares do **modelo de 9 interseções estendido de Egenhofer** (DE-9IM), que compara o interior, a borda e o exterior de duas geometrias. A função `ST_Relate(A, B)` retorna a matriz completa. Veja a [documentação do PostGIS](https://postgis.net/workshops/postgis-intro/de9im.html).
+    Todos esses predicados são casos particulares do **modelo de 9 interseções** de Egenhofer, na versão estendida com dimensões (**DE-9IM**, *Dimensionally Extended 9-Intersection Model*), que compara o interior, a borda e o exterior de duas geometrias. A função `ST_Relate(A, B)` retorna a matriz completa. Veja a [documentação do PostGIS](https://postgis.net/workshops/postgis-intro/de9im.html).
 
 ---
 
@@ -261,8 +261,8 @@ LIMIT 3;
 
 | sigla_uf | area_calc_km2 | area_ibge_km2 | perimetro_km |
 |---|---:|---:|---:|
-| BA | 564796 | 564760 | 5561 |
-| MA | 329647 | 329651 | 5360 |
+| BA | 564795 | 564760 | 5550 |
+| MA | 329646 | 329651 | 5338 |
 | PI | 251756 | 251755 | 3276 |
 
 As funções espaciais se combinam com as agregações do Capítulo 13. A área de cada região:
@@ -308,6 +308,8 @@ ORDER BY u.sigla_uf;
 
 Observe o padrão: `ST_Intersects` no `JOIN` seleciona os pares relevantes; `ST_Intersection` no `SELECT` calcula a geometria resultante.
 
+Se você medir a ferrovia inteira (`SELECT ST_Length(geom::geography) / 1000 FROM ferrovia;`), obterá cerca de 769 km, e não os 736 km da soma da tabela. A diferença está no último trecho, que passa pela Baía de São Marcos: como os polígonos das UFs não incluem a água, esses quilômetros não pertencem a nenhum estado.
+
 Outros exemplos:
 
 ```sql
@@ -316,8 +318,10 @@ SELECT round((ST_Area(ST_Buffer(geom::geography, 50000)) / 1e6)::numeric)
 FROM capital WHERE nome = 'São Luís';
 -- 7809 (≈ π × 50²)
 
--- O polígono único da região Nordeste
+-- A geometria da região Nordeste, unindo as nove UFs
 SELECT ST_Union(geom) FROM uf WHERE nm_regiao = 'Nordeste';
+-- um MultiPolygon: o continente, as ilhas e pequenas frestas entre UFs vizinhas,
+-- efeito da simplificação das geometrias (confira com ST_NumGeometries)
 
 -- Centroide do Maranhão
 SELECT ST_AsText(ST_Centroid(geom)) FROM uf WHERE sigla_uf = 'MA';

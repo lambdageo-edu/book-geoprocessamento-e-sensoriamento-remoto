@@ -306,7 +306,7 @@ SELECT categoria,
        round(avg(preco), 2) AS preco_medio
 FROM produto
 GROUP BY categoria
-ORDER BY quantidade DESC;
+ORDER BY quantidade DESC, categoria;
 ```
 
 | categoria | quantidade | preco_medio |

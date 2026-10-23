@@ -38,8 +38,8 @@ anteriores do mesmo autor:
 Os arquivos em `docs/dados/` são derivados de dados públicos, simplificados para fins
 didáticos, e mantêm a atribuição às fontes originais:
 
-- `BR_UF.zip` — Malha de Unidades da Federação, IBGE (geometria simplificada; atributo
-  numérico `CD_REGIAO` acrescentado);
+- `BR_UF.zip` — Malha de Unidades da Federação, IBGE (geometria simplificada, sem anéis degenerados;
+  atributo numérico `CD_REGIAO` acrescentado);
 - `terras_indigenas.zip` — Terras indígenas, FUNAI (2010), via Ministério do Meio Ambiente
   (geometria simplificada, subconjunto de atributos);
 - `polos_madeireiros_mma.zip` — Polos madeireiros da Amazônia, Ministério do Meio Ambiente.
