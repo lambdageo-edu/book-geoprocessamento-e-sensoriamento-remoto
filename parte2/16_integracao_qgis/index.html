@@ -13,6 +13,8 @@
         <meta name="author" content="Sergio Souza Costa">
       
       
+        <link rel="canonical" href="https://lambdageo-edu.github.io/book-geoprocessamento-e-sensoriamento-remoto/parte2/16_integracao_qgis/">
+      
       
         <link rel="prev" href="../15_operacoes_espaciais/">
       
@@ -195,6 +197,18 @@
       
     
     
+      <div class="md-header__source">
+        <a href="https://github.com/lambdageo-edu/book-geoprocessamento-e-sensoriamento-remoto" title="Ir ao repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
   </nav>
   
 </header>
@@ -228,6 +242,18 @@
     </a>
     Introdução ao Geoprocessamento e Sensoriamento Remoto
   </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/lambdageo-edu/book-geoprocessamento-e-sensoriamento-remoto" title="Ir ao repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
     
@@ -1299,6 +1325,9 @@
                   
 
 
+  
+  
+
 
 <h1 id="integracao-com-o-qgis">Integração com o QGIS<a class="headerlink" href="#integracao-com-o-qgis" title="Permanent link">&para;</a></h1>
 <p>Como vimos no <a href="../10_introducao_bd/#arquiteturas-de-bancos-de-dados">Capítulo 10</a>, um SGBD usa a arquitetura cliente/servidor. Na integração com um SIG, o <strong>SIG é o cliente</strong> e o <strong>PostgreSQL/PostGIS é o servidor</strong>. Neste capítulo, conectaremos o QGIS ao banco, importaremos camadas, faremos consultas espaciais a partir do SIG e veremos que o mesmo banco pode ser usado por outros SIGs.</p>
@@ -1335,7 +1364,7 @@
 </code></pre></div>
 <p><strong>2. Abra o Gerenciador de Banco de Dados.</strong> No menu <strong>Banco de Dados → Gerenciador BD...</strong>, expanda o provedor PostGIS, a conexão criada e selecione o esquema <code>brasil</code>:</p>
 <p><img alt="O Gerenciador de Banco de Dados" src="../img/cap16/qgis-gerenciador-bd.png" /></p>
-<p><strong>3. Importe a camada.</strong> Clique no botão <strong>Importar camada/arquivo</strong>. Na janela, escolha a camada de entrada (um arquivo <em>shapefile</em> ou uma camada já aberta no projeto — aqui, os municípios do Brasil) e preencha as opções:</p>
+<p><strong>3. Importe a camada.</strong> Clique no botão <strong>Importar camada/arquivo</strong>. Na janela, escolha a camada de entrada (um arquivo <em>shapefile</em> ou uma camada já aberta no projeto — aqui, os municípios do Brasil, <code>municipios_br/municipios_br.shp</code>, do <a href="../../dados/dadosbdgeo.zip">dadosbdgeo.zip</a> baixado no Capítulo 12) e preencha as opções:</p>
 <p><img alt="Importando uma camada vetorial" src="../img/cap16/qgis-importar-camada.png" /></p>
 <ul>
 <li><strong>Esquema</strong> e <strong>Tabela</strong>: o destino (<code>brasil.municipios_br</code>);</li>

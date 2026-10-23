@@ -13,6 +13,8 @@
         <meta name="author" content="Sergio Souza Costa">
       
       
+        <link rel="canonical" href="https://lambdageo-edu.github.io/book-geoprocessamento-e-sensoriamento-remoto/parte1/04_tipos_dados/">
+      
       
         <link rel="prev" href="../03_conhecendo_gee/">
       
@@ -195,6 +197,18 @@
       
     
     
+      <div class="md-header__source">
+        <a href="https://github.com/lambdageo-edu/book-geoprocessamento-e-sensoriamento-remoto" title="Ir ao repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
   </nav>
   
 </header>
@@ -228,6 +242,18 @@
     </a>
     Introdução ao Geoprocessamento e Sensoriamento Remoto
   </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/lambdageo-edu/book-geoprocessamento-e-sensoriamento-remoto" title="Ir ao repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
     
@@ -1467,6 +1493,9 @@
                   
 
 
+  
+  
+
 
 <h1 id="tipos-de-dados-geograficos">Tipos de Dados Geográficos<a class="headerlink" href="#tipos-de-dados-geograficos" title="Permanent link">&para;</a></h1>
 <p>Como representar a informação geográfica em um sistema computacional? O mundo real é extremamente complexo, e só conseguimos capturar partes dele por meio de <strong>modelos e abstrações</strong>. Este capítulo apresenta as duas grandes visões conceituais do espaço geográfico — objetos e campos —, suas representações computacionais — vetores e matrizes — e como elas aparecem no Google Earth Engine.</p>
@@ -1593,7 +1622,7 @@
 </tr>
 </tbody>
 </table>
-<p>Para visualizar uma geometria, adicionamos-a ao mapa e aproximamos o zoom:</p>
+<p>Para visualizar uma geometria, adicionamo-la ao mapa e aproximamos o zoom:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// PASSO 1: ENTRADA/SELEÇÃO</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1">// cria um objeto ponto com as coordenadas dadas (longitude, latitude)</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kd">var</span><span class="w"> </span><span class="nx">geo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Geometry</span><span class="p">.</span><span class="nx">Point</span><span class="p">([</span><span class="o">-</span><span class="mf">37.77028535227355</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">4.565653343819942</span><span class="p">]);</span>
@@ -1611,7 +1640,7 @@
 <p>Em vez de digitar coordenadas, você pode <strong>desenhar</strong> pontos, linhas e polígonos com as ferramentas no canto superior esquerdo do mapa — de modo parecido ao Google Maps e ao Google Earth. Ao concluir o desenho, a geometria aparece como um <em>import</em> no topo do <em>script</em> (com o nome <code>geometry</code>, que pode ser renomeado). Clicando no ícone ao lado dos <em>imports</em>, é possível copiar o código gerado, útil para reutilizar a geometria em outros <em>scripts</em>.</p>
 </div>
 <h3 id="feicoes-eefeature">Feições: <code>ee.Feature</code><a class="headerlink" href="#feicoes-eefeature" title="Permanent link">&para;</a></h3>
-<p>As entidades geográficas codificadas no modelo vetorial são chamadas de <strong>feições</strong> (<em>features</em>): objetos do tipo ponto, linha ou polígono (LONGLEY, 2005). Além da geometria, elas têm <strong>atributos</strong>. Uma feição poligonal que representa um município, por exemplo, pode ter como atributos o nome, a população e o índice de desenvolvimento humano.</p>
+<p>As entidades geográficas codificadas no modelo vetorial são chamadas de <strong>feições</strong> (<em>features</em>): objetos do tipo ponto, linha ou polígono (LONGLEY et al., 2013). Além da geometria, elas têm <strong>atributos</strong>. Uma feição poligonal que representa um município, por exemplo, pode ter como atributos o nome, a população e o índice de desenvolvimento humano.</p>
 <p>No GEE, uma <code>ee.Feature</code> é uma <strong>geometria + um dicionário de atributos</strong>. Cada chave do dicionário nomeia um atributo, e o valor pode ser de qualquer tipo. O código a seguir cria um polígono com os limites aproximados da Universidade Federal do Maranhão e dois atributos, <code>nome</code> e <code>sigla</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">// ENTRADA</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1">// cria uma geometria</span>
@@ -1656,7 +1685,7 @@
 <p>No Console, expanda o objeto impresso: a coleção tem uma lista <code>features</code>, e cada feição tem <code>geometry</code> e <code>properties</code>. Neste exemplo a coleção foi criada explicitamente, mas o mais comum é que ela venha do catálogo ou de um arquivo enviado pelo usuário — é o que veremos no <a href="../05_selecao_vetorial/">Capítulo 5</a>.</p>
 <hr />
 <h2 id="dados-matriciais">🟩 Dados matriciais<a class="headerlink" href="#dados-matriciais" title="Permanent link">&para;</a></h2>
-<p>Em uma representação matricial, o espaço é dividido em uma <strong>malha retangular de células</strong>, geralmente quadradas. O espaço é concebido como uma matriz <span class="arithmatex">\(P(m, n)\)</span>, com <span class="arithmatex">\(m\)</span> colunas e <span class="arithmatex">\(n\)</span> linhas, em que cada célula tem um número de linha, um número de coluna e um valor correspondente ao atributo estudado (CÂMARA, 2005). O exemplo mais comum são as imagens produzidas por sensores a bordo de satélites ou aeronaves. A <strong>resolução espacial</strong> depende da relação entre o tamanho da célula e a área que ela representa no terreno.</p>
+<p>Em uma representação matricial, o espaço é dividido em uma <strong>malha retangular de células</strong>, geralmente quadradas. O espaço é concebido como uma matriz <span class="arithmatex">\(P(m, n)\)</span>, com <span class="arithmatex">\(m\)</span> linhas e <span class="arithmatex">\(n\)</span> colunas, em que cada célula tem um número de linha, um número de coluna e um valor correspondente ao atributo estudado (CÂMARA, 2005). O exemplo mais comum são as imagens produzidas por sensores a bordo de satélites ou aeronaves. A <strong>resolução espacial</strong> depende da relação entre o tamanho da célula e a área que ela representa no terreno.</p>
 <p><img alt="Dados matriciais: células e resolução" src="../img/cap04/matriz.png" /></p>
 <p>As quatro resoluções — espacial, espectral, radiométrica e temporal — foram apresentadas no <a href="../02_sensoriamento_remoto/#as-quatro-resolucoes">Capítulo 2</a>.</p>
 <h3 id="imagens-eeimage">Imagens: <code>ee.Image</code><a class="headerlink" href="#imagens-eeimage" title="Permanent link">&para;</a></h3>

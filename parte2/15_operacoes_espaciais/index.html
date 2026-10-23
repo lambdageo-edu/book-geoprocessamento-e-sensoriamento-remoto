@@ -13,6 +13,8 @@
         <meta name="author" content="Sergio Souza Costa">
       
       
+        <link rel="canonical" href="https://lambdageo-edu.github.io/book-geoprocessamento-e-sensoriamento-remoto/parte2/15_operacoes_espaciais/">
+      
       
         <link rel="prev" href="../14_tipos_espaciais/">
       
@@ -195,6 +197,18 @@
       
     
     
+      <div class="md-header__source">
+        <a href="https://github.com/lambdageo-edu/book-geoprocessamento-e-sensoriamento-remoto" title="Ir ao repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
   </nav>
   
 </header>
@@ -228,6 +242,18 @@
     </a>
     Introdução ao Geoprocessamento e Sensoriamento Remoto
   </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/lambdageo-edu/book-geoprocessamento-e-sensoriamento-remoto" title="Ir ao repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
     
@@ -1343,6 +1369,9 @@
                   
 
 
+  
+  
+
 
 <h1 id="operacoes-e-indexacao-espacial">Operações e Indexação Espacial<a class="headerlink" href="#operacoes-e-indexacao-espacial" title="Permanent link">&para;</a></h1>
 <p>As consultas espaciais se baseiam em relacionamentos de vários tipos — <strong>topológicos</strong>, <strong>métricos</strong> e <strong>direcionais</strong>. Neste capítulo veremos como o PostGIS implementa essas operações sobre geo-objetos e como os <strong>índices espaciais</strong> tornam as consultas rápidas.</p>
@@ -1647,7 +1676,7 @@
 </code></pre></div>
 <div class="admonition info">
 <p class="admonition-title">O modelo de 9 interseções</p>
-<p>Todos esses predicados são casos particulares do <strong>modelo de 9 interseções estendido de Egenhofer</strong> (DE-9IM), que compara o interior, a borda e o exterior de duas geometrias. A função <code>ST_Relate(A, B)</code> retorna a matriz completa. Veja a <a href="https://postgis.net/workshops/postgis-intro/de9im.html">documentação do PostGIS</a>.</p>
+<p>Todos esses predicados são casos particulares do <strong>modelo de 9 interseções</strong> de Egenhofer, na versão estendida com dimensões (<strong>DE-9IM</strong>, <em>Dimensionally Extended 9-Intersection Model</em>), que compara o interior, a borda e o exterior de duas geometrias. A função <code>ST_Relate(A, B)</code> retorna a matriz completa. Veja a <a href="https://postgis.net/workshops/postgis-intro/de9im.html">documentação do PostGIS</a>.</p>
 </div>
 <hr />
 <h2 id="operacoes-metricas">📏 Operações métricas<a class="headerlink" href="#operacoes-metricas" title="Permanent link">&para;</a></h2>
@@ -1754,15 +1783,15 @@
 <tbody>
 <tr>
 <td>BA</td>
-<td style="text-align: right;">564796</td>
+<td style="text-align: right;">564795</td>
 <td style="text-align: right;">564760</td>
-<td style="text-align: right;">5561</td>
+<td style="text-align: right;">5550</td>
 </tr>
 <tr>
 <td>MA</td>
-<td style="text-align: right;">329647</td>
+<td style="text-align: right;">329646</td>
 <td style="text-align: right;">329651</td>
-<td style="text-align: right;">5360</td>
+<td style="text-align: right;">5338</td>
 </tr>
 <tr>
 <td>PI</td>
@@ -1850,22 +1879,25 @@
 </tbody>
 </table>
 <p>Observe o padrão: <code>ST_Intersects</code> no <code>JOIN</code> seleciona os pares relevantes; <code>ST_Intersection</code> no <code>SELECT</code> calcula a geometria resultante.</p>
+<p>Se você medir a ferrovia inteira (<code>SELECT ST_Length(geom::geography) / 1000 FROM ferrovia;</code>), obterá cerca de 769 km, e não os 736 km da soma da tabela. A diferença está no último trecho, que passa pela Baía de São Marcos: como os polígonos das UFs não incluem a água, esses quilômetros não pertencem a nenhum estado.</p>
 <p>Outros exemplos:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1">-- Área (km²) de um buffer de 50 km em torno de São Luís</span>
 <a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">round</span><span class="p">((</span><span class="n">ST_Area</span><span class="p">(</span><span class="n">ST_Buffer</span><span class="p">(</span><span class="n">geom</span><span class="p">::</span><span class="n">geography</span><span class="p">,</span><span class="w"> </span><span class="mi">50000</span><span class="p">))</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1</span><span class="n">e6</span><span class="p">)::</span><span class="nb">numeric</span><span class="p">)</span>
 <a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="k">FROM</span><span class="w"> </span><span class="n">capital</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">nome</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'São Luís'</span><span class="p">;</span>
 <a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1">-- 7809 (≈ π × 50²)</span>
 <a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>
-<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="c1">-- O polígono único da região Nordeste</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="c1">-- A geometria da região Nordeste, unindo as nove UFs</span>
 <a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">ST_Union</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">uf</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">nm_regiao</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Nordeste'</span><span class="p">;</span>
-<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>
-<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="c1">-- Centroide do Maranhão</span>
-<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Centroid</span><span class="p">(</span><span class="n">geom</span><span class="p">))</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">uf</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">sigla_uf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'MA'</span><span class="p">;</span>
-<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="c1">-- POINT(-45.2877... -5.0727...)</span>
-<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>
-<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="c1">-- São Luís em SIRGAS 2000 / UTM 23S (coordenadas em metros)</span>
-<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Transform</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span><span class="w"> </span><span class="mi">31983</span><span class="p">))</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">capital</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">nome</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'São Luís'</span><span class="p">;</span>
-<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="c1">-- POINT(577507.66 9720258.96)</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="c1">-- um MultiPolygon: o continente, as ilhas e pequenas frestas entre UFs vizinhas,</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="c1">-- efeito da simplificação das geometrias (confira com ST_NumGeometries)</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="c1">-- Centroide do Maranhão</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Centroid</span><span class="p">(</span><span class="n">geom</span><span class="p">))</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">uf</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">sigla_uf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'MA'</span><span class="p">;</span>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="c1">-- POINT(-45.2877... -5.0727...)</span>
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a>
+<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="c1">-- São Luís em SIRGAS 2000 / UTM 23S (coordenadas em metros)</span>
+<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">ST_AsText</span><span class="p">(</span><span class="n">ST_Transform</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span><span class="w"> </span><span class="mi">31983</span><span class="p">))</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">capital</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">nome</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'São Luís'</span><span class="p">;</span>
+<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a><span class="c1">-- POINT(577507.66 9720258.96)</span>
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title"><code>ST_Transform</code> e SRIDs diferentes</p>
@@ -1925,6 +1957,7 @@
 <li>Qual a diferença entre <code>ST_Intersects</code> e <code>ST_Intersection</code>? Dê um exemplo de uso de cada uma na mesma consulta.</li>
 <li>Crie um <em>buffer</em> de 100 km em torno da ferrovia e descubra quais capitais estão dentro dele.</li>
 <li>Explique, com suas palavras, o filtro primário e o filtro secundário de uma consulta espacial indexada.</li>
+<li>O arquivo <code>banco02.sql</code>, no <a href="../../dados/dadosbdgeo.zip">dadosbdgeo.zip</a>, cria e preenche as tabelas do exemplo "Lago Azul" da especificação <em>Simple Features</em> do OGC (lagos, estradas, rios, pontes, florestas, edificações...). Execute-o em um banco novo (ele já contém o <code>CREATE EXTENSION postgis</code>) e responda: quais pontes estão sobre algum rio? Qual a área do Lago Azul, descontada a ilha? Qual a distância de cada edificação até a estrada mais próxima? (Observe que a tabela <code>edificacoes</code> tem duas colunas de geometria, <code>geom_pt</code> e <code>geom_pol</code>.)</li>
 </ol>
 
 
